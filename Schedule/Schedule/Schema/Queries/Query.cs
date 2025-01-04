@@ -1,6 +1,6 @@
-using Core.Interfaces;
+using Schedule.Interfaces;
 
-namespace Infrastructure.Schema.Queries;
+namespace Schedule.Schema.Queries;
 
 public class Query(IRepository repository)
 {

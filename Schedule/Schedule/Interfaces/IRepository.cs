@@ -1,4 +1,4 @@
-namespace Core.Interfaces;
+namespace Schedule.Interfaces;
 
 public interface IRepository
 {

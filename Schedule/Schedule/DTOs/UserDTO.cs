@@ -1,6 +1,6 @@
-using Core.Entities;
+using Schedule.Entities;
 
-namespace API.DTOs;
+namespace Schedule.DTOs;
 
 public record UserDTO(
     int Id, 

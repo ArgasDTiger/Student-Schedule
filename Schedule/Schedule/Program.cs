@@ -1,6 +1,7 @@
 using Infrastructure.Data;
-using Infrastructure.Schema.Queries;
 using Microsoft.EntityFrameworkCore;
+using Schedule.Data;
+using Schedule.Schema.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 

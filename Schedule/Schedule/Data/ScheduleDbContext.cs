@@ -1,7 +1,7 @@
-using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Schedule.Entities;
 
-namespace Infrastructure.Data;
+namespace Schedule.Data;
 
 public class ScheduleDbContext : DbContext
 {

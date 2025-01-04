@@ -1,40 +1,40 @@
-using Core.Interfaces;
-using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Schedule.Data;
+using Schedule.Interfaces;
 
-namespace Infrastructure.Services;
+namespace Schedule.Services;
 
-public class Repository(ScheduleDbContext _context) : IRepository
+public class Repository(ScheduleDbContext context) : IRepository
 {
     public IQueryable<T> GetAll<T>() where T : class
     {
-        _context.ChangeTracker.LazyLoadingEnabled = true;
-        return _context.Set<T>();
+        context.ChangeTracker.LazyLoadingEnabled = true;
+        return context.Set<T>();
     }
 
     public IQueryable<T> GetAllAsNoTracking<T>() where T : class
     {
-        _context.ChangeTracker.LazyLoadingEnabled = false;
-        return _context.Set<T>().AsNoTracking();
+        context.ChangeTracker.LazyLoadingEnabled = false;
+        return context.Set<T>().AsNoTracking();
     }
 
     public T Add<T>(T entity) where T : class
     {
-       return _context.Add(entity).Entity;
+       return context.Add(entity).Entity;
     }
 
     public void Remove<T>(T entity) where T : class
     {
-        _context.Remove<T>(entity);
+        context.Remove<T>(entity);
     }
 
     public T Update<T>(T entity) where T : class
     {
-        return _context.Update<T>(entity).Entity;
+        return context.Update<T>(entity).Entity;
     }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return _context.SaveChangesAsync(cancellationToken);
+        return context.SaveChangesAsync(cancellationToken);
     }
 }

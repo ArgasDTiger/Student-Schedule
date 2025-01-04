@@ -1,4 +1,4 @@
-namespace Core.Entities;
+namespace Schedule.Entities;
 
 public class Teacher
 {
