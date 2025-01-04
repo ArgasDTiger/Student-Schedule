@@ -11,8 +11,8 @@ public static class Seed
         {
             var faculties = new List<Faculty>()
             {
-                new() { Name = "Факультет математики та інформатики", CorpusNumber = 1},
-                new() { Name = "Юридичний факультет", CorpusNumber = 4}
+                new() { Id = 1, Name = "Факультет математики та інформатики", CorpusNumber = 1},
+                new() { Id = 2, Name = "Юридичний факультет", CorpusNumber = 4}
             };
 
             context.AddRange(faculties);
@@ -47,7 +47,7 @@ public static class Seed
         
         if (!context.Set<Student>().Any())
         {
-            var students = new List<Student>()
+            var students = new List<Student>
             {
                 new()
                 {
@@ -56,9 +56,10 @@ public static class Seed
                     MiddleName = "Богданович",
                     DateOfBirth = new DateTime(2003, 02, 11),
                     Email = "bohdankit@gmail.com",
-                    Groups = [
-                        context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    ],
+                    Groups = new List<Group>
+                    {
+                        context.Set<Group>().FirstOrDefault(g => g.Faculty.Id == 1)!,
+                    }
                 },
                 new()
                 {
@@ -67,9 +68,10 @@ public static class Seed
                     MiddleName = "Денисович",
                     DateOfBirth = new DateTime(2002, 11, 01),
                     Email = "chovenivan@gmail.com",
-                    Groups = [
-                        context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Юридичний факультет")!,
-                    ],
+                    Groups = new List<Group>
+                    {
+                        context.Set<Group>().FirstOrDefault(g => g.Faculty.Id == 2)!,
+                    }
                 },
                 new()
                 {
@@ -78,14 +80,16 @@ public static class Seed
                     MiddleName = "Василівна",
                     DateOfBirth = new DateTime(2001, 07, 08),
                     Email = "katyaboyko@gmail.com",
-                    Groups = [
-                        context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                        context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Юридичний факультет")!,
-                    ],
+                    Groups = new List<Group>
+                    {
+                        context.Set<Group>().FirstOrDefault(g => g.Faculty.Id == 1)!,
+                        context.Set<Group>().FirstOrDefault(g => g.Faculty.Id == 2)!,
+                    }
                 },
             };
 
             context.AddRange(students);
+            
             await context.SaveChangesAsync();
         }
         
@@ -101,7 +105,7 @@ public static class Seed
                     DateOfBirth = new DateTime(1987, 03, 11),
                     Email = "volodyaselko@gmail.com",
                     Faculties = [
-                        context.Set<Faculty>().FirstOrDefault(g => g.Name == "Факультет математики та інформатики")!,
+                        context.Set<Faculty>().FirstOrDefault(f => f.Name == "Факультет математики та інформатики")!,
                     ],
                 },
                 new()
@@ -112,7 +116,7 @@ public static class Seed
                     DateOfBirth = new DateTime(1994, 08, 24),
                     Email = "vadympes@gmail.com",
                     Faculties = [
-                        context.Set<Faculty>().FirstOrDefault(g => g.Name == "Юридичний факультет")!,
+                        context.Set<Faculty>().FirstOrDefault(f => f.Name == "Юридичний факультет")!,
                     ],
                 }
             };
@@ -183,6 +187,7 @@ public static class Seed
             {
                 new()
                 {
+                    Id = 1,
                     FirstName = "Калина",
                     LastName = "Зарубайко",
                     MiddleName = "Петрівна",
@@ -190,6 +195,7 @@ public static class Seed
                 },
                 new()
                 {
+                    Id = 2,
                     FirstName = "Владислав",
                     LastName = "Мудрик",
                     MiddleName = "Тарасович",
@@ -197,6 +203,7 @@ public static class Seed
                 },
                 new()
                 {
+                    Id = 3,
                     FirstName = "Павло",
                     LastName = "Мартинюк",
                     MiddleName = "Леонідович",
@@ -204,6 +211,7 @@ public static class Seed
                 },
                 new()
                 {
+                    Id = 4,
                     FirstName = "Дарія",
                     LastName = "Макар",
                     MiddleName = "Сергіївна",
@@ -211,6 +219,7 @@ public static class Seed
                 },
                 new()
                 {
+                    Id = 5,
                     FirstName = "Богдана",
                     LastName = "Корт",
                     MiddleName = "Олегівна",
@@ -218,6 +227,7 @@ public static class Seed
                 },
                 new()
                 {
+                    Id = 6,
                     FirstName = "Станіслав",
                     LastName = "Мельник",
                     MiddleName = "Васильович",
@@ -237,7 +247,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Основи 3Д графіки")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Калина" && t.MiddleName == "Зарубайко" && t.LastName == "Петрівна")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 1)!,
                     WeekDay = DayOfWeek.Tuesday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Laboratory,
@@ -249,7 +259,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Програмування мовою Python")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Павло" && t.MiddleName == "Мартинюк" && t.LastName == "Леонідович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 3)!,
                     WeekDay = DayOfWeek.Thursday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Laboratory,
@@ -261,7 +271,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Програмування мовою Python")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Павло" && t.MiddleName == "Мартинюк" && t.LastName == "Леонідович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 3)!,
                     WeekDay = DayOfWeek.Monday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Laboratory,
@@ -273,7 +283,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Програмування мовою Python")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Павло" && t.MiddleName == "Мартинюк" && t.LastName == "Леонідович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 3)!,
                     WeekDay = DayOfWeek.Monday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Lecture,
@@ -285,7 +295,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Програмування мовою Python")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Павло" && t.MiddleName == "Мартинюк" && t.LastName == "Леонідович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 3)!,
                     WeekDay = DayOfWeek.Monday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Lecture,
@@ -297,7 +307,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Комп'ютерні мережі")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Богдана" && t.MiddleName == "Корт" && t.LastName == "Олегівна")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 3)!,
                     WeekDay = DayOfWeek.Wednesday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Practice,
@@ -309,7 +319,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Комп'ютерні мережі")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Богдана" && t.MiddleName == "Корт" && t.LastName == "Олегівна")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 5)!,
                     WeekDay = DayOfWeek.Friday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Practice,
@@ -321,7 +331,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Основи веб-технологій")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Калина" && t.MiddleName == "Зарубайко" && t.LastName == "Петрівна")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 1)!,
                     WeekDay = DayOfWeek.Thursday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Practice,
@@ -333,7 +343,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Математичний аналіз")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Станіслав" && t.MiddleName == "Мельник" && t.LastName == "Васильович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 6)!,
                     WeekDay = DayOfWeek.Friday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Lecture,
@@ -345,7 +355,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Математичний аналіз")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Станіслав" && t.MiddleName == "Мельник" && t.LastName == "Васильович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 6)!,
                     WeekDay = DayOfWeek.Friday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Lecture,
@@ -357,7 +367,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Математичний аналіз")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Станіслав" && t.MiddleName == "Мельник" && t.LastName == "Васильович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 6)!,
                     WeekDay = DayOfWeek.Tuesday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Practice,
@@ -369,7 +379,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Математичний аналіз")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 207 && g.Faculty.Name == "Факультет математики та інформатики")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Станіслав" && t.MiddleName == "Мельник" && t.LastName == "Васильович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 6)!,
                     WeekDay = DayOfWeek.Tuesday,
                     LessonNumber = LessonNumber.Third,
                     Type = LessonType.Practice,
@@ -381,7 +391,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Правознавство")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Юридичний факультет")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Владислав" && t.MiddleName == "Мудрик" && t.LastName == "Тарасович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 2)!,
                     WeekDay = DayOfWeek.Tuesday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Practice,
@@ -393,7 +403,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Правознавство")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Юридичний факультет")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Владислав" && t.MiddleName == "Мудрик" && t.LastName == "Тарасович")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 2)!,
                     WeekDay = DayOfWeek.Monday,
                     LessonNumber = LessonNumber.First,
                     Type = LessonType.Lecture,
@@ -405,7 +415,7 @@ public static class Seed
                 {
                     Lesson = context.Set<Lesson>().FirstOrDefault(l => l.Name == "Закони України")!,
                     Group = context.Set<Group>().FirstOrDefault(g => g.GroupNumber == 201 && g.Faculty.Name == "Юридичний факультет")!,
-                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.FirstName == "Дарія" && t.MiddleName == "Макар" && t.LastName == "Сергіївна")!,
+                    Teacher = context.Set<Teacher>().FirstOrDefault(t => t.Id == 4)!,
                     WeekDay = DayOfWeek.Monday,
                     LessonNumber = LessonNumber.Second,
                     Type = LessonType.Lecture,

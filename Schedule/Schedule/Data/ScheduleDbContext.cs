@@ -22,6 +22,10 @@ public class ScheduleDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Student>().ToTable("Students");
+        modelBuilder.Entity<Moderator>().ToTable("Moderators");
+        modelBuilder.Entity<Admin>().ToTable("Administrators");
+        
         modelBuilder.Entity<Faculty>()
             .HasKey(f => f.Id);
 
