@@ -17,8 +17,7 @@ public record StudentDTO(
     string LastName,
     DateTime DateOfBirth,
     string Email,
-    List<Group> Groups,
-    List<Faculty> Faculties) 
+    List<Group> Groups) 
     : UserDTO(Id, FirstName, MiddleName, LastName, DateOfBirth, Email);
     
 public record ModeratorDTO(

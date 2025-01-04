@@ -13,7 +13,7 @@ public class ScheduleDbContext : DbContext
     public DbSet<Group> Groups { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<LessonGroup> LessonGroup { get; set; }
-    public DbSet<LessonTeacher> LessonTeacher { get; set; }
+    // public DbSet<LessonTeacher> LessonTeacher { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
@@ -49,24 +49,29 @@ public class ScheduleDbContext : DbContext
             .HasOne(lg => lg.Group)
             .WithMany()
             .HasForeignKey("GroupId");
-
-        modelBuilder.Entity<LessonTeacher>()
-            .HasKey(lt => lt.Id);
-
-        modelBuilder.Entity<LessonTeacher>()
+        
+        modelBuilder.Entity<LessonGroup>()
             .HasOne(lt => lt.Teacher)
             .WithMany()
             .HasForeignKey("TeacherId");
-
-        modelBuilder.Entity<LessonTeacher>()
-            .HasOne(lt => lt.Faculty)
-            .WithMany()
-            .HasForeignKey("FacultyId");
-
-        modelBuilder.Entity<LessonTeacher>()
-            .Property(lt => lt.StartTime)
-            .HasConversion(v => v.ToTimeSpan(), v => TimeOnly.FromTimeSpan(v));
-
+        
+        // modelBuilder.Entity<LessonTeacher>()
+        //     .HasKey(lt => lt.Id);
+        //
+        // modelBuilder.Entity<LessonTeacher>()
+        //     .HasOne(lt => lt.Teacher)
+        //     .WithMany()
+        //     .HasForeignKey("TeacherId");
+        //
+        // modelBuilder.Entity<LessonTeacher>()
+        //     .HasOne(lt => lt.Faculty)
+        //     .WithMany()
+        //     .HasForeignKey("FacultyId");
+        //
+        // modelBuilder.Entity<LessonTeacher>()
+        //     .Property(lt => lt.StartTime)
+        //     .HasConversion(v => v.ToTimeSpan(), v => TimeOnly.FromTimeSpan(v));
+        
         modelBuilder.Entity<Teacher>()
             .HasKey(t => t.Id);
 
@@ -75,10 +80,6 @@ public class ScheduleDbContext : DbContext
 
         modelBuilder.Entity<Student>()
             .HasMany(s => s.Groups)
-            .WithMany();
-
-        modelBuilder.Entity<Student>()
-            .HasMany(s => s.Faculties)
             .WithMany();
 
         modelBuilder.Entity<Moderator>()

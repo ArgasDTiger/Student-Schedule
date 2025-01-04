@@ -22,6 +22,11 @@ public class Repository(ScheduleDbContext context) : IRepository
     {
        return context.Add(entity).Entity;
     }
+    
+    public void AddRange<T>(IEnumerable<T> entities)
+    {
+        context.AddRange(entities);
+    }
 
     public void Remove<T>(T entity) where T : class
     {

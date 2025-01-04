@@ -13,7 +13,6 @@ public class User
 public class Student : User
 {
     public List<Group> Groups { get; set; }
-    public List<Faculty> Faculties { get; set; }
 }
 
 public class Moderator : User
