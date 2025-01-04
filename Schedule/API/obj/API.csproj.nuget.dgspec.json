@@ -46,6 +46,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -59,6 +64,16 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -116,17 +131,18 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Infrastructure\\Infrastructure.csproj": {
-                "projectPath": "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Infrastructure\\Infrastructure.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -186,20 +202,43 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Core\\Core.csproj": {
+                "projectPath": "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Core\\Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "HotChocolate.Data.EntityFramework": {
+              "target": "Package",
+              "version": "[15.0.0-p.17, )"
+            },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.0, )"
             }

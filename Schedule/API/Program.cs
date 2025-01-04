@@ -1,15 +1,19 @@
+using API.Schema;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddGraphQLServer().AddQueryType<Query>();
+
+builder.Services.AddDbContext<ScheduleDbContext>(o =>
+    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapGraphQL();
 
 app.UseHttpsRedirection();
 

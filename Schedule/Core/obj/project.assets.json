@@ -216,19 +216,6 @@
         "build": {
           "buildTransitive/net8.0/_._": {}
         }
-      },
-      "Infrastructure/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "9.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Infrastructure.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Infrastructure.dll": {}
-        }
       }
     }
   },
@@ -599,16 +586,10 @@
         "system.diagnostics.diagnosticsource.nuspec",
         "useSharedDesignerContext.txt"
       ]
-    },
-    "Infrastructure/1.0.0": {
-      "type": "project",
-      "path": "../Infrastructure/Infrastructure.csproj",
-      "msbuildProject": "../Infrastructure/Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Infrastructure >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 9.0.0"
     ]
   },
@@ -644,17 +625,18 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {
-            "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "D:\\AProgramming\\Unik\\Course Project\\Schedule\\Student-Schedule\\Schedule\\Infrastructure\\Infrastructure.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
