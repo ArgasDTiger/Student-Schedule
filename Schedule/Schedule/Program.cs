@@ -1,9 +1,13 @@
+using System.Reflection;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Data;
 using Schedule.Extensions;
 using Schedule.Schema.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
+
+TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 
 builder.Services.AddGraphQLServer().AddQueryType<Query>();
 
