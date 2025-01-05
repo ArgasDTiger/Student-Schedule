@@ -12,11 +12,12 @@ public static class ApplicationServicesExtensions
     {
         services.AddScoped<IRepository, Repository>();
         services.AddScoped<Query>();
-        services.AddScoped<DataLoaderWithIntId<EntityWithIntId>>();
-        services.AddScoped<DataLoaderWithStringId<EntityWithStringId>>();
-        services.AddScoped<DataLoaderWithIntId<Teacher>>();
-        services.AddScoped<DataLoaderWithIntId<Group>>();
-        services.AddScoped<DataLoaderWithIntId<Lesson>>();
-
+        services.AddScoped<IUserService, UserService>();
+        
+        // services.AddScoped<DataLoaderWithIntId<EntityWithIntId>>();
+        // services.AddScoped<DataLoaderWithStringId<EntityWithStringId>>();
+        // services.AddScoped<DataLoaderWithIntId<Teacher>>();
+        // services.AddScoped<DataLoaderWithIntId<Group>>();
+        // services.AddScoped<DataLoaderWithIntId<Lesson>>();
     }
 }

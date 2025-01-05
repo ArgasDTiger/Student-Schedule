@@ -3,23 +3,34 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Data;
 using Schedule.Extensions;
+using Schedule.Middleware;
+using Schedule.Schema.Mutations;
 using Schedule.Schema.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
 TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 
-builder.Services.AddGraphQLServer().AddQueryType<Query>();
+builder.Services
+    // .AddAuthorization()
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
+// .AddMutationType<Mutation>()
 
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
-        options.UseLazyLoadingProxies()
-            .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseLazyLoadingProxies()
+        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// builder.Services.AddGoogleAuthentication(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+// app.UseAuthentication();
+// app.UseAuthorization();
+// app.UseMiddleware<GoogleAuthenticationMiddleware>();
 
 app.MapGraphQL();
 
@@ -38,7 +49,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogError(ex, "An error occured during seeding data.");
+        logger.LogError(ex, "An error occurred during seeding data.");
     }
 }
 

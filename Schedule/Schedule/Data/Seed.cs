@@ -45,7 +45,7 @@ public static class Seed
             await context.SaveChangesAsync();
         }
         
-        if (!context.Set<Student>().Any())
+        /*if (!context.Set<Student>().Any())
         {
             var students = new List<Student>
             {
@@ -87,7 +87,7 @@ public static class Seed
                     }
                 },
             };
-
+        
             context.AddRange(students);
             
             await context.SaveChangesAsync();
@@ -120,7 +120,7 @@ public static class Seed
                     ],
                 }
             };
-
+        
             context.AddRange(moderators);
             await context.SaveChangesAsync();
         }
@@ -138,10 +138,10 @@ public static class Seed
                     Email = "admin@gmail.com",
                 }
             };
-
+        
             context.AddRange(admins);
             await context.SaveChangesAsync();
-        }
+        }*/
         
         if (!context.Set<Lesson>().Any())
         {

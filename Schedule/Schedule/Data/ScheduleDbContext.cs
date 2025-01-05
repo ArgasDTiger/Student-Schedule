@@ -16,9 +16,6 @@ public class ScheduleDbContext : DbContext
     // public DbSet<LessonTeacher> LessonTeacher { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Student> Students { get; set; }
-    public DbSet<Moderator> Moderators { get; set; }
-    public DbSet<Admin> Administrators { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,10 +27,6 @@ public class ScheduleDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Student>().ToTable("Students");
-        modelBuilder.Entity<Moderator>().ToTable("Moderators");
-        modelBuilder.Entity<Admin>().ToTable("Administrators");
-        
         modelBuilder.Entity<Faculty>()
             .HasKey(f => f.Id);
 
@@ -90,11 +83,11 @@ public class ScheduleDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasKey(u => u.Id);
 
-        modelBuilder.Entity<Student>()
+        modelBuilder.Entity<User>()
             .HasMany(s => s.Groups)
             .WithMany();
 
-        modelBuilder.Entity<Moderator>()
+        modelBuilder.Entity<User>()
             .HasMany(m => m.Faculties)
             .WithMany();
     }

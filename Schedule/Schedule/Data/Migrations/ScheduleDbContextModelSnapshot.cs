@@ -18,38 +18,41 @@ namespace Schedule.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FacultyModerator", b =>
+            modelBuilder.Entity("FacultyUser", b =>
                 {
                     b.Property<int>("FacultiesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModeratorId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("FacultiesId", "ModeratorId");
+                    b.HasKey("FacultiesId", "UserId");
 
-                    b.HasIndex("ModeratorId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("FacultyModerator");
+                    b.ToTable("FacultyUser");
                 });
 
-            modelBuilder.Entity("GroupStudent", b =>
+            modelBuilder.Entity("GroupUser", b =>
                 {
                     b.Property<int>("GroupsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("GroupsId", "StudentId");
+                    b.HasKey("GroupsId", "UserId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("GroupStudent");
+                    b.ToTable("GroupUser");
                 });
 
             modelBuilder.Entity("Schedule.Entities.Faculty", b =>
@@ -203,6 +206,10 @@ namespace Schedule.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GoogleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -211,35 +218,15 @@ namespace Schedule.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("Schedule.Entities.Admin", b =>
-                {
-                    b.HasBaseType("Schedule.Entities.User");
-
-                    b.ToTable("Administrators", (string)null);
-                });
-
-            modelBuilder.Entity("Schedule.Entities.Moderator", b =>
-                {
-                    b.HasBaseType("Schedule.Entities.User");
-
-                    b.ToTable("Moderators", (string)null);
-                });
-
-            modelBuilder.Entity("Schedule.Entities.Student", b =>
-                {
-                    b.HasBaseType("Schedule.Entities.User");
-
-                    b.ToTable("Students", (string)null);
-                });
-
-            modelBuilder.Entity("FacultyModerator", b =>
+            modelBuilder.Entity("FacultyUser", b =>
                 {
                     b.HasOne("Schedule.Entities.Faculty", null)
                         .WithMany()
@@ -247,14 +234,14 @@ namespace Schedule.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Schedule.Entities.Moderator", null)
+                    b.HasOne("Schedule.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("ModeratorId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GroupStudent", b =>
+            modelBuilder.Entity("GroupUser", b =>
                 {
                     b.HasOne("Schedule.Entities.Group", null)
                         .WithMany()
@@ -262,9 +249,9 @@ namespace Schedule.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Schedule.Entities.Student", null)
+                    b.HasOne("Schedule.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("StudentId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -305,33 +292,6 @@ namespace Schedule.Data.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("Schedule.Entities.Admin", b =>
-                {
-                    b.HasOne("Schedule.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Schedule.Entities.Admin", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Schedule.Entities.Moderator", b =>
-                {
-                    b.HasOne("Schedule.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Schedule.Entities.Moderator", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Schedule.Entities.Student", b =>
-                {
-                    b.HasOne("Schedule.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Schedule.Entities.Student", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
