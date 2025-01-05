@@ -7,13 +7,6 @@ public class ScheduleDbContext : DbContext
 {
     public ScheduleDbContext(DbContextOptions<ScheduleDbContext> options) : base(options)
     {
-        Console.WriteLine("DbContext created");
-    }
-
-    public override void Dispose()
-    {
-        Console.WriteLine("DbContext disposed");
-        base.Dispose();
     }
     
     public DbSet<Faculty> Faculties { get; set; }
