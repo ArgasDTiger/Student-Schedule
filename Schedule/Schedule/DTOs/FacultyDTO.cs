@@ -1,7 +1,8 @@
-namespace Schedule.Entities;
+namespace Schedule.DTOs;
 
-public class Faculty : EntityWithIntId
+public class FacultyDTO
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public int CorpusNumber { get; set; }
 }

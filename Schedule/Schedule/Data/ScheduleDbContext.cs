@@ -7,8 +7,15 @@ public class ScheduleDbContext : DbContext
 {
     public ScheduleDbContext(DbContextOptions<ScheduleDbContext> options) : base(options)
     {
+        Console.WriteLine("DbContext created");
     }
 
+    public override void Dispose()
+    {
+        Console.WriteLine("DbContext disposed");
+        base.Dispose();
+    }
+    
     public DbSet<Faculty> Faculties { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
@@ -19,6 +26,14 @@ public class ScheduleDbContext : DbContext
     public DbSet<Student> Students { get; set; }
     public DbSet<Moderator> Moderators { get; set; }
     public DbSet<Admin> Administrators { get; set; }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

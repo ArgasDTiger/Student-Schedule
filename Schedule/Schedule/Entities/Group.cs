@@ -1,8 +1,7 @@
 namespace Schedule.Entities;
 
-public class Group
+public class Group : EntityWithIntId
 {
-    public int Id { get; set; }
     public int GroupNumber { get; set; }
-    public Faculty Faculty { get; set; }
+    public virtual Faculty Faculty { get; set; }
 }

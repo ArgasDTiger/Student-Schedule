@@ -1,8 +1,7 @@
 namespace Schedule.Entities;
 
-public class User
+public class User : EntityWithIntId
 {
-    public int Id { get; set; }
     public string FirstName { get; set; }
     public string MiddleName { get; set; }
     public string LastName { get; set; }
@@ -12,12 +11,12 @@ public class User
 
 public class Student : User
 {
-    public List<Group> Groups { get; set; }
+    public virtual List<Group> Groups { get; set; }
 }
 
 public class Moderator : User
 {
-    public List<Faculty> Faculties { get; set; }
+    public virtual List<Faculty> Faculties { get; set; }
 }
 
 public class Admin : User

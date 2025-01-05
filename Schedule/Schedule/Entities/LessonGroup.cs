@@ -1,11 +1,14 @@
+using GreenDonut.Predicates;
+using Schedule.DataLoaders;
+using Schedule.Interfaces;
+
 namespace Schedule.Entities;
 
-public class LessonGroup
+public class LessonGroup : EntityWithIntId
 {
-    public int Id { get; set; }
-    public Lesson Lesson { get; set; }
-    public Group Group { get; set; }
-    public Teacher Teacher { get; set; }
+    public virtual Lesson Lesson { get; set; }
+    public virtual Group Group { get; set; }
+    public virtual Teacher Teacher { get; set; }
     // public string? SubGroupLetter { get; set; }
     public DayOfWeek WeekDay { get; set; }
     public LessonNumber LessonNumber { get; set; }
