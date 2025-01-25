@@ -5,6 +5,7 @@
 
 # dotenv files
 .env
+.environment.development.ts
 
 # User-specific files
 *.rsuser

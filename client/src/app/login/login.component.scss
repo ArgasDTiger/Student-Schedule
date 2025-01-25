@@ -1,0 +1,27 @@
+@import "styles";
+
+.card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.card {
+  color: $text-primary;
+  width: 55vw;
+  height: 40vh;
+  text-align: center;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+
+  & > span {
+    font-size: 0.95rem;
+    color: $text-secondary;
+  }
+}

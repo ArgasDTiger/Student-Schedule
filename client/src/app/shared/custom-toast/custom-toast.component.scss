@@ -1,0 +1,57 @@
+@import 'styles';
+
+.toast-container {
+  background-color: $primary-light;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 16px;
+  width: 320px;
+  color: $text-primary;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toast-message {
+  display: flex;
+  align-items: center;
+}
+
+.toast-icon {
+  color: $primary-color;
+  margin-right: 8px;
+}
+
+.toast-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.toast-message-text {
+  color: $text-secondary;
+}
+
+.toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toast-progress {
+  background-color: $primary-color;
+  height: 4px;
+  margin-top: 8px;
+  border-radius: 4px;
+}

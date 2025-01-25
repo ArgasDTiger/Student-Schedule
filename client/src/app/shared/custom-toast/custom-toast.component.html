@@ -1,0 +1,22 @@
+<div class="toast-container" [@flyInOut]="state().value">
+  <div class="toast-content">
+    <div class="toast-message">
+      <mat-icon class="toast-icon">info</mat-icon>
+      <div>
+        <div *ngIf="title" class="toast-title" [attr.aria-label]="title">{{ title }}</div>
+        <div *ngIf="message && options.enableHtml" class="toast-message-text" role="alert" [innerHTML]="message"></div>
+        <div *ngIf="message && !options.enableHtml" class="toast-message-text" role="alert" [attr.aria-label]="message">{{ message }}</div>
+      </div>
+    </div>
+    <div class="toast-actions">
+      <button mat-icon-button color="primary" *ngIf="!options.closeButton" (click)="action($event)">
+        {{ undoString }}
+      </button>
+      <button mat-icon-button color="primary" *ngIf="options.closeButton" (click)="remove()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="options.progressBar" class="toast-progress" [style.width]="width() + '%'">
+  </div>
+</div>

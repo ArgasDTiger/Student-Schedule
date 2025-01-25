@@ -8,6 +8,10 @@
   &.sidebar-collapsed {
     margin-left: $sidebar-collapsed-width;
   }
+
+  &.full {
+    margin-left: 0;
+  }
 }
 
 .content-header {

@@ -9,13 +9,14 @@ public class UserService(IRepository repository, IConfiguration configuration) :
 {
     public async Task<User?> AuthenticateGoogleUserAsync(GoogleJsonWebSignature.Payload payload, CancellationToken cancellationToken)
     {
-        if (!payload.EmailVerified ||
-            !payload.Email.EndsWith(configuration.GetValue<string>("GoogleAuth:AllowedDomain")))
+        if (!payload.EmailVerified 
+            // || !payload.Email.EndsWith(configuration.GetValue<string>("GoogleAuth:AllowedDomain"))
+            )
             return null;
 
         var user = await repository.GetAll<User>().FirstOrDefaultAsync(u => u.GoogleId == payload.Subject, cancellationToken);
 
-        if (user == null)
+        if (user is null)
         {
             user = new User
             {

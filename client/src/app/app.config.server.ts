@@ -10,7 +10,7 @@ const serverConfig: ApplicationConfig = {
     provideClientHydration(withHttpTransferCacheOptions({
       includePostRequests: true,
     })),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
   ]
 };
 

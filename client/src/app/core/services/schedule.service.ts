@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from "apollo-angular";
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LessonInfo } from '../models/lessonInfo';
 

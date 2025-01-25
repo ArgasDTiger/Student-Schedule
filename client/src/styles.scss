@@ -2,13 +2,18 @@ $primary-color: #6366f1;
 $primary-light: #e0e7ff;
 $border-color: #e2e8f0;
 $text-primary: #1e293b;
-$text-secondary: #64748b;
+$text-secondary: #607288;
 $bg-hover: #f1f5f9;
 $danger-color: #f43f5e;
 $success-color: #10b981;
-$bg-color: #f8fafc;
+$bg-color: #e9eced;
 $sidebar-width: 280px;
 $sidebar-collapsed-width: 80px;
+
+$xxl: 1200px;
+$lg: 992px;
+$medium: 768px;
+$sm: 576px;
 
 * {
   margin: 0;

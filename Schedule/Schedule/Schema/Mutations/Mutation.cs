@@ -1,41 +1,38 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Google.Apis.Auth;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Schedule.Entities;
 using Schedule.Interfaces;
 using Schedule.Models.Payloads;
-using Schedule.Models.Requests;
 
 namespace Schedule.Schema.Mutations;
 
 public class Mutation(IRepository repository, IUserService userService, IConfiguration configuration)
 {
-    [GraphQLName("googleSignIn")]
-    public async Task<GoogleSignInPayload> GoogleSignInAsync(GoogleSignInRequest request, CancellationToken cancellationToken)
+    public async Task<GoogleSignInPayload> Login(string requestToken, CancellationToken cancellationToken)
     {
         try
         {
-            var clientId = configuration["Authentication:Google:ClientId"]
+            var clientId = configuration["GoogleAuth:ClientId"]
                 ?? throw new Exception("Google ClientId is not configured");
-            var allowedDomain = configuration["GoogleAuth:AllowedDomain"]
-                           ?? throw new Exception("Allowed Domain is not configured");
+            // var allowedDomain = configuration["GoogleAuth:AllowedDomain"]
+            //                ?? throw new Exception("Allowed Domain is not configured");
                 
             var settings = new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new[] { clientId }
             };
 
-            var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
+            var payload = await GoogleJsonWebSignature.ValidateAsync(requestToken, settings);
             
-            if (!payload.Email.EndsWith(allowedDomain))
-            {
-                throw new Exception("Invalid email domain");
-            }
+            // if (!payload.Email.EndsWith(allowedDomain))
+            // {
+            //     throw new Exception("Invalid email domain");
+            // }
 
             var user = await userService.AuthenticateGoogleUserAsync(payload, cancellationToken);
-            if (user == null)
+            if (user is null)
                 throw new Exception("Authentication failed");
 
             var token = GenerateJwtToken(user);
