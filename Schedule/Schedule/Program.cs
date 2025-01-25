@@ -1,8 +1,10 @@
 using System.Reflection;
+using HotChocolate.Types.Descriptors;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Data;
 using Schedule.Extensions;
+using Schedule.Helpers;
 using Schedule.Middleware;
 using Schedule.Schema.Mutations;
 using Schedule.Schema.Queries;
@@ -14,6 +16,7 @@ TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 builder.Services
     // .AddAuthorization()
     .AddGraphQLServer()
+    .AddConvention<INamingConventions>(new PascalCaseEnumConverter())
     .AddQueryType<Query>();
 // .AddMutationType<Mutation>()
 

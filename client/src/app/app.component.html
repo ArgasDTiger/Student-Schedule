@@ -1,4 +1,4 @@
-<main class="main-content">
-  <app-sidebar/>
+<app-sidebar (sidebarCollapsed)="onSidebarToggle($event)"/>
+<main class="main-content" [ngClass]="{'sidebar-collapsed': sidebarCollapsed}">
   <router-outlet/>
 </main>

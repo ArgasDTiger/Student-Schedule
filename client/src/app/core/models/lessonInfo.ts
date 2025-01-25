@@ -3,14 +3,14 @@ import {Group} from "./group";
 import {Teacher} from "./teacher";
 import {DayOfWeek} from "../enums/dayOfWeek";
 import {LessonType} from "../enums/lessonType";
-import {LessonNumber} from "../enums/lessonNumber";
+import {LessonNumberString} from "../enums/lessonNumber";
 
 export interface LessonInfo {
   lesson: Lesson;
   group: Group;
   teacher: Teacher;
   weekDay: DayOfWeek;
-  lessonNumber: LessonNumber;
+  lessonNumber: LessonNumberString;
   type: LessonType;
   room: number;
   oddWeek: boolean;

@@ -1,0 +1,15 @@
+<td>
+  @if (lessonInfo) {
+    <div class="class">{{ lessonNumber }}</div>
+  }
+</td>
+<td>
+  @if (lessonInfo) {
+    <div class="lesson-info">
+      <span class="lesson-time">{{ lessonNumberToTimeSpanMap[lessonInfo!.lessonNumber] }}</span>
+      <span class="lesson-title">{{ lessonInfo!.lesson.name }}</span>
+      <span class="lesson-professor">{{ degreeToString[lessonInfo!.teacher.degree] }} {{ lessonInfo!.teacher.lastName }} {{ lessonInfo!.teacher.firstName }} {{ lessonInfo!.teacher.middleName }}</span>
+      <span class="lesson-location">{{ lessonTypeToString[lessonInfo!.type] }}, {{ lessonInfo!.room }} ауд.</span>
+    </div>
+  }
+</td>

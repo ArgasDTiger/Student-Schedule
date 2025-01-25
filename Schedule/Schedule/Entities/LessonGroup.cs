@@ -23,7 +23,7 @@ public enum LessonType
 
 public enum LessonNumber
 {
-    First,
+    First = 1,
     Second,
     Third,
     Fourth,

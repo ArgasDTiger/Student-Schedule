@@ -1,5 +1,5 @@
 export enum LessonType {
-  Lecture,
-  Practice,
-  Laboratory,
+  Lecture = "Lecture",
+  Practice = "Practice",
+  Laboratory = "Laboratory",
 }

@@ -11,7 +11,7 @@ export class ScheduleService {
 
   constructor(private readonly apollo: Apollo) { }
 
-  getScheduleByGroupId(groupId: number): Observable<LessonInfo[]> {
+  getScheduleByGroupId(groupId: number) {
     return this.apollo
       .watchQuery<{ scheduleByStudentGroup: LessonInfo[] }>({
         query: gql`

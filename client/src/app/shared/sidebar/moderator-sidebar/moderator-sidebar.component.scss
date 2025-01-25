@@ -1,0 +1,25 @@
+@import "styles";
+
+.list {
+  padding: 1rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.item:hover {
+  background-color: $bg-hover;
+}
+
+.item.active {
+  background-color: $primary-light;
+  color: $primary-color;
+}

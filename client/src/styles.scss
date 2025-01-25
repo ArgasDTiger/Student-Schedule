@@ -7,9 +7,8 @@ $bg-hover: #f1f5f9;
 $danger-color: #f43f5e;
 $success-color: #10b981;
 $bg-color: #f8fafc;
-//$sidebar-width: 280px;
-$sidebar-width: 0px;
-$sidebar-collapsed-width: 60px;
+$sidebar-width: 280px;
+$sidebar-collapsed-width: 80px;
 
 * {
   margin: 0;
@@ -23,4 +22,24 @@ body {
   background-color: $bg-color;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: $text-primary;
+}
+
+button, input[type="submit"], input[type="reset"] {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+mat-icon {
+  color: $primary-color;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.18rem;
+
+  &:hover {
+    background-color: $bg-hover;
+  }
 }

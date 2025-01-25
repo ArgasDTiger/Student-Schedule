@@ -1,0 +1,43 @@
+@import "styles";
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid $border-color;
+}
+
+.class {
+  background: $primary-color;
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.lesson-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lesson-time {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}
+
+.lesson-title {
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.lesson-professor {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}
+
+.lesson-location {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}

@@ -1,5 +1,5 @@
 export enum Degree {
-  Assistant,
-  AssociateProfessor,
-  Professor
+  Assistant = "Assistant",
+  AssociateProfessor = "AssociateProfessor",
+  Professor = "Professor",
 }

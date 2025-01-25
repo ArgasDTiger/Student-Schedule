@@ -1,0 +1,13 @@
+<div class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="header">
+    <button (click)="toggleSidebar()">
+      <mat-icon class="icon">menu</mat-icon>
+    </button>
+    @if (!isSidebarCollapsed) {
+      <span>Мої групи</span>
+    }
+  </div>
+  @if (!isSidebarCollapsed) {
+    <app-student-sidebar/>
+  }
+</div>

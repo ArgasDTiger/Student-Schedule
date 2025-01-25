@@ -1,4 +1,4 @@
-import {Degree} from "../enums/degree";
+import { Degree } from "../enums/degree";
 
 export interface Teacher {
   id: number;
