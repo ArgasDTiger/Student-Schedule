@@ -1,5 +1,3 @@
-using Mapster;
-using Schedule.DataLoaders;
 using Schedule.Entities;
 
 namespace Schedule.DTOs;

@@ -1,5 +1,26 @@
+$primary-color: #6366f1;
+$primary-light: #e0e7ff;
+$border-color: #e2e8f0;
+$text-primary: #1e293b;
+$text-secondary: #64748b;
+$bg-hover: #f1f5f9;
+$danger-color: #f43f5e;
+$success-color: #10b981;
+$bg-color: #f8fafc;
+//$sidebar-width: 280px;
+$sidebar-width: 0px;
+$sidebar-collapsed-width: 60px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #f6f3f3;
-  font-family: Arial, sans-serif;
-  padding: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: $bg-color;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: $text-primary;
 }

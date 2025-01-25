@@ -26,14 +26,24 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", b =>
+    {
+        b.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // app.UseAuthentication();
 // app.UseAuthorization();
 // app.UseMiddleware<GoogleAuthenticationMiddleware>();
 
+app.UseCors("CorsPolicy");
 app.MapGraphQL();
-
 app.UseHttpsRedirection();
 
 using (var scope = app.Services.CreateScope())

@@ -1,7 +1,3 @@
-using GreenDonut.Predicates;
-using Schedule.DataLoaders;
-using Schedule.Interfaces;
-
 namespace Schedule.Entities;
 
 public class LessonGroup : EntityWithIntId

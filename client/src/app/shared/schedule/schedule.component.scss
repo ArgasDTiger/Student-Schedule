@@ -1,0 +1,104 @@
+@import "styles";
+
+.container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  overflow: hidden;
+}
+
+.schedule-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.schedule-group-card {
+  background: white;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.schedule-group-card:hover {
+  border-color: $primary-color;
+  transform: translateY(-2px);
+}
+
+.schedule-group-card.active {
+  border-color: $primary-color;
+  background-color: $primary-light;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+caption {
+  font-weight: 600;
+  font-size: 1.25rem;
+  padding: 1.5rem;
+  text-align: left;
+  background: white;
+  border-bottom: 1px solid $border-color;
+}
+
+th {
+  padding: 1rem;
+  background-color: #f8fafc;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid $border-color;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid $border-color;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.class {
+  background: $primary-color;
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.lesson-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lesson-time {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}
+
+.lesson-title {
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.lesson-professor {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}
+
+.lesson-location {
+  color: $text-secondary;
+  font-size: 0.875rem;
+}
