@@ -1,39 +1,33 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Schedule.Helpers.GoogleAuth;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Schedule.Extensions;
 
 public static class AuthenticationServiceExtensions
 {
-    public static IServiceCollection AddGoogleAuthentication(
+    public static IServiceCollection AddAuthenticationService(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var googleOptions = configuration
-            .GetSection(GoogleAuthOptions.SectionName)
-            .Get<GoogleAuthOptions>();
-
-        services.AddAuthentication()
-            .AddCookie()
-            .AddGoogle(options =>
+        services.AddAuthentication(x =>
             {
-                options.ClientId = googleOptions.ClientId;
-                options.ClientSecret = googleOptions.ClientSecret;
-                
-                options.Events = new OAuthEvents
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    OnTicketReceived = async context =>
-                    {
-                        var email = context.Principal.FindFirstValue(ClaimTypes.Email);
-                        if (!email.EndsWith($"@{googleOptions.AllowedDomain}"))
-                        {
-                            context.Response.StatusCode = 403;
-                            context.HandleResponse();
-                        }
-                    }
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["GoogleAuth:Jwt:Key"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
                 };
-            });
+            })
+            .AddCookie();
 
         return services;
     }

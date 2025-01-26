@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Google.Apis.Auth;
+using HotChocolate.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Schedule.Entities;
@@ -9,7 +10,7 @@ using Schedule.Models.Payloads;
 
 namespace Schedule.Schema.Mutations;
 
-public class Mutation(IRepository repository, IUserService userService, IConfiguration configuration)
+public partial class Mutation(IRepository repository, IUserService userService, IConfiguration configuration)
 {
     public async Task<GoogleSignInPayload> Login(string idToken, CancellationToken cancellationToken)
     {
@@ -55,7 +56,6 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Role, user.Role.ToString())
         };

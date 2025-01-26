@@ -19,7 +19,6 @@ import {ToasterManagerService} from "../core/services/toaster-manager.service";
 })
 export class LoginComponent implements OnInit, OnDestroy {
   authSubscription!: Subscription;
-  toastId!: number;
 
   constructor(private socialAuthService: SocialAuthService,
               private authService: AuthService,

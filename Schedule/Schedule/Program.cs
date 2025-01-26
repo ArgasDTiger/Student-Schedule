@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Schedule.Data;
 using Schedule.Extensions;
 using Schedule.Helpers;
-using Schedule.Middleware;
 using Schedule.Schema.Mutations;
 using Schedule.Schema.Queries;
 
@@ -14,17 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 
 builder.Services
-    .AddAuthorization()
     .AddGraphQLServer()
     .AddConvention<INamingConventions>(new PascalCaseEnumConverter())
     .AddQueryType<Query>()
-    .AddMutationType<Mutation>();
+    .AddMutationType<Mutation>()
+    .AddAuthorization();
 
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseLazyLoadingProxies()
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddGoogleAuthentication(builder.Configuration);
+builder.Services.AddAuthenticationService(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -41,11 +40,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<GoogleAuthenticationMiddleware>();
 
-app.UseCors("CorsPolicy");
 app.MapGraphQL();
 app.UseHttpsRedirection();
 
