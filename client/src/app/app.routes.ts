@@ -3,6 +3,6 @@ import {ScheduleComponent} from "./shared/schedule/schedule.component";
 import {LoginComponent} from "./login/login.component";
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', component: ScheduleComponent },
   { path: 'login', component: LoginComponent },
 ];

@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Google.Apis.Auth;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Schedule.Entities;
 using Schedule.Interfaces;
@@ -14,8 +15,7 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
     {
         try
         {
-            var clientId = configuration["GoogleAuth:ClientId"]
-                ?? throw new Exception("Google ClientId is not configured");
+            var clientId = configuration["GoogleAuth:ClientId"] ?? throw new Exception("Authentication failed.");
             // var allowedDomain = configuration["GoogleAuth:AllowedDomain"]
             //                ?? throw new Exception("Allowed Domain is not configured");
                 
@@ -31,9 +31,10 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
             //     throw new Exception("Invalid email domain");
             // }
 
-            var user = await userService.AuthenticateGoogleUserAsync(payload, cancellationToken);
+            var user = await repository.GetAll<User>().SingleOrDefaultAsync(u => u.GoogleId == payload.Subject, cancellationToken);
+            
             if (user is null)
-                throw new Exception("Authentication failed");
+                throw new Exception("User is not found.");
 
             var token = GenerateJwtToken(user);
 
@@ -51,8 +52,7 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
 
     private string GenerateJwtToken(User user)
     {
-        var key = configuration["Authentication:Jwt:Key"] 
-            ?? throw new Exception("JWT Key not configured");
+        var key = configuration["Authentication:Jwt:Key"] ?? throw new Exception("Authentication failed.");
 
         var claims = new List<Claim>
         {
