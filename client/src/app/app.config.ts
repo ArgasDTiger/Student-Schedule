@@ -43,7 +43,10 @@ export const appConfig: ApplicationConfig = {
       const httpLink = inject(HttpLink);
 
       return {
-        link: httpLink.create({ uri: environment.graphqlUrl }),
+        link: httpLink.create({
+          uri: environment.graphqlUrl,
+          withCredentials: true
+        }),
         cache: new InMemoryCache(),
         ssrMode: true,
       };

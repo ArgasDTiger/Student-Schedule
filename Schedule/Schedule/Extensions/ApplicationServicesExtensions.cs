@@ -16,6 +16,8 @@ public static class ApplicationServicesExtensions
         services.AddScoped<Query>();
         services.AddScoped<Mutation>();
         
+        services.AddHttpContextAccessor();
+        
         // services.AddScoped<DataLoaderWithIntId<EntityWithIntId>>();
         // services.AddScoped<DataLoaderWithStringId<EntityWithStringId>>();
         // services.AddScoped<DataLoaderWithIntId<Teacher>>();

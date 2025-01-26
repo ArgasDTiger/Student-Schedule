@@ -10,20 +10,24 @@ public static class AuthenticationServiceExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddAuthentication(options =>
+        services.AddAuthentication(o =>
             {
-                options.DefaultAuthenticateScheme =
-                    options.DefaultChallengeScheme =
-                        options.DefaultForbidScheme =
-                            options.DefaultScheme =
-                                options.DefaultSignInScheme =
-                                    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultAuthenticateScheme =
+                    o.DefaultChallengeScheme =
+                        o.DefaultForbidScheme =
+                            o.DefaultScheme =
+                                o.DefaultSignInScheme =
+                                    o.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddCookie(o =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+                o.Cookie.Name = "token";
+            })
+            .AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = configuration["GoogleAuth:Jwt:Issuer"],
@@ -33,6 +37,15 @@ public static class AuthenticationServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["GoogleAuth:Jwt:Key"]!)
                     )
+                };
+
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["token"];
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

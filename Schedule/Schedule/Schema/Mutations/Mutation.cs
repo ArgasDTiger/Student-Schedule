@@ -34,7 +34,7 @@ public partial class Mutation(IRepository repository, IConfiguration configurati
             if (user is null)
                 throw new Exception("User is not found.");
 
-            var token = tokenService.CreateJwtToken(user);
+            tokenService.CreateJwtToken(user);
 
             UserDTO adaptedUser = user.Role switch
             {
@@ -43,7 +43,6 @@ public partial class Mutation(IRepository repository, IConfiguration configurati
                 UserRole.Admin => user.Adapt<AdminDTO>(),
                 _ => throw new Exception("Unknown user role")
             };
-            adaptedUser.Token = token;
 
             return adaptedUser;
         }
