@@ -11,7 +11,7 @@ namespace Schedule.Schema.Mutations;
 
 public class Mutation(IRepository repository, IUserService userService, IConfiguration configuration)
 {
-    public async Task<GoogleSignInPayload> Login(string requestToken, CancellationToken cancellationToken)
+    public async Task<GoogleSignInPayload> Login(string idToken, CancellationToken cancellationToken)
     {
         try
         {
@@ -24,7 +24,7 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
                 Audience = new[] { clientId }
             };
 
-            var payload = await GoogleJsonWebSignature.ValidateAsync(requestToken, settings);
+            var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
             
             // if (!payload.Email.EndsWith(allowedDomain))
             // {
@@ -32,7 +32,6 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
             // }
 
             var user = await repository.GetAll<User>().SingleOrDefaultAsync(u => u.GoogleId == payload.Subject, cancellationToken);
-            
             if (user is null)
                 throw new Exception("User is not found.");
 
@@ -52,7 +51,7 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
 
     private string GenerateJwtToken(User user)
     {
-        var key = configuration["Authentication:Jwt:Key"] ?? throw new Exception("Authentication failed.");
+        var key = configuration["GoogleAuth:Jwt:Key"] ?? throw new Exception("Authentication failed.");
 
         var claims = new List<Claim>
         {
@@ -65,8 +64,8 @@ public class Mutation(IRepository repository, IUserService userService, IConfigu
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: configuration["Authentication:Jwt:Issuer"],
-            audience: configuration["Authentication:Jwt:Audience"],
+            issuer: configuration["GoogleAuth:Jwt:Issuer"],
+            audience: configuration["GoogleAuth:Jwt:Audience"],
             claims: claims,
             expires: DateTime.Now.AddDays(7),
             signingCredentials: credentials);

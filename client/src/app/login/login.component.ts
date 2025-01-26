@@ -1,67 +1,71 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
-import {Router} from "@angular/router";
+import { Subscription } from 'rxjs';
+import {SocialAuthService} from "@abacritt/angularx-social-login";
+import {NgOptimizedImage} from "@angular/common";
 import {AuthService} from "../core/services/auth.service";
-import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
-import {environment} from "../../environments/environment";
-import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
+import {ToasterManagerService} from "../core/services/toaster-manager.service";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    MatCardModule
+    MatCardModule,
+    NgOptimizedImage
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
-  constructor(private router: Router,
-              private service: AuthService,
-              private toastr: ToastrService) {}
+export class LoginComponent implements OnInit, OnDestroy {
+  authSubscription!: Subscription;
+  toastId!: number;
+
+  constructor(private socialAuthService: SocialAuthService,
+              private authService: AuthService,
+              private router: Router,
+              private toasterManager: ToasterManagerService) {}
 
   ngOnInit() {
-    if (typeof window !== 'undefined') {
-      // @ts-ignore
-      window.onGoogleLibraryLoad = () => {
-        // @ts-ignore
-        google.accounts.id.initialize({
-          client_id: environment.clientId,
-          callback: this.handleCredentialResponse.bind(this),
-          auto_select: false,
-          cancel_on_tap_outside: true,
-        });
-
-        // @ts-ignore
-        google.accounts.id.renderButton(
-          // @ts-ignore
-          document.getElementById("googleBtn"),
-          {
-            theme: "outline",
-            size: "large",
-            shape: "square",
-            text: "signin",
-            width: "500",
-            logo_alignment: "left"
-          }
-        );
-
-        // @ts-ignore
-        google.accounts.id.prompt((notification: PromptMomentNotification) => {});
-      };
-    }
+    this.authSubscription = this.socialAuthService.authState.subscribe((user) => {
+      this.authService.login(user.idToken).subscribe(
+        x => {
+          this.router.navigate(['']);
+        },
+        (error: any) => {
+          this.toasterManager.error("Виникла помилка під час авторизації")
+        }
+      );
+    });
   }
 
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
+  }
 
-  async handleCredentialResponse(response: CredentialResponse) {
-    this.service.login(response.credential).subscribe(
-      x => {
-        this.router.navigate(['/logout']);
+  public createWrapper() {
+    const googleLoginWrapper = document.createElement('div');
+    googleLoginWrapper.style.display = 'none';
+    document.body.appendChild(googleLoginWrapper);
+    // @ts-ignore
+    window.google.accounts.id.renderButton(googleLoginWrapper, {
+      type: 'icon',
+      width: '200',
+    });
+
+    const googleLoginWrapperButton = googleLoginWrapper.querySelector(
+      'div[role=button]'
+    ) as HTMLElement;
+
+    return {
+      click: () => {
+        googleLoginWrapperButton?.click();
       },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+    };
+  };
 
+
+  public login(googleWrapper: any) {
+    googleWrapper.click();
+  }
 }

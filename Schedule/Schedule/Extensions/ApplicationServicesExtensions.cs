@@ -1,6 +1,5 @@
-using Schedule.DataLoaders;
-using Schedule.Entities;
 using Schedule.Interfaces;
+using Schedule.Schema.Mutations;
 using Schedule.Schema.Queries;
 using Schedule.Services;
 
@@ -11,8 +10,10 @@ public static class ApplicationServicesExtensions
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IRepository, Repository>();
-        services.AddScoped<Query>();
         services.AddScoped<IUserService, UserService>();
+        
+        services.AddScoped<Query>();
+        services.AddScoped<Mutation>();
         
         // services.AddScoped<DataLoaderWithIntId<EntityWithIntId>>();
         // services.AddScoped<DataLoaderWithStringId<EntityWithStringId>>();

@@ -19,6 +19,11 @@ export class ToasterManagerService {
     return this._toasterService.success(message);
   }
 
+  error(message: string) {
+    if (!this.isBrowser) return;
+    return this._toasterService.error(message);
+  }
+
   clear(toastId: number) {
     if (!this.isBrowser) return;
     this._toasterService.clear(toastId);

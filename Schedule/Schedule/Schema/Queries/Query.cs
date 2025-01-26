@@ -1,4 +1,3 @@
-using HotChocolate.Authorization;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.DTOs;

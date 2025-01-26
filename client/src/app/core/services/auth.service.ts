@@ -1,5 +1,4 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
 import {Apollo, gql} from "apollo-angular";
 import {map} from "rxjs/operators";
@@ -31,26 +30,23 @@ export class AuthService {
     if (!this.isBrowser) return;
     localStorage.setItem("token", token);
   }
-  login(credentials: string): Observable<any> {
+
+  login(idToken: string): Observable<any> {
     return this.apollo
       .mutate({
         mutation: gql`
-          mutation Login($credentials: String!) {
-            login(requestToken: $credentials) {
+          mutation Login($idToken: String!) {
+            login(idToken: $idToken) {
               token
               user {
                   firstName
                   lastName
                   dateOfBirth
-                  email
-                  googleId
-                  role
-                  id
               }
             }
           }
         `,
-        variables: { credentials },
+        variables: { idToken },
       })
       .pipe(
         map((result: any) => {

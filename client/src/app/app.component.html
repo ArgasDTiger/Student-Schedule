@@ -1,5 +1,6 @@
 @if (isAuthorized) {
   <app-sidebar (sidebarCollapsed)="onSidebarToggle($event)"/>
+
 }
 <main class="main-content" [ngClass]="{'sidebar-collapsed': sidebarCollapsed, 'full': !isAuthorized}">
   <router-outlet/>

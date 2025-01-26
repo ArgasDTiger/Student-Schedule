@@ -18,22 +18,11 @@ export class AppComponent {
   sidebarCollapsed: boolean = false;
   isAuthorized: boolean = false;
 
-  toastId!: number;
   constructor(private toasterManager: ToasterManagerService, private authService: AuthService) {
-    const toast = this.toasterManager.success('Close already!');
-    if (toast) {
-      this.toastId = toast.toastId;
-    }
-
     this.isAuthorized = this.authService.isAuthorized();
-  }
-
-  clear() {
-    this.toasterManager.clear(this.toastId);
   }
 
   onSidebarToggle(isCollapsed: boolean) {
     this.sidebarCollapsed = isCollapsed;
   }
-
 }

@@ -6,6 +6,9 @@
       Зверніть увагу, що вхід відбувається тільки з корпоративної пошти.<br>
       Якщо вам не вдалося увійти, будь ласка, зв'яжіться з модераторами та/або адміністраторами сайту.
     </span>
-    <div id="googleBtn"></div>
+    <button class="google-button" (click)="login(this.createWrapper())">
+      <img src="assets/google logo.svg"/>
+      Увійти з Google
+    </button>
   </mat-card>
 </div>

@@ -11,6 +11,7 @@ import {environment} from "../environments/environment";
 import {provideAnimations} from "@angular/platform-browser/animations";
 import {provideToastr} from "ngx-toastr";
 import {CustomToast} from "./shared/custom-toast/custom-toast.component";
+import {GoogleLoginProvider, SocialAuthServiceConfig} from "@abacritt/angularx-social-login";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +27,18 @@ export const appConfig: ApplicationConfig = {
       closeButton: true,
       toastComponent: CustomToast
     }),
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.clientId),
+          },
+        ]
+      } as SocialAuthServiceConfig,
+    },
     provideApollo(() => {
       const httpLink = inject(HttpLink);
 
