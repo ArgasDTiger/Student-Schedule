@@ -38,11 +38,6 @@ export class AuthService {
           mutation Login($idToken: String!) {
             login(idToken: $idToken) {
               token
-              user {
-                  firstName
-                  lastName
-                  dateOfBirth
-              }
             }
           }
         `,

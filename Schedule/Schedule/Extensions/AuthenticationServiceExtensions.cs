@@ -6,28 +6,35 @@ namespace Schedule.Extensions;
 
 public static class AuthenticationServiceExtensions
 {
-    public static IServiceCollection AddAuthenticationService(
+    public static IServiceCollection AddAuthenticationServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddAuthentication(x =>
+        services.AddAuthentication(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme =
+                    options.DefaultChallengeScheme =
+                        options.DefaultForbidScheme =
+                            options.DefaultScheme =
+                                options.DefaultSignInScheme =
+                                    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(x =>
+            .AddJwtBearer(options =>
             {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["GoogleAuth:Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = configuration["GoogleAuth:Jwt:Audience"],
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["GoogleAuth:Jwt:Key"])),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration["GoogleAuth:Jwt:Key"]!)
+                    )
                 };
-            })
-            .AddCookie();
+            });
 
         return services;
     }

@@ -11,6 +11,7 @@ public static class ApplicationServicesExtensions
     {
         services.AddScoped<IRepository, Repository>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ITokenService, TokenService>();
         
         services.AddScoped<Query>();
         services.AddScoped<Mutation>();

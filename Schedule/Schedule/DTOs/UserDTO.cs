@@ -2,39 +2,28 @@ using Schedule.Entities;
 
 namespace Schedule.DTOs;
 
-public record UserDTO(
-    int Id, 
-    string FirstName,
-    string MiddleName, 
-    string LastName,
-    DateTime DateOfBirth, 
-    string Email);
+public class UserDTO
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string MiddleName { get; set; }
+    public string LastName { get; set; }
+    public DateTime DateOfBirth { get; set; }
+    public string Email { get; set; }
+    public string Token { get; set; }
+    public UserRole Role { get; set; }
+}
 
-public record StudentDTO(
-    int Id,
-    string FirstName,
-    string MiddleName,
-    string LastName,
-    DateTime DateOfBirth,
-    string Email,
-    List<Group> Groups) 
-    : UserDTO(Id, FirstName, MiddleName, LastName, DateOfBirth, Email);
-    
-public record ModeratorDTO(
-    int Id,
-    string FirstName,
-    string MiddleName,
-    string LastName,
-    DateTime DateOfBirth,
-    string Email,
-    List<Faculty> Faculties) 
-    : UserDTO(Id, FirstName, MiddleName, LastName, DateOfBirth, Email);
-    
-public record AdminDTO(
-    int Id,
-    string FirstName,
-    string MiddleName,
-    string LastName,
-    DateTime DateOfBirth,
-    string Email) 
-    : UserDTO(Id, FirstName, MiddleName, LastName, DateOfBirth, Email);
+public class StudentDTO : UserDTO
+{
+    public List<GroupDTO> Groups { get; set; }
+}
+
+public class ModeratorDTO : UserDTO
+{
+    public List<Faculty> Faculties { get; set; }
+}
+
+public class AdminDTO : UserDTO
+{
+}

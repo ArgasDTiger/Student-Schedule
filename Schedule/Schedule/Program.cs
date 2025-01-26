@@ -23,7 +23,7 @@ builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseLazyLoadingProxies()
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAuthenticationService(builder.Configuration);
+builder.Services.AddAuthenticationServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
