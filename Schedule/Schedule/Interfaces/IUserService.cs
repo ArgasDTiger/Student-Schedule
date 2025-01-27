@@ -1,9 +1,9 @@
-using Google.Apis.Auth;
-using Schedule.Entities;
+using Schedule.DTOs;
 
 namespace Schedule.Interfaces;
 
 public interface IUserService
 {
-    Task<User?> AuthenticateGoogleUserAsync(GoogleJsonWebSignature.Payload payload, CancellationToken cancellationToken);
+    Task<UserDTO> Login(string idToken, CancellationToken cancellationToken);
+    Task<UserDTO> GetCurrentUser(CancellationToken cancellationToken);
 }

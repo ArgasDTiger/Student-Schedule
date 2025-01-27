@@ -8,47 +8,29 @@ using Schedule.Interfaces;
 
 namespace Schedule.Schema.Mutations;
 
-public partial class Mutation(IRepository repository, IConfiguration configuration, ITokenService tokenService)
+public class Mutation
 {
+    private readonly IRepository _repository;
+    private readonly IConfiguration _configuration;
+    private readonly ITokenService _tokenService;
+    private readonly IUserService _userService;
+
+    public Mutation(IRepository repository, IConfiguration configuration, ITokenService tokenService, IUserService userService)
+    {
+        _repository = repository;
+        _configuration = configuration;
+        _tokenService = tokenService;
+        _userService = userService;
+    }
+    
     public async Task<UserDTO> Login(string idToken, CancellationToken cancellationToken)
     {
-        try
-        {
-            var clientId = configuration["GoogleAuth:ClientId"] ?? throw new Exception("Authentication failed.");
-            // var allowedDomain = configuration["GoogleAuth:AllowedDomain"]
-            //                ?? throw new Exception("Allowed Domain is not configured");
-                
-            var settings = new GoogleJsonWebSignature.ValidationSettings
-            {
-                Audience = new[] { clientId }
-            };
-
-            var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
-            
-            // if (!payload.Email.EndsWith(allowedDomain))
-            // {
-            //     throw new Exception("Invalid email domain");
-            // }
-
-            var user = await repository.GetAll<User>().SingleOrDefaultAsync(u => u.GoogleId == payload.Subject, cancellationToken);
-            if (user is null)
-                throw new Exception("User is not found.");
-
-            tokenService.CreateJwtToken(user);
-
-            UserDTO adaptedUser = user.Role switch
-            {
-                UserRole.Student => user.Adapt<StudentDTO>(),
-                UserRole.Moderator => user.Adapt<ModeratorDTO>(),
-                UserRole.Admin => user.Adapt<AdminDTO>(),
-                _ => throw new Exception("Unknown user role")
-            };
-
-            return adaptedUser;
-        }
-        catch (Exception ex)
-        {
-            throw new GraphQLException(new Error("Authentication failed", ex.Message));
-        }
+        return await _userService.Login(idToken, cancellationToken);
     }
+
+    public async Task RevokeToken(int userId, CancellationToken cancellationToken)
+    {
+        await _tokenService.RevokeToken(userId, cancellationToken);
+    }
+
 }

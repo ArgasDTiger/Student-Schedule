@@ -9,8 +9,9 @@ public class User : EntityWithIntId
     public string Email { get; set; }
     public string GoogleId { get; set; }
     public UserRole Role { get; set; }
-    public virtual List<Group>? Groups { get; set; }
-    public virtual List<Faculty>? Faculties { get; set; }
+    public virtual List<RefreshToken> RefreshTokens { get; set; }
+    public virtual List<Group> Groups { get; set; }
+    public virtual List<Faculty> Faculties { get; set; }
 }
 
 public enum UserRole
