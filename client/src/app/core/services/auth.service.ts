@@ -31,13 +31,13 @@ export class AuthService {
     localStorage.setItem("token", token);
   }
 
-  login(idToken: string): Observable<any> {
+  login(idToken: string) {
     return this.apollo
       .mutate({
         mutation: gql`
           mutation Login($idToken: String!) {
             login(idToken: $idToken) {
-              token
+              firstName
             }
           }
         `,

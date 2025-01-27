@@ -11,11 +11,11 @@
     </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let lessonNumber of lessonNumbers">
-        <ng-container *ngFor="let day of daysOfWeek">
-          <app-lesson [lessonInfo]="getLesson(lessonNumber, day)"/>
-        </ng-container>
-      </tr>
+    <tr *ngFor="let lessonNumber of lessonNumbers">
+      <ng-container *ngFor="let day of daysOfWeek">
+        <app-lesson [lessonInfo]="getLesson(lessonNumber, day)"/>
+      </ng-container>
+    </tr>
     </tbody>
   </table>
 </div>

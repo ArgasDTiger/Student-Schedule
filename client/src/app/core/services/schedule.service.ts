@@ -1,16 +1,23 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import { Apollo, gql } from "apollo-angular";
 import { map } from 'rxjs/operators';
 import { LessonInfo } from '../models/lessonInfo';
+import {isPlatformBrowser} from "@angular/common";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScheduleService {
+  isBrowser = false;
 
-  constructor(private readonly apollo: Apollo) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private readonly apollo: Apollo) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   getScheduleByGroupId(groupId: number) {
+    if (!this.isBrowser) return new Observable<LessonInfo[]>();
     return this.apollo
       .watchQuery<{ scheduleByStudentGroup: LessonInfo[] }>({
         query: gql`

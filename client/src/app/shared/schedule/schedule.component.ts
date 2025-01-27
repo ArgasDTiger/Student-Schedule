@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import { ScheduleService } from "../../core/services/schedule.service";
 import { LessonInfo } from "../../core/models/lessonInfo";
 import {LessonComponent} from "./lesson/lesson.component";
 import {LessonNumber} from "../../core/enums/lessonNumber";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
-import {NgForOf} from "@angular/common";
+import {isPlatformBrowser, NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-schedule',
@@ -21,8 +21,11 @@ export class ScheduleComponent implements OnInit {
   maxLessonNumber: number = 5;
   lessonNumbers: number[] = [];
   daysOfWeek = Object.values(DayOfWeek).slice(0, 5);
+  isBrowser = false;
 
-  constructor(private scheduleService: ScheduleService) {
+  constructor(private scheduleService: ScheduleService,
+              @Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {

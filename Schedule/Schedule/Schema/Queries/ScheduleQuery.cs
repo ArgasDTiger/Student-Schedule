@@ -9,6 +9,7 @@ namespace Schedule.Schema.Queries;
 public partial class Query
 {
     // [Authorize(Roles = [nameof(UserRole.Student)])
+    [Authorize]
     public async Task<List<LessonInfoDTO>> GetScheduleByStudentGroup(int groupId, CancellationToken cancellationToken)
     {
         var lessonGroups = await _repository
