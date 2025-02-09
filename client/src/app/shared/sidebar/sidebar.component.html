@@ -8,6 +8,11 @@
     }
   </div>
   @if (!isSidebarCollapsed) {
-    <app-student-sidebar/>
+    @if (userRole === Role.Student) {
+      <app-student-sidebar/>
+    }
+    @if (userRole === Role.Moderator) {
+      <app-moderator-sidebar/>
+    }
   }
 </div>

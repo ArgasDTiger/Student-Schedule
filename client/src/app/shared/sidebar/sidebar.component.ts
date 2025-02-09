@@ -1,15 +1,19 @@
-import {Component, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit, Output} from '@angular/core';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatIconModule} from "@angular/material/icon";
 import {StudentSidebarComponent} from "./student-sidebar/student-sidebar.component";
 import {NgClass, NgStyle} from "@angular/common";
 import { EventEmitter } from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
+import {Subscription} from "rxjs";
+import {UserService} from "../../core/services/user.service";
+import {Role} from "../../core/enums/role";
+import {ModeratorSidebarComponent} from "./moderator-sidebar/moderator-sidebar.component";
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [MatIconModule, MatSlideToggleModule, StudentSidebarComponent, NgClass, NgStyle
+  imports: [MatIconModule, MatSlideToggleModule, StudentSidebarComponent, NgClass, NgStyle, ModeratorSidebarComponent
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
@@ -25,13 +29,32 @@ import {animate, style, transition, trigger} from "@angular/animations";
     ]),
   ],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
+  private currentUserSubscription?: Subscription;
   @Output() sidebarCollapsed = new EventEmitter<boolean>();
 
   isSidebarCollapsed = false;
+  userRole?: Role;
+
+  constructor(private userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(
+      user => {
+        this.userRole = user?.role;
+      }
+    )
+  }
+
+  ngOnDestroy() {
+    this.currentUserSubscription?.unsubscribe();
+  }
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
     this.sidebarCollapsed.emit(this.isSidebarCollapsed);
   }
+
+  protected readonly Role = Role;
 }

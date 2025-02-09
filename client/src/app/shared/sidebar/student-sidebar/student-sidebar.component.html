@@ -1,10 +1,12 @@
 <div class="list">
-  <div class="item">
-    <mat-icon class="icon">groups</mat-icon>
-    <span>Група 201</span>
-  </div>
-  <div class="item active">
-    <mat-icon class="icon">groups</mat-icon>
-    <span>Група 202</span>
-  </div>
+  @for (group of userGroups; track group.id) {
+    <div
+      class="item"
+      [routerLink]="['/schedule', group.id]"
+      routerLinkActive="active"
+    >
+      <mat-icon class="icon">groups</mat-icon>
+      <span>Група {{ group.groupNumber }}</span>
+    </div>
+  }
 </div>

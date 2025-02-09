@@ -1,9 +1,10 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Apollo, gql} from "apollo-angular";
-import {map} from "rxjs/operators";
+import {map, take} from "rxjs/operators";
 import {isPlatformBrowser} from "@angular/common";
-import {catchError, of} from "rxjs";
 import {RefreshTokenResponse} from "../responses/refresh-token-response";
+import {UserService} from "./user.service";
+import {of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class AuthService {
   isBrowser = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private readonly apollo: Apollo) {
+              private readonly apollo: Apollo,
+              private userService: UserService) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
@@ -22,9 +24,12 @@ export class AuthService {
   }
 
   isAuthorized() {
-    if (!this.isBrowser) return false;
-    const token = localStorage.getItem("token");
-    return !!token;
+    if (!this.isBrowser) return of(false);
+    return this.userService.currentUser$.pipe(
+      map(user => {
+        console.log(`user is ${JSON.stringify(user)}`)
+        return !!user;
+      }));
   }
 
   login(idToken: string) {
@@ -48,19 +53,19 @@ export class AuthService {
 
   async refreshToken(): Promise<boolean> {
     return this.apollo
-    .mutate<RefreshTokenResponse>({
-      mutation: gql`
-        mutation RefreshToken {
-          refreshToken
-        }`
-    })
-    .toPromise()
-    .then(response => {
-      return response?.data?.refreshToken === true;
-    })
-    .catch(e => {
-      return false;
-    });
+      .mutate<RefreshTokenResponse>({
+        mutation: gql`
+          mutation RefreshToken {
+            refreshToken
+          }`
+      })
+      .toPromise()
+      .then(response => {
+        return response?.data?.refreshToken === true;
+      })
+      .catch(e => {
+        return false;
+      });
   }
 
 }

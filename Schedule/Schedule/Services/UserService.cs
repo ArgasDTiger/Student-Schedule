@@ -55,19 +55,19 @@ public class UserService : IUserService
 
     public async Task<UserDTO> GetCurrentUser(CancellationToken cancellationToken)
     {
-        var token = _cookieService.GetRefreshToken();
+        var token = _cookieService.GetAccessToken();
         
         var handler = new JwtSecurityTokenHandler();
 
         if (!handler.CanReadToken(token))
-            throw new DetailedException("Invalid JWT token.");
+            throw new DetailedException("Token is invalid.");
 
         var jwtToken = handler.ReadJwtToken(token);
 
-        var email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        var email = jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
 
         if (string.IsNullOrEmpty(email))
-            throw new DetailedException("Invalid JWT token.");
+            throw new DetailedException("Token is invalid.");
 
         var user = await _repository.GetAll<User>().SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
 
