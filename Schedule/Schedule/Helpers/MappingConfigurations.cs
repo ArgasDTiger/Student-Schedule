@@ -13,10 +13,13 @@ public class MappingConfigurations : IRegister
             .Map(dest => dest.Teacher, src => src.Teacher.Adapt<TeacherDTO>())
             .Map(dest => dest.Lesson, src => src.Lesson.Adapt<LessonDTO>());
 
-        config.NewConfig<Faculty, FacultyDTO>();
-        
         config.NewConfig<Group, GroupDTO>()
+            .PreserveReference(true)
             .Map(dest => dest.Faculty, src => src.Faculty.Adapt<FacultyDTO>());
+
+        config.NewConfig<Faculty, FacultyDTO>()
+            .PreserveReference(true)
+            .Map(dest => dest.Groups, src => src.Groups.Adapt<GroupDTO[]>());
 
         config.NewConfig<User, UserDTO>()
             .Map(dest => dest.Groups, src => src.Groups.Adapt<List<GroupDTO>>())

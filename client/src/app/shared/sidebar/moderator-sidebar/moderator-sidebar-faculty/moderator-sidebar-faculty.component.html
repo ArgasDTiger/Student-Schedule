@@ -1,0 +1,20 @@
+<div class="faculty-container">
+  <div class="faculty-header" (click)="toggleGroups()">
+    <div class="header-content">
+      <mat-icon class="faculty-icon">apartment</mat-icon>
+      <span class="faculty-name">{{ faculty.name }}</span>
+    </div>
+    <mat-icon class="toggle-icon" [@rotateIcon]="groupsVisible ? 'expanded' : 'collapsed'">
+      keyboard_arrow_down
+    </mat-icon>
+  </div>
+
+  <div class="groups-container" [@expandCollapse]="groupsVisible ? 'expanded' : 'collapsed'">
+    @for (group of faculty.groups; track group.id) {
+      <div class="group-item">
+        <mat-icon>groups</mat-icon>
+        <span class="group-name">Група {{ group.groupNumber }}</span>
+      </div>
+    }
+  </div>
+</div>

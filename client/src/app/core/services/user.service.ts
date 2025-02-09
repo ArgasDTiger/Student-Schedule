@@ -30,6 +30,14 @@ export class UserService {
               id,
               groupNumber
             },
+            faculties {
+              id,
+              name
+              groups {
+                id,
+                groupNumber,
+              }
+            }
             role
           }
         }

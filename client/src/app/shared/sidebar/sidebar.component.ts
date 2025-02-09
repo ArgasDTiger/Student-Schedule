@@ -24,7 +24,7 @@ import {ModeratorSidebarComponent} from "./moderator-sidebar/moderator-sidebar.c
         animate('0.3s ease', style({ opacity: 1 })),
       ]),
       transition(':leave', [
-        animate('0.3s ease', style({ opacity: 0 })), // Fade out
+        animate('0.3s ease', style({ opacity: 0 })),
       ]),
     ]),
   ],

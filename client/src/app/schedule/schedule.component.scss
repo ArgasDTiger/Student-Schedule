@@ -21,16 +21,16 @@
   padding: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
-}
 
-.schedule-group-card:hover {
-  border-color: $primary-color;
-  transform: translateY(-2px);
-}
+  &:hover {
+    border-color: $primary-color;
+    transform: translateY(-2px);
+  }
 
-.schedule-group-card.active {
-  border-color: $primary-color;
-  background-color: $primary-light;
+  &.active {
+    border-color: $primary-color;
+    background-color: $primary-light;
+  }
 }
 
 table {

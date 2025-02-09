@@ -1,1 +1,5 @@
-<p>moderator-sidebar works!</p>
+<div class="list">
+  @for (faculty of userFaculties; track faculty.id) {
+    <app-moderator-sidebar-faculty [faculty]="faculty"/>
+  }
+</div>

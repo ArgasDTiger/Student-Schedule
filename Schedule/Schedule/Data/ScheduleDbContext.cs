@@ -8,7 +8,7 @@ public class ScheduleDbContext : DbContext
     public ScheduleDbContext(DbContextOptions<ScheduleDbContext> options) : base(options)
     {
     }
-    
+
     public DbSet<Faculty> Faculties { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
@@ -16,7 +16,7 @@ public class ScheduleDbContext : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -24,13 +24,13 @@ public class ScheduleDbContext : DbContext
             optionsBuilder.UseLazyLoadingProxies();
         }
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Group>()
             .HasOne(g => g.Faculty)
-            .WithMany()
-            .HasForeignKey("FacultyId")
+            .WithMany(f => f.Groups)
+            .HasForeignKey(g => g.FacultyId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<LessonGroup>()
@@ -42,7 +42,7 @@ public class ScheduleDbContext : DbContext
             .HasOne(lg => lg.Group)
             .WithMany()
             .HasForeignKey("GroupId");
-        
+
         modelBuilder.Entity<LessonGroup>()
             .HasOne(lt => lt.Teacher)
             .WithMany()
@@ -50,11 +50,15 @@ public class ScheduleDbContext : DbContext
 
         modelBuilder.Entity<User>()
             .HasMany(s => s.Groups)
-            .WithMany();
+            .WithMany()
+            .UsingEntity(j => j.ToTable("GroupUsers")
+                .Property("GroupsId").HasColumnName("GroupId"));
 
         modelBuilder.Entity<User>()
             .HasMany(m => m.Faculties)
-            .WithMany();
+            .WithMany()
+            .UsingEntity(j => j.ToTable("FacultyUsers")
+                .Property("FacultiesId").HasColumnName("FacultyId"));
 
         modelBuilder.Entity<RefreshToken>()
             .Property(rt => rt.Revoked)
