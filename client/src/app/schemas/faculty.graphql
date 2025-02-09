@@ -1,0 +1,5 @@
+type Faculty {
+  id: Int!
+  name: String!
+  corpusNumber: Int!
+}

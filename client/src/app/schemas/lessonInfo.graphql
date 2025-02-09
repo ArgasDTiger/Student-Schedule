@@ -1,0 +1,14 @@
+type LessonInfo {
+  lesson: Lesson!
+  group: Group
+  teacher: Teacher
+  weekDay: String!
+  lessonNumber: String!
+  type: String!
+  room: Int!
+  oddWeek: Boolean!
+  evenWeek: Boolean!
+}
+
+
+

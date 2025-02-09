@@ -1,24 +1,15 @@
-
-using Google.Apis.Auth;
-using Mapster;
-using Microsoft.EntityFrameworkCore;
 using Schedule.DTOs;
-using Schedule.Entities;
 using Schedule.Interfaces;
 
 namespace Schedule.Schema.Mutations;
 
 public class Mutation
 {
-    private readonly IRepository _repository;
-    private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
 
-    public Mutation(IRepository repository, IConfiguration configuration, ITokenService tokenService, IUserService userService)
+    public Mutation(ITokenService tokenService, IUserService userService)
     {
-        _repository = repository;
-        _configuration = configuration;
         _tokenService = tokenService;
         _userService = userService;
     }
@@ -27,10 +18,17 @@ public class Mutation
     {
         return await _userService.Login(idToken, cancellationToken);
     }
-
-    public async Task RevokeToken(int userId, CancellationToken cancellationToken)
+    
+    public async Task<bool?> RefreshToken(CancellationToken cancellationToken)
     {
-        await _tokenService.RevokeToken(userId, cancellationToken);
+        await _tokenService.RefreshToken(cancellationToken);
+        return true;
+    }
+
+    public async Task<bool?> RevokeToken(CancellationToken cancellationToken)
+    {
+        await _tokenService.RevokeToken(cancellationToken);
+        return true;
     }
 
 }

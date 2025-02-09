@@ -1,8 +1,9 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {Observable} from "rxjs";
 import {Apollo, gql} from "apollo-angular";
 import {map} from "rxjs/operators";
 import {isPlatformBrowser} from "@angular/common";
+import {catchError, of} from "rxjs";
+import {RefreshTokenResponse} from "../responses/refresh-token-response";
 
 @Injectable({
   providedIn: 'root'
@@ -26,18 +27,14 @@ export class AuthService {
     return !!token;
   }
 
-  saveToken(token: string) {
-    if (!this.isBrowser) return;
-    localStorage.setItem("token", token);
-  }
-
   login(idToken: string) {
     return this.apollo
       .mutate({
         mutation: gql`
           mutation Login($idToken: String!) {
             login(idToken: $idToken) {
-              firstName
+              firstName,
+              lastName
             }
           }
         `,
@@ -45,8 +42,25 @@ export class AuthService {
       })
       .pipe(
         map((result: any) => {
-          this.saveToken(result.data.login.token);
           return result.data.login;
         }));
   }
+
+  async refreshToken(): Promise<boolean> {
+    return this.apollo
+    .mutate<RefreshTokenResponse>({
+      mutation: gql`
+        mutation RefreshToken {
+          refreshToken
+        }`
+    })
+    .toPromise()
+    .then(response => {
+      return response?.data?.refreshToken === true;
+    })
+    .catch(e => {
+      return false;
+    });
+  }
+
 }

@@ -1,0 +1,11 @@
+type User {
+  id: Int!
+  firstName: String!
+  middleName: String
+  lastName: String!
+  dateOfBirth: String!
+  email: String!
+  role: String!
+  groups: [Group!]!
+  faculties: [Faculty!]!
+}

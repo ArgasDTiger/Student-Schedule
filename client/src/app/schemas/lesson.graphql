@@ -1,0 +1,4 @@
+type Lesson {
+  id: Int!
+  name: String!
+}

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Schedule.Entities;
+using Schedule.Exceptions;
 using Schedule.Interfaces;
 
 namespace Schedule.Services;
@@ -59,27 +60,30 @@ public class TokenService : ITokenService
             .SingleOrDefaultAsync(cancellationToken);
 
         if (user is null)
-            throw new BadHttpRequestException("User is not found");
+            throw new UserIsNotFoundException();
 
         var usersRefreshToken = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
 
         if (usersRefreshToken?.ExpiresAt <= DateTime.UtcNow || usersRefreshToken?.Revoked == true)
-            throw new UnauthorizedAccessException("Refresh token is expired or invalid");
+            throw new UnauthorizedAccessException("Refresh token is expired or invalid.");
 
         await CreateJwtToken(user, cancellationToken);
     }
 
-    public async Task RevokeToken(int userId, CancellationToken cancellationToken)
+    public async Task RevokeToken(CancellationToken cancellationToken)
     {
-        var user = await _repository.GetAll<User>().SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        var refreshToken = _cookieService.GetRefreshToken();
+        
+        var user = await _repository.GetAll<User>()
+            .Where(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken))
+            .SingleOrDefaultAsync(cancellationToken);
+
         if (user is null)
-            throw new BadHttpRequestException("User is not found");
+            throw new UserIsNotFoundException();
 
-        if (user.RefreshTokens == null || !user.RefreshTokens.Any())
-            throw new InvalidOperationException("No refresh tokens are available to revoke");
-
-        foreach (var token in user.RefreshTokens.Where(rt => rt.ExpiresAt > DateTime.UtcNow))
-            token.Revoked = true;
+        var token = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
+        token!.Revoked = true;
+        _repository.Update(user);
         await _repository.SaveChangesAsync(cancellationToken);
         
         _cookieService.RemoveAccessToken();

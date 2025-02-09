@@ -1,0 +1,5 @@
+type Mutation {
+  login(idToken: String!): User!
+  refreshToken: Boolean!
+  revokeToken: Boolean!
+}

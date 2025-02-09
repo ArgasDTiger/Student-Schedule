@@ -17,7 +17,8 @@ builder.Services
     .AddConvention<INamingConventions>(new PascalCaseEnumConverter())
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
-    .AddAuthorization();
+    .AddAuthorization()
+    .AddErrorFilter<DetailedExceptionErrorFilter>();
 
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseLazyLoadingProxies()

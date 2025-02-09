@@ -18,9 +18,11 @@ public class MappingConfigurations : IRegister
         config.NewConfig<Group, GroupDTO>()
             .Map(dest => dest.Faculty, src => src.Faculty.Adapt<FacultyDTO>());
 
-        config.NewConfig<User, UserDTO>();
+        config.NewConfig<User, UserDTO>()
+            .Map(dest => dest.Groups, src => src.Groups.Adapt<List<GroupDTO>>())
+            .Map(dest => dest.Faculties, src => src.Faculties.Adapt<List<FacultyDTO>>());
         
-        config.NewConfig<User, object>()
+        /*config.NewConfig<User, object>()
             .MapWith(src => 
                 src.Role == UserRole.Admin ? src.Adapt<AdminDTO>() :
                 src.Role == UserRole.Moderator ? src.Adapt<ModeratorDTO>() :
@@ -31,6 +33,6 @@ public class MappingConfigurations : IRegister
             .Map(dest => dest.Groups, src => src.Groups.Adapt<List<GroupDTO>>());
         config.NewConfig<User, ModeratorDTO>()
             .Map(dest => dest.Faculties, src => src.Faculties.Adapt<List<FacultyDTO>>());
-        config.NewConfig<User, AdminDTO>();
+        config.NewConfig<User, AdminDTO>();*/
     }  
 }

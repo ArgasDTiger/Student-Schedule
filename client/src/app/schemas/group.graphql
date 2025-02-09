@@ -1,0 +1,5 @@
+type Group {
+  id: Int!
+  groupNumber: Int!
+  faculty: Faculty!
+}

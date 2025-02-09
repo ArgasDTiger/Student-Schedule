@@ -5,6 +5,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.DTOs;
 using Schedule.Entities;
+using Schedule.Exceptions;
 using Schedule.Interfaces;
 
 namespace Schedule.Services;
@@ -59,14 +60,14 @@ public class UserService : IUserService
         var handler = new JwtSecurityTokenHandler();
 
         if (!handler.CanReadToken(token))
-            throw new InvalidOperationException("Invalid JWT token.");
+            throw new DetailedException("Invalid JWT token.");
 
         var jwtToken = handler.ReadJwtToken(token);
 
         var email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
         if (string.IsNullOrEmpty(email))
-            throw new InvalidOperationException("Invalid JWT token.");
+            throw new DetailedException("Invalid JWT token.");
 
         var user = await _repository.GetAll<User>().SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
 

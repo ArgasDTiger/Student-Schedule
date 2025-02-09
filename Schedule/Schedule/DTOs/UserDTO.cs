@@ -11,9 +11,11 @@ public class UserDTO
     public DateTime DateOfBirth { get; set; }
     public string Email { get; set; }
     public UserRole Role { get; set; }
+    public List<GroupDTO> Groups { get; set; }
+    public List<Faculty> Faculties { get; set; }
 }
 
-public class StudentDTO : UserDTO
+/*public class StudentDTO : UserDTO
 {
     public List<GroupDTO> Groups { get; set; }
 }
@@ -25,4 +27,4 @@ public class ModeratorDTO : UserDTO
 
 public class AdminDTO : UserDTO
 {
-}
+}*/

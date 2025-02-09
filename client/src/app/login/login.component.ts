@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['']);
         },
         (error: any) => {
-          this.toasterManager.error("Виникла помилка під час авторизації")
+          this.toasterManager.error("Виникла помилка під час авторизації.")
         }
       );
     });
