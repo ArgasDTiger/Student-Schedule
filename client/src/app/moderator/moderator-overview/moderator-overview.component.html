@@ -1,0 +1,20 @@
+<div class="main-content">
+    <h1 class="content-title">Група {{ selectedGroupNumber }}</h1>
+
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'schedule'"
+      (click)="switchTab('schedule')">
+      Розклад
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'groups'"
+      (click)="switchTab('groups')">
+      Управління групою
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

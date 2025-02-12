@@ -1,6 +1,16 @@
 <td>
-  @if (lessonInfo) {
-    <div class="class">{{ lessonNumber }}</div>
+  @if (lessonInfo && userRole && userRole === Role.Student) {
+    <div class="class student">{{ lessonNumber }}</div>
+  }
+  @if (userRole && userRole === Role.Moderator) {
+    <div class="class moderator">{{ lessonNumber === 0? emptyLessonNumber : lessonNumber }}</div>
+
+    @if (lessonInfo) {
+      <mat-icon class="icon">edit</mat-icon>
+      <mat-icon class="icon">delete</mat-icon>
+    } @else {
+      <mat-icon class="icon moderator">add</mat-icon>
+    }
   }
 </td>
 <td>

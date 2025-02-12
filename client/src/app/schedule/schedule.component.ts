@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser, NgForOf} from "@angular/common";
 import {DayOfWeek} from "../core/enums/dayOfWeek";
 import {LessonComponent} from "./lesson/lesson.component";
@@ -9,6 +9,8 @@ import {UserService} from "../core/services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {take} from "rxjs/operators";
 import {ToasterManagerService} from "../core/services/toaster-manager.service";
+import {Subscription} from "rxjs";
+import {Role} from "../core/enums/role";
 
 @Component({
   selector: 'app-schedule',
@@ -20,12 +22,16 @@ import {ToasterManagerService} from "../core/services/toaster-manager.service";
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss'
 })
-export class ScheduleComponent implements OnInit {
+export class ScheduleComponent implements OnInit, OnDestroy {
+  private userSubscription?: Subscription;
+
   lessons: LessonInfo[] = [];
   maxLessonNumber: number = 5;
   lessonNumbers: number[] = [];
+  moderatorLessonNumbers: number[] = [1, 2, 3, 4, 5];
   daysOfWeek = Object.values(DayOfWeek).slice(0, 5);
   isBrowser = false;
+  userRole?: Role;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
               private scheduleService: ScheduleService,
@@ -37,20 +43,38 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userSubscription = this.userService.currentUser$.subscribe(user => {
+      this.userRole = user?.role;
+    });
+
     this.route.params.subscribe(params => {
       const groupId = params['id'];
       if (groupId) {
         this.loadSchedule(Number(groupId));
-      } else {
+        return;
+      }
+      this.route.parent?.params.subscribe(parentParams => {
+        const parentGroupId = parentParams['id'];
+        if (parentGroupId) {
+          this.loadSchedule(Number(parentGroupId));
+          return;
+        }
+
         this.userService.currentUser$.pipe(
           take(1)
         ).subscribe(async user => {
           if (user?.groups?.length) {
             await this.router.navigate(['/schedule', user.groups[0].id]);
           }
-        })
-      }
-    })
+        });
+      });
+    });
+
+
+  }
+
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
   }
 
   getLesson(lessonNumber: number, day: string) {
@@ -71,4 +95,6 @@ export class ScheduleComponent implements OnInit {
       }
     );
   }
+
+  protected readonly Role = Role;
 }

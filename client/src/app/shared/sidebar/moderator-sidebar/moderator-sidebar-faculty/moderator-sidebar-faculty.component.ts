@@ -1,16 +1,18 @@
-// moderator-sidebar-faculty.component.ts
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from "@angular/material/icon";
 import { Faculty } from "../../../../core/models/faculty";
 import { CommonModule } from "@angular/common";
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'app-moderator-sidebar-faculty',
   standalone: true,
   imports: [
     MatIconModule,
-    CommonModule
+    CommonModule,
+    RouterLinkActive,
+    RouterLink
   ],
   templateUrl: './moderator-sidebar-faculty.component.html',
   styleUrl: './moderator-sidebar-faculty.component.scss',

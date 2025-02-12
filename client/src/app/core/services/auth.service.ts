@@ -27,7 +27,6 @@ export class AuthService {
     if (!this.isBrowser) return of(false);
     return this.userService.currentUser$.pipe(
       map(user => {
-        console.log(`user is ${JSON.stringify(user)}`)
         return !!user;
       }));
   }
@@ -47,6 +46,9 @@ export class AuthService {
       })
       .pipe(
         map((result: any) => {
+          if (this.isBrowser) {
+            localStorage.setItem("sidebar_collapsed", "false");
+          }
           return result.data.login;
         }));
   }

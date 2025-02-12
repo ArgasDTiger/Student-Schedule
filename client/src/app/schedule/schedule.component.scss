@@ -1,12 +1,5 @@
 @import "styles";
 
-.container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-  overflow: hidden;
-}
-
 .schedule-groups {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -33,11 +26,18 @@
   }
 }
 
-table {
+.content-container {
   width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: max-content;
+  min-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.875rem;
+  table-layout: fixed;
 }
 
 caption {
@@ -55,8 +55,46 @@ th {
   font-weight: 600;
   text-align: left;
   border-bottom: 1px solid $border-color;
+  white-space: nowrap;
+}
+
+tr:nth-child(even) {
+  background-color: $table-even;
+}
+
+tr:nth-child(odd) {
+  background-color: $table-odd;
 }
 
 tr:last-child td {
   border-bottom: none;
+}
+
+td, th {
+  padding: 1rem;
+  width: 0;
+}
+
+td:nth-child(odd), th:nth-child(odd) {
+  width: 70px;
+  min-width: 70px;
+  padding: 1rem;
+}
+
+td:nth-child(even), th:nth-child(even) {
+  width: 240px;
+  min-width: 240px;
+  padding: 1rem;
+}
+
+th[colspan="2"] {
+  width: 310px;
+  min-width: 310px;
+  text-align: center;
+}
+
+td:empty {
+  width: inherit;
+  min-width: inherit;
+  padding: 1rem;
 }

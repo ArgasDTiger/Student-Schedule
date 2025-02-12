@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, Output, PLATFORM_ID} from '@angular/core';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatIconModule} from "@angular/material/icon";
 import {StudentSidebarComponent} from "./student-sidebar/student-sidebar.component";
-import {NgClass, NgStyle} from "@angular/common";
+import {isPlatformBrowser, NgClass, NgStyle} from "@angular/common";
 import { EventEmitter } from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
 import {Subscription} from "rxjs";
@@ -35,11 +35,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   isSidebarCollapsed = false;
   userRole?: Role;
+  isBrowser = false;
 
-  constructor(private userService: UserService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private userService: UserService) {
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
+    if (this.isBrowser)
+      this.isSidebarCollapsed = JSON.parse(localStorage.getItem("sidebar_collapsed") ?? "false");
+
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       user => {
         this.userRole = user?.role;
@@ -54,6 +60,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
     this.sidebarCollapsed.emit(this.isSidebarCollapsed);
+
+    if (this.isBrowser)
+      localStorage.setItem("sidebar_collapsed", this.isSidebarCollapsed.toString());
   }
 
   protected readonly Role = Role;

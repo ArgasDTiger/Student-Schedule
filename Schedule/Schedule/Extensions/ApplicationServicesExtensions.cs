@@ -13,7 +13,9 @@ public static class ApplicationServicesExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ICookieService, CookieService>();
-        
+        services.AddScoped<ILessonService, LessonService>();
+        services.AddScoped<IGroupService, GroupService>();
+
         services.AddScoped<Query>();
         services.AddScoped<Mutation>();
         

@@ -2,6 +2,6 @@
   <app-sidebar (sidebarCollapsed)="onSidebarToggle($event)"/>
 
 }
-<main class="main-content" [ngClass]="{'sidebar-collapsed': sidebarCollapsed, 'full': !isAuthorized}">
+<main class="main-content" [ngClass]="{'sidebar-collapsed': isSidebarCollapsed, 'full': !isAuthorized}">
   <router-outlet/>
 </main>

@@ -12,12 +12,33 @@ td {
 .class {
   background: $primary-color;
   color: white;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
+
+  &.student {
+    width: 40px;
+    height: 40px;
+  }
+
+  &.moderator {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0.2rem;
+  }
+}
+
+mat-icon {
+  @extend .class;
+  font-size: 1.2rem;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 0.2rem;
+
+  &:hover {
+    color: $primary-color;
+  }
 }
 
 .lesson-info {

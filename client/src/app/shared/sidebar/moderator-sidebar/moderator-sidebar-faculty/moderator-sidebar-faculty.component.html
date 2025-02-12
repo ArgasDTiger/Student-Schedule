@@ -11,7 +11,10 @@
 
   <div class="groups-container" [@expandCollapse]="groupsVisible ? 'expanded' : 'collapsed'">
     @for (group of faculty.groups; track group.id) {
-      <div class="group-item">
+      <div
+        class="group-item"
+        [routerLink]="['/moderator', group.id, 'schedule']"
+        routerLinkActive="active">
         <mat-icon>groups</mat-icon>
         <span class="group-name">Група {{ group.groupNumber }}</span>
       </div>
