@@ -1,4 +1,6 @@
 type Query {
   scheduleByStudentGroup(groupId: Int!): LessonInfo!
   currentUser: User!
+  lessons: [Lesson!]
+  teachers: [Teacher!]
 }

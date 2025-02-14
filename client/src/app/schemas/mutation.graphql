@@ -2,4 +2,7 @@ type Mutation {
   login(idToken: String!): User!
   refreshToken: Boolean!
   revokeToken: Boolean!
+  createLessonInfo(lessonInfo: LessonInfoInput!): LessonInfo!
+  updateLessonInfo(lessonInfo: LessonInfoInput!): LessonInfo!
+  deleteLessonInfo(id: Int!): Boolean!
 }

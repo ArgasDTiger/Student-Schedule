@@ -5,3 +5,11 @@ type Teacher {
   lastName: String!
   degree: String!
 }
+
+input TeacherInput {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+  degree: String!
+}

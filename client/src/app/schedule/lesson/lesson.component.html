@@ -6,10 +6,10 @@
     <div class="class moderator">{{ lessonNumber === 0? emptyLessonNumber : lessonNumber }}</div>
 
     @if (lessonInfo) {
-      <mat-icon class="icon">edit</mat-icon>
+      <mat-icon (click)="openEditModal()" class="icon">edit</mat-icon>
       <mat-icon class="icon">delete</mat-icon>
     } @else {
-      <mat-icon class="icon moderator">add</mat-icon>
+      <mat-icon (click)="openCreateModal()" class="icon moderator">add</mat-icon>
     }
   }
 </td>
@@ -23,3 +23,6 @@
     </div>
   }
 </td>
+
+<app-edit-schedule-modal/>
+

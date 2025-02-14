@@ -4,3 +4,10 @@ type Faculty {
   corpusNumber: Int!
   groups: [Group!]!
 }
+
+input FacultyInput {
+  id: Int!
+  name: String!
+  corpusNumber: Int!
+  groups: [GroupInput!]!
+}

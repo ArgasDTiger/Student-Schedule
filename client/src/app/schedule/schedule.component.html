@@ -21,7 +21,7 @@
       @if (userRole && userRole === Role.Moderator) {
         <tr *ngFor="let lessonNumber of moderatorLessonNumbers">
           <ng-container *ngFor="let day of daysOfWeek">
-            <app-lesson [lessonInfo]="getLesson(lessonNumber, day)" [emptyLessonNumber]="lessonNumber"/>
+            <app-lesson [lessonInfo]="getLesson(lessonNumber, day)" [emptyLessonNumber]="lessonNumber" [groupId]="groupId"/>
           </ng-container>
         </tr>
       }

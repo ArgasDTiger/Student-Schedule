@@ -6,11 +6,6 @@ namespace Schedule.Schema.Mutations;
 
 public partial class Mutation
 {
-    public async Task<List<LessonDTO>> GetLessons(CancellationToken cancellationToken)
-    {
-        var lessons = await _lessonService.GetAllLessons(cancellationToken);
-        return lessons.Adapt<List<LessonDTO>>();
-    }
     public async Task<LessonInfoDTO> CreateLessonInfo(AddLessonInfoRequest request, CancellationToken cancellationToken)
     {
         var lesson = await _lessonService.AddLessonGroup(request, cancellationToken);

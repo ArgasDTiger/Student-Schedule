@@ -5,6 +5,7 @@ $border-color: #e2e8f0;
 $text-primary: #1e293b;
 $text-secondary: #4a5c73;
 $bg-hover: #f1f5f9;
+$btn-bg-hover: #a7a8e6;
 $danger-color: #f43f5e;
 $success-color: #10b981;
 $bg-color: #e9eced;
@@ -51,7 +52,7 @@ mat-icon {
 
   &:hover {
     transition: 0.3s;
-    background-color: $bg-hover;
+    background-color: $btn-bg-hover;
   }
 }
 
@@ -60,4 +61,34 @@ mat-icon {
   border-radius: 8px;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   overflow: hidden;
+}
+
+.btn-primary {
+  background-color: #6366f1;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #a7a8e6;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #4a5c73;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f5f9;
+  }
 }

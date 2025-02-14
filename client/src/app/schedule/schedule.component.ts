@@ -11,6 +11,7 @@ import {take} from "rxjs/operators";
 import {ToasterManagerService} from "../core/services/toaster-manager.service";
 import {Subscription} from "rxjs";
 import {Role} from "../core/enums/role";
+import {Group} from "../core/models/group";
 
 @Component({
   selector: 'app-schedule',
@@ -32,6 +33,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   daysOfWeek = Object.values(DayOfWeek).slice(0, 5);
   isBrowser = false;
   userRole?: Role;
+  groupId?: number;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
               private scheduleService: ScheduleService,
@@ -51,12 +53,14 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       const groupId = params['id'];
       if (groupId) {
         this.loadSchedule(Number(groupId));
+        this.groupId = +groupId;
         return;
       }
       this.route.parent?.params.subscribe(parentParams => {
         const parentGroupId = parentParams['id'];
         if (parentGroupId) {
           this.loadSchedule(Number(parentGroupId));
+          this.groupId = +parentGroupId;
           return;
         }
 

@@ -3,3 +3,9 @@ type Group {
   groupNumber: Int!
   faculty: Faculty!
 }
+
+input GroupInput {
+  id: Int!
+  groupNumber: Int!
+  faculty: FacultyInput!
+}

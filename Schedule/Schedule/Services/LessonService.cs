@@ -17,7 +17,7 @@ public class LessonService : ILessonService
 
     public async Task<List<Lesson>> GetAllLessons(CancellationToken cancellationToken)
     {
-        return await _repository.GetAll<Lesson>().ToListAsync(cancellationToken);
+        return await _repository.GetAll<Lesson>().OrderBy(l => l.Name).ToListAsync(cancellationToken);
     }
 
     public async Task<LessonGroup> AddLessonGroup(AddLessonInfoRequest request, CancellationToken cancellationToken)

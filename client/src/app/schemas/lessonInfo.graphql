@@ -10,5 +10,17 @@ type LessonInfo {
   evenWeek: Boolean!
 }
 
+input LessonInfoInput {
+  lesson: LessonInput
+  group: GroupInput
+  teacher: TeacherInput
+  weekDay: String!
+  lessonNumber: String!
+  type: String!
+  room: Int!
+  oddWeek: Boolean!
+  evenWeek: Boolean!
+}
+
 
 

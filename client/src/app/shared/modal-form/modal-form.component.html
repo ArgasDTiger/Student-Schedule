@@ -1,0 +1,28 @@
+<div class="modal-overlay" [class.visible]="isVisible" (click)="closeModal()">
+  <div class="modal content-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ title }}</h2>
+      <mat-icon (click)="closeModal()">close</mat-icon>
+    </div>
+
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="closeModal()">
+        Скасувати
+      </button>
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="submitDisabled"
+        (click)="onSubmit()">
+        Зберегти
+      </button>
+    </div>
+  </div>
+</div>
