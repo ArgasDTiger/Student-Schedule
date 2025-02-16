@@ -8,11 +8,11 @@ import {Subscription} from "rxjs";
 import {UserService} from "../../core/services/user.service";
 import {Role} from "../../core/enums/role";
 import {MatIconModule} from "@angular/material/icon";
-import {ModalFormComponent} from "../../shared/modal-form/modal-form.component";
+import {ModalFormComponent} from "../../shared/modals/modal-form/modal-form.component";
 import {AsyncPipe} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {EditScheduleModalComponent} from "../../moderator/edit-schedule-modal/edit-schedule-modal.component";
-import {ScheduleModalService} from "../../core/services/schedule-modal.service";
+import {ModalService} from "../../core/services/modal.service";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
 import {ScheduleService} from "../../core/services/schedule.service";
 import {ToasterManagerService} from "../../core/services/toaster-manager.service";
@@ -46,9 +46,10 @@ export class LessonComponent implements OnInit, OnDestroy {
   userRole?: Role;
 
   constructor(private userService: UserService,
-              private scheduleModalService: ScheduleModalService,
+              private scheduleModalService: ModalService,
               private scheduleService: ScheduleService,
-              private toasterManagerService: ToasterManagerService) {
+              private toasterManagerService: ToasterManagerService,
+              private modalService: ModalService) {
   }
 
   ngOnInit() {
@@ -68,24 +69,37 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   openCreateModal() {
     if (this.emptyLessonNumber && this.groupId && this.weekDay) {
-      this.scheduleModalService.openCreateModal(this.emptyLessonNumber, this.groupId, this.weekDay);
+      this.scheduleModalService.openCreateLessonInfoModal(this.emptyLessonNumber, this.groupId, this.weekDay);
     }
   }
 
   openEditModal() {
     if (this.lessonInfo) {
-      this.scheduleModalService.openEditModal(this.lessonInfo);
+      this.scheduleModalService.openEditLessonInfoModal(this.lessonInfo);
     }
   }
 
   async deleteScheduleItem() {
-    if (this.lessonInfo) {
-      const success = await this.scheduleService.deleteScheduleItem(this.lessonInfo?.id, this.lessonInfo?.group.id);
-      if (success) {
-        this.toasterManagerService.success("Успішно видалено предмет розкладу.");
-      } else {
-        this.toasterManagerService.error("Помилка при видаленні предмету з розкладу.");
-      }
+    if (!this.lessonInfo) return;
+
+    const confirmed = await this.modalService.openActionModal({
+      header: 'Видалення предмету',
+      message: 'Ви впевнені, що хочете видалити цей предмет з розкладу?',
+      buttonText: 'Видалити',
+      buttonColor: 'red'
+    });
+
+    if (!confirmed) {
+      return;
+    }
+
+    const success = await this.scheduleService.deleteScheduleItem(this.lessonInfo.id, this.lessonInfo.group.id);
+
+    if (success) {
+      this.toasterManagerService.success("Успішно видалено предмет розкладу.");
+      this.lessonInfo = undefined;
+    } else {
+      this.toasterManagerService.error("Помилка при видаленні предмету з розкладу.");
     }
   }
 

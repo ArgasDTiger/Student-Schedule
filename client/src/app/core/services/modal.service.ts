@@ -1,18 +1,52 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { LessonInfo } from '../models/lessonInfo';
+import { DayOfWeek } from "../enums/dayOfWeek";
+import {ActionButtonColor, ActionButtonType} from "../constants/modal-types";
+
+export interface ActionModalConfig {
+  header: string;
+  message: string;
+  buttonText: ActionButtonType;
+  buttonColor: ActionButtonColor;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
-  private isVisibleSubject = new BehaviorSubject<boolean>(false);
-  isVisible$ = this.isVisibleSubject.asObservable();
+  private editModalSubject = new Subject<{type: 'create' | 'edit', data: any}>();
+  private actionModalSubject = new Subject<ActionModalConfig>();
+  private actionModalConfirmed?: (value: boolean) => void;
 
-  open() {
-    this.isVisibleSubject.next(true);
+  editModal$ = this.editModalSubject.asObservable();
+  actionModal$ = this.actionModalSubject.asObservable();
+
+  openCreateLessonInfoModal(lessonNumber: number, groupId: number, weekDay: DayOfWeek) {
+    this.editModalSubject.next({
+      type: 'create',
+      data: { lessonNumber, groupId, weekDay }
+    });
   }
 
-  close() {
-    this.isVisibleSubject.next(false);
+  openEditLessonInfoModal(lessonInfo: LessonInfo) {
+    this.editModalSubject.next({
+      type: 'edit',
+      data: lessonInfo
+    });
+  }
+
+  openActionModal(data: ActionModalConfig): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.actionModalConfirmed = resolve;
+      this.actionModalSubject.next(data);
+    });
+  }
+
+  resolveActionModal(confirmed: boolean) {
+    if (this.actionModalConfirmed) {
+      this.actionModalConfirmed(confirmed);
+      this.actionModalConfirmed = undefined;
+    }
   }
 }

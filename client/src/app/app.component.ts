@@ -8,11 +8,12 @@ import {ToasterManagerService} from "./core/services/toaster-manager.service";
 import {AuthService} from "./core/services/auth.service";
 import {UserService} from "./core/services/user.service";
 import {Subscription} from "rxjs";
+import {ActionModalComponent} from "./shared/modals/action-modal/action-modal.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, MatIconModule, MatSlideToggleModule, NgClass],
+  imports: [RouterOutlet, SidebarComponent, MatIconModule, MatSlideToggleModule, NgClass, ActionModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

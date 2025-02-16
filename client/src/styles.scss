@@ -92,3 +92,20 @@ mat-icon {
     background-color: #f1f5f9;
   }
 }
+
+.btn-danger {
+  background-color: $danger-color;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #c1a5a9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

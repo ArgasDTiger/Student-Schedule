@@ -1,0 +1,9 @@
+<app-modal-form
+  [isVisible]="isModalVisible"
+  [title]="header!"
+  [submitButtonText]="buttonText"
+  [submitButtonColor]="buttonColor"
+  (close)="closeModal()"
+  (submit)="onSubmit()">
+  <p>{{ message }}</p>
+</app-modal-form>

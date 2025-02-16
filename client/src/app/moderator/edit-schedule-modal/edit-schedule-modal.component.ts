@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ModalFormComponent } from "../../shared/modal-form/modal-form.component";
+import { ModalFormComponent } from "../../shared/modals/modal-form/modal-form.component";
 import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
 import {catchError, Observable, of, Subscription} from "rxjs";
 import { Lesson } from "../../core/models/lesson";
@@ -9,7 +9,7 @@ import { Teacher } from "../../core/models/teacher";
 import { TeacherService } from "../../core/services/teacher.service";
 import { lessonTypes } from "../../core/enums/lessonType";
 import { LessonInfo } from "../../core/models/lessonInfo";
-import {ScheduleModalService} from "../../core/services/schedule-modal.service";
+import {ModalService} from "../../core/services/modal.service";
 import {ScheduleService} from "../../core/services/schedule.service";
 import {AddLessonInfoInput} from "../../core/inputs/add-lesson-info-input";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
@@ -48,7 +48,7 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
               private lessonService: LessonService,
               private teacherService: TeacherService,
-              private scheduleModalService: ScheduleModalService,
+              private modalService: ModalService,
               private scheduleService: ScheduleService,
               private toasterManagerService: ToasterManagerService) {
     this.initForm();
@@ -57,7 +57,7 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.modalSubscription = this.scheduleModalService.editModal$.subscribe(modalData => {
+    this.modalSubscription = this.modalService.editModal$.subscribe(modalData => {
       if (modalData.type === 'create') {
         this.openCreateModal(modalData.data.lessonNumber, modalData.data.groupId, modalData.data.weekDay);
       } else {
@@ -112,8 +112,7 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-     console.log(`update: ${this.isUpdate} groupId: ${this.groupId} weekDay: ${this.weekDay} lessonNum: ${this.lessonInfo?.lessonNumber}`)
-    if (this.isUpdate && this.lessonInfo?.group.id && this.lessonInfo?.weekDay && this.lessonInfo?.lessonNumber) {
+    if (this.isUpdate && this.lessonInfo) {
       const success = await this.updateScheduleItem();
 
       if (success) {
