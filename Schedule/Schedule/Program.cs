@@ -7,6 +7,7 @@ using Schedule.Extensions;
 using Schedule.Helpers;
 using Schedule.Schema.Mutations;
 using Schedule.Schema.Queries;
+using Schedule.Schema.Subscriptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services
     .AddConvention<INamingConventions>(new PascalCaseEnumConverter())
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
+    .AddSubscriptionType<Subscription>()
+    .AddInMemorySubscriptions()
     .AddAuthorization()
     .AddErrorFilter<DetailedExceptionErrorFilter>();
 
@@ -45,6 +48,7 @@ var app = builder.Build();
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseWebSockets();
 
 app.MapGraphQL();
 app.UseHttpsRedirection();

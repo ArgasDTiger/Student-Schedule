@@ -35,9 +35,19 @@ public class LessonService : ILessonService
             EvenWeek = input.EvenWeek
         };
 
-        var lessonGroup = _repository.Add(newLessonGroup);
+        var lessonGroupFromDb = _repository.Add(newLessonGroup);
         await _repository.SaveChangesAsync(cancellationToken);
 
+        var lessonGroup = await _repository
+            .GetAll<LessonGroup>()
+            .Include(lg => lg.Lesson)
+            .Include(lg => lg.Group).ThenInclude(g => g.Faculty)
+            .Include(lg => lg.Teacher)
+            .SingleOrDefaultAsync(lg => lg.Id == lessonGroupFromDb.Id, cancellationToken);
+
+        if (lessonGroup is null)
+            throw new DetailedException("Couldn't load added lesson information.");
+        
         return lessonGroup;
     }
 

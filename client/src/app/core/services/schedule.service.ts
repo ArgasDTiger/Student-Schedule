@@ -1,9 +1,9 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import { Apollo, gql } from "apollo-angular";
-import { map } from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import { LessonInfo } from '../models/lessonInfo';
 import {isPlatformBrowser} from "@angular/common";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {DeleteLessonInfoResponse} from "../responses/delete-lesson-info-response";
 import {UpdateLessonInfoRequest} from "../inputs/update-lesson-info-request";
 import {AddLessonInfoInput} from "../inputs/add-lesson-info-input";
@@ -64,6 +64,7 @@ export class ScheduleService {
   }
 
   createScheduleItem(lessonInfo: AddLessonInfoInput) {
+    if (!this.isBrowser) return new Observable<LessonInfo>();
     return this.apollo.mutate({
       mutation: gql`
         mutation CreateLessonInfo($lessonInfo: AddLessonInfoInput!) {
@@ -80,6 +81,7 @@ export class ScheduleService {
   }
 
   updateScheduleItem($lessonInfo: UpdateLessonInfoRequest) {
+    if (!this.isBrowser) return new Observable<LessonInfo>();
     return this.apollo
     .mutate({
       mutation: gql`
@@ -99,6 +101,7 @@ export class ScheduleService {
   }
 
   async deleteScheduleItem($id: number) {
+    if (!this.isBrowser) return new Observable<LessonInfo[]>();
     return this.apollo
     .mutate<DeleteLessonInfoResponse>({
       mutation: gql`
@@ -116,4 +119,39 @@ export class ScheduleService {
       return false;
     });
   }
+
+  subscribeToLessonInfoCreations(groupId: number): Observable<LessonInfo> {
+    if (!this.isBrowser) return new Observable<LessonInfo>();
+    return this.apollo.subscribe<{ lessonInfoCreated?: LessonInfo }>({
+      query: gql`
+        subscription LessonInfoCreated($groupId: Int!) {
+          lessonInfoCreated(groupId: $groupId) {
+            weekDay
+            lessonNumber
+            type
+            room
+            oddWeek
+            evenWeek
+            lesson {
+              id
+              name
+            }
+            group {
+              id
+              groupNumber
+            }
+            teacher {
+              firstName
+              lastName
+            }
+          }
+        }
+      `,
+      variables: { groupId }
+    }).pipe(
+      filter(result => !!result.data?.lessonInfoCreated),
+      map(result => result.data!.lessonInfoCreated as LessonInfo)
+    );
+  }
+
 }
