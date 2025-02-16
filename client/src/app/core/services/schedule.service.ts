@@ -5,6 +5,8 @@ import { LessonInfo } from '../models/lessonInfo';
 import {isPlatformBrowser} from "@angular/common";
 import {Observable} from "rxjs";
 import {DeleteLessonInfoResponse} from "../responses/delete-lesson-info-response";
+import {UpdateLessonInfoRequest} from "../inputs/update-lesson-info-request";
+import {AddLessonInfoInput} from "../inputs/add-lesson-info-input";
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +46,6 @@ export class ScheduleService {
                 }
               }
               teacher {
-                id
                 firstName
                 middleName
                 lastName
@@ -62,81 +63,30 @@ export class ScheduleService {
       );
   }
 
-  createScheduleItem($lessonInfo: LessonInfo) {
-    return this.apollo
-    .mutate({
+  createScheduleItem(lessonInfo: AddLessonInfoInput) {
+    return this.apollo.mutate({
       mutation: gql`
-        mutation CreateLessonInfo($lessonInfo: LessonInfoInput!) {
+        mutation CreateLessonInfo($lessonInfo: AddLessonInfoInput!) {
           createLessonInfo(lessonInfo: $lessonInfo) {
             weekDay
             lessonNumber
-            type
-            room
-            oddWeek
-            evenWeek
-            lesson {
-              id
-              name
-            }
-            group {
-              id
-              groupNumber
-              faculty {
-                id
-                name
-                corpusNumber
-              }
-            }
-            teacher {
-              id
-              firstName
-              middleName
-              lastName
-              degree
-            }
           }
         }
       `,
-      variables: { $lessonInfo },
-    })
-    .pipe(
-      map((result: any) => {
-        return result.data.createLessonInfo;
-      }));
+      variables: { lessonInfo: lessonInfo }
+    }).pipe(
+      map((result: any) => result.data.createLessonInfo)
+    );
   }
 
-  updateScheduleItem($lessonInfo: LessonInfo) {
+  updateScheduleItem($lessonInfo: UpdateLessonInfoRequest) {
     return this.apollo
     .mutate({
       mutation: gql`
-        mutation UpdateLessonInfo($lessonInfo: LessonInfoInput!) {
+        mutation UpdateLessonInfo($lessonInfo: UpdateLessonInfoInput!) {
           updateLessonInfo(lessonInfo: $lessonInfo) {
             weekDay
             lessonNumber
-            type
-            room
-            oddWeek
-            evenWeek
-            lesson {
-              id
-              name
-            }
-            group {
-              id
-              groupNumber
-              faculty {
-                id
-                name
-                corpusNumber
-              }
-            }
-            teacher {
-              id
-              firstName
-              middleName
-              lastName
-              degree
-            }
           }
         }
       `,

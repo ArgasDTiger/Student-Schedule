@@ -13,16 +13,16 @@
     <tbody>
     @if (userRole && userRole === Role.Student) {
       <tr *ngFor="let lessonNumber of lessonNumbers">
-        <ng-container *ngFor="let day of daysOfWeek">
+        @for (day of daysOfWeek; track day) {
           <app-lesson [lessonInfo]="getLesson(lessonNumber, day)"/>
-        </ng-container>
+        }
       </tr>
     }
       @if (userRole && userRole === Role.Moderator) {
         <tr *ngFor="let lessonNumber of moderatorLessonNumbers">
-          <ng-container *ngFor="let day of daysOfWeek">
-            <app-lesson [lessonInfo]="getLesson(lessonNumber, day)" [emptyLessonNumber]="lessonNumber" [groupId]="groupId"/>
-          </ng-container>
+          @for (day of daysOfWeek; track day) {
+            <app-lesson [lessonInfo]="getLesson(lessonNumber, day)" [emptyLessonNumber]="lessonNumber" [groupId]="groupId" [weekDay]="day"/>
+          }
         </tr>
       }
 
@@ -30,3 +30,4 @@
   </table>
 </div>
 
+<app-edit-schedule-modal/>

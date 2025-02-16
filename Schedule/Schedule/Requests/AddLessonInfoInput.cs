@@ -2,7 +2,7 @@ using Schedule.Entities;
 
 namespace Schedule.Requests;
 
-public class AddLessonInfoRequest
+public class AddLessonInfoInput
 {
     public int LessonId { get; set; }
     public int GroupId { get; set; }

@@ -12,13 +12,15 @@ import {ToasterManagerService} from "../core/services/toaster-manager.service";
 import {Subscription} from "rxjs";
 import {Role} from "../core/enums/role";
 import {Group} from "../core/models/group";
+import {EditScheduleModalComponent} from "../moderator/edit-schedule-modal/edit-schedule-modal.component";
 
 @Component({
   selector: 'app-schedule',
   standalone: true,
   imports: [
     LessonComponent,
-    NgForOf
+    NgForOf,
+    EditScheduleModalComponent
   ],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss'

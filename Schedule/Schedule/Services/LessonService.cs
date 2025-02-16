@@ -20,19 +20,19 @@ public class LessonService : ILessonService
         return await _repository.GetAll<Lesson>().OrderBy(l => l.Name).ToListAsync(cancellationToken);
     }
 
-    public async Task<LessonGroup> AddLessonGroup(AddLessonInfoRequest request, CancellationToken cancellationToken)
+    public async Task<LessonGroup> AddLessonGroup(AddLessonInfoInput input, CancellationToken cancellationToken)
     {
         var newLessonGroup = new LessonGroup
         {
-            LessonId = request.LessonId,
-            GroupId = request.GroupId,
-            TeacherId = request.TeacherId,
-            WeekDay = request.WeekDay,
-            LessonNumber = request.LessonNumber,
-            Type = request.Type,
-            Room = request.Room,
-            OddWeek = request.OddWeek,
-            EvenWeek = request.EvenWeek
+            LessonId = input.LessonId,
+            GroupId = input.GroupId,
+            TeacherId = input.TeacherId,
+            WeekDay = input.WeekDay,
+            LessonNumber = input.LessonNumber,
+            Type = input.Type,
+            Room = input.Room,
+            OddWeek = input.OddWeek,
+            EvenWeek = input.EvenWeek
         };
 
         var lessonGroup = _repository.Add(newLessonGroup);
@@ -75,5 +75,15 @@ public class LessonService : ILessonService
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    public async Task<List<LessonGroup>> GetLessonGroupByStudentGroup(int groupId, CancellationToken cancellationToken)
+    {
+        var lessonGroups = await _repository
+            .GetAll<LessonGroup>()
+            .Where(lg => lg.Group.Id == groupId)
+            .ToListAsync(cancellationToken);
+
+        return lessonGroups;
     }
 }

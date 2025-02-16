@@ -13,9 +13,11 @@
           id="lesson"
           formControlName="lesson"
           class="form-input">
-          <option value="">Оберіть предмет</option>
+          @if (!isUpdate) {
+            <option [ngValue]="null" disabled selected>Оберіть предмет</option>
+          }
           @for (lesson of lessons$ | async; track lesson.id) {
-            <option [value]="lesson.id">{{ lesson.name }}</option>
+            <option [ngValue]="lesson.id">{{ lesson.name }}</option>
           }
         </select>
       </div>
@@ -31,10 +33,12 @@
           id="teacher"
           formControlName="teacher"
           class="form-input">
-          <option value="">Оберіть викладача</option>
-          <ng-container *ngFor="let teacher of teachers$ | async">
-            <option [value]="teacher.id">{{ teacher.lastName }} {{ teacher.firstName }} {{ teacher.middleName }}</option>
-          </ng-container>
+          @if (!isUpdate) {
+            <option [ngValue]="null" disabled selected>Оберіть викладача</option>
+          }
+          @for (teacher of teachers$ | async; track teacher.id) {
+            <option [ngValue]="teacher.id">{{ teacher.lastName }} {{ teacher.firstName }} {{ teacher.middleName }}</option>
+          }
         </select>
       </div>
       <div class="error-message" *ngIf="scheduleForm.get('teacher')?.touched && scheduleForm.get('teacher')?.errors?.['required']">
@@ -49,11 +53,12 @@
           id="type"
           formControlName="type"
           class="form-input">
-          <option value="">Оберіть тип предмету</option>
-          <ng-container *ngFor="let type of lessonTypes">
-            <option [value]="type.key">{{ type.value }}</option>
-          </ng-container>
-
+          @if (!isUpdate) {
+            <option [ngValue]="null" disabled selected>Оберіть тип предмету</option>
+          }
+          @for (type of lessonTypes; track type.key) {
+            <option [ngValue]="type.key">{{ type.value }}</option>
+          }
         </select>
       </div>
       <div class="error-message" *ngIf="scheduleForm.get('type')?.touched && scheduleForm.get('type')?.errors?.['required']">
@@ -71,6 +76,9 @@
         placeholder="Номер аудиторії">
       <div class="error-message" *ngIf="scheduleForm.get('room')?.touched && scheduleForm.get('room')?.errors?.['required']">
         Номер аудиторії обов'язковий
+      </div>
+      <div class="error-message" *ngIf="scheduleForm.get('room')?.touched && scheduleForm.get('room')?.errors?.['pattern']">
+        Номер аудиторії повинен містити лишень цифри
       </div>
     </div>
 
@@ -92,6 +100,9 @@
           class="custom-checkbox">
         <label for="oddWeek" class="checkbox-label">Непарний тиждень</label>
       </div>
+    </div>
+    <div class="error-message" *ngIf="scheduleForm.errors?.['weekRequired'] && (scheduleForm.get('evenWeek')?.touched || scheduleForm.get('oddWeek')?.touched)">
+      Оберіть хоча б один параметр
     </div>
   </form>
 </app-modal-form>

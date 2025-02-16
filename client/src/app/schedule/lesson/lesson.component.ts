@@ -4,15 +4,16 @@ import {LessonInfo} from "../../core/models/lessonInfo";
 import {lessonNumberToTimeSpanMap} from "../../core/mappings/lessonNumberToTimeSpan";
 import {degreeToString} from "../../core/mappings/degreeToString";
 import {lessonTypeToString} from "../../core/mappings/lessonTypeToString";
-import {Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {UserService} from "../../core/services/user.service";
 import {Role} from "../../core/enums/role";
 import {MatIconModule} from "@angular/material/icon";
 import {ModalFormComponent} from "../../shared/modal-form/modal-form.component";
-import {ModalService} from "../../core/services/modal.service";
 import {AsyncPipe} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {EditScheduleModalComponent} from "../../moderator/edit-schedule-modal/edit-schedule-modal.component";
+import {ScheduleModalService} from "../../core/services/schedule-modal.service";
+import {DayOfWeek} from "../../core/enums/dayOfWeek";
 
 @Component({
   selector: 'app-lesson',
@@ -31,6 +32,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   @Input() lessonInfo?: LessonInfo;
   @Input() emptyLessonNumber?: number; // for mods only
   @Input() groupId?: number;
+  @Input() weekDay?: DayOfWeek;
 
   @ViewChild(EditScheduleModalComponent) editScheduleModalComponent?: EditScheduleModalComponent;
 
@@ -41,7 +43,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   userRole?: Role;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService,
+              private scheduleModalService: ScheduleModalService) {
   }
 
   ngOnInit() {
@@ -60,15 +63,16 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   openCreateModal() {
-    this.editScheduleModalComponent?.openEditModal(this.lessonInfo);
+    console.log(`weekDay is ${this.weekDay}`)
+    if (this.emptyLessonNumber && this.groupId && this.weekDay) {
+      this.scheduleModalService.openCreateModal(this.emptyLessonNumber, this.groupId, this.weekDay);
+    }
   }
 
   openEditModal() {
-    this.editScheduleModalComponent?.openCreateModal(this.emptyLessonNumber, this.groupId);
-  }
-
-  closeModal() {
-    this.editScheduleModalComponent?.closeModal();
+    if (this.lessonInfo) {
+      this.scheduleModalService.openEditModal(this.lessonInfo);
+    }
   }
 
   protected readonly Role = Role;

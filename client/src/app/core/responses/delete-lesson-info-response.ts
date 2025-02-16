@@ -1,3 +1,3 @@
-export type DeleteLessonInfoResponse = {
+export interface DeleteLessonInfoResponse {
   deleteLessonInfo: boolean;
 }

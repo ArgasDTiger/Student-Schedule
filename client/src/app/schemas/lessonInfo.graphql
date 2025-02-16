@@ -10,10 +10,10 @@ type LessonInfo {
   evenWeek: Boolean!
 }
 
-input LessonInfoInput {
-  lesson: LessonInput
-  group: GroupInput
-  teacher: TeacherInput
+input AddLessonInfoInput {
+  lessonId: Int!
+  groupId: Int!
+  teacherId: Int!
   weekDay: String!
   lessonNumber: String!
   type: String!
@@ -22,5 +22,39 @@ input LessonInfoInput {
   evenWeek: Boolean!
 }
 
+input UpdateLessonInfoInput {
+  id: Int!
+  lessonId: Int!
+  groupId: Int!
+  teacherId: Int!
+  weekDay: String!
+  lessonNumber: String!
+  type: String!
+  room: Int!
+  oddWeek: Boolean!
+  evenWeek: Boolean!
+}
 
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
 
+enum LessonNumber {
+  First
+  Second
+  Third
+  Fourth
+  Fifth
+}
+
+enum LessonType {
+  Lecture
+  Practice
+  Laboratory
+}

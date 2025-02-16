@@ -23,6 +23,7 @@ public class PascalCaseEnumConverter : DefaultNamingConventions
                 return enumMember.GetCustomAttribute<GraphQLNameAttribute>()!.Name;
             }
         }
-        return value.ToString();
+
+        return value.ToString() ?? string.Empty;
     }
 }
