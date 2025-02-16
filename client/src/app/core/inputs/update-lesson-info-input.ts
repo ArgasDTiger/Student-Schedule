@@ -1,10 +1,8 @@
-import {Group} from "../models/group";
-import {Teacher} from "../models/teacher";
 import {DayOfWeek} from "../enums/dayOfWeek";
 import {LessonNumberString} from "../enums/lessonNumber";
 import {LessonType} from "../enums/lessonType";
 
-export interface UpdateLessonInfoRequest {
+export interface UpdateLessonInfoInput {
   id: number;
   lessonId: number;
   groupId: number;

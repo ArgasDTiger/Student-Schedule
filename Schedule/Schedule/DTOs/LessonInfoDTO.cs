@@ -4,6 +4,7 @@ namespace Schedule.DTOs;
 
 public class LessonInfoDTO
 {
+    public int Id { get; set; }
     public LessonDTO Lesson { get; set; }
     public GroupDTO Group { get; set; }
     public TeacherDTO Teacher { get; set; }

@@ -51,22 +51,22 @@ public class LessonService : ILessonService
         return lessonGroup;
     }
 
-    public async Task<bool> UpdateLessonGroup(UpdateLessonInfoRequest request, CancellationToken cancellationToken)
+    public async Task<bool> UpdateLessonGroup(UpdateLessonInfoInput input, CancellationToken cancellationToken)
     {
-        var lessonGroup = await _repository.GetAll<LessonGroup>().SingleOrDefaultAsync(lg => lg.Id == request.Id, cancellationToken);
+        var lessonGroup = await _repository.GetAll<LessonGroup>().SingleOrDefaultAsync(lg => lg.Id == input.Id, cancellationToken);
 
         if (lessonGroup is null)
             throw new DetailedException("LessonInfo is not found.");
         
-        lessonGroup.LessonId = request.LessonId;
-        lessonGroup.GroupId = request.GroupId;
-        lessonGroup.TeacherId = request.TeacherId;
-        lessonGroup.WeekDay = request.WeekDay;
-        lessonGroup.LessonNumber = request.LessonNumber;
-        lessonGroup.Type = request.Type;
-        lessonGroup.Room = request.Room;
-        lessonGroup.OddWeek = request.OddWeek;
-        lessonGroup.EvenWeek = request.EvenWeek;
+        lessonGroup.LessonId = input.LessonId;
+        lessonGroup.GroupId = input.GroupId;
+        lessonGroup.TeacherId = input.TeacherId;
+        lessonGroup.WeekDay = input.WeekDay;
+        lessonGroup.LessonNumber = input.LessonNumber;
+        lessonGroup.Type = input.Type;
+        lessonGroup.Room = input.Room;
+        lessonGroup.OddWeek = input.OddWeek;
+        lessonGroup.EvenWeek = input.EvenWeek;
 
         _repository.Update(lessonGroup);
         await _repository.SaveChangesAsync(cancellationToken);

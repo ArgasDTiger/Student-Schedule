@@ -6,6 +6,7 @@ import {LessonType} from "../enums/lessonType";
 import {LessonNumberString} from "../enums/lessonNumber";
 
 export interface LessonInfo {
+  id: number;
   lesson: Lesson;
   group: Group;
   teacher: Teacher;

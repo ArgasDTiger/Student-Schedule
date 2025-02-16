@@ -18,9 +18,9 @@ public partial class Mutation
         return toReturn;
     }
     
-    public async Task<bool> UpdateLessonInfo(UpdateLessonInfoRequest request, CancellationToken cancellationToken)
+    public async Task<bool> UpdateLessonInfo(UpdateLessonInfoInput lessonInfo, CancellationToken cancellationToken)
     {
-        return await _lessonService.UpdateLessonGroup(request, cancellationToken);
+        return await _lessonService.UpdateLessonGroup(lessonInfo, cancellationToken);
     }
     
     public async Task<bool> DeleteLessonInfo(int id, CancellationToken cancellationToken)

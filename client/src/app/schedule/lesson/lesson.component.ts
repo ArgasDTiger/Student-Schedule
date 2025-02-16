@@ -14,6 +14,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {EditScheduleModalComponent} from "../../moderator/edit-schedule-modal/edit-schedule-modal.component";
 import {ScheduleModalService} from "../../core/services/schedule-modal.service";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
+import {ScheduleService} from "../../core/services/schedule.service";
+import {ToasterManagerService} from "../../core/services/toaster-manager.service";
 
 @Component({
   selector: 'app-lesson',
@@ -44,7 +46,9 @@ export class LessonComponent implements OnInit, OnDestroy {
   userRole?: Role;
 
   constructor(private userService: UserService,
-              private scheduleModalService: ScheduleModalService) {
+              private scheduleModalService: ScheduleModalService,
+              private scheduleService: ScheduleService,
+              private toasterManagerService: ToasterManagerService) {
   }
 
   ngOnInit() {
@@ -63,7 +67,6 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   openCreateModal() {
-    console.log(`weekDay is ${this.weekDay}`)
     if (this.emptyLessonNumber && this.groupId && this.weekDay) {
       this.scheduleModalService.openCreateModal(this.emptyLessonNumber, this.groupId, this.weekDay);
     }
@@ -72,6 +75,17 @@ export class LessonComponent implements OnInit, OnDestroy {
   openEditModal() {
     if (this.lessonInfo) {
       this.scheduleModalService.openEditModal(this.lessonInfo);
+    }
+  }
+
+  async deleteScheduleItem() {
+    if (this.lessonInfo) {
+      const success = await this.scheduleService.deleteScheduleItem(this.lessonInfo?.id, this.lessonInfo?.group.id);
+      if (success) {
+        this.toasterManagerService.success("Успішно видалено предмет розкладу.");
+      } else {
+        this.toasterManagerService.error("Помилка при видаленні предмету з розкладу.");
+      }
     }
   }
 

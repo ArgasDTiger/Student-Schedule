@@ -3,6 +3,6 @@ type Mutation {
   refreshToken: Boolean!
   revokeToken: Boolean!
   createLessonInfo(lessonInfo: AddLessonInfoInput!): LessonInfo!
-  updateLessonInfo(lessonInfo: UpdateLessonInfoInput!): LessonInfo!
+  updateLessonInfo(lessonInfo: UpdateLessonInfoInput!): Boolean!
   deleteLessonInfo(id: Int!): Boolean!
 }

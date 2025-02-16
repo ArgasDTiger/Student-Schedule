@@ -11,7 +11,6 @@ export class ScheduleModalService {
   editModal$ = this.editModalSubject.asObservable();
 
   openCreateModal(lessonNumber: number, groupId: number, weekDay: DayOfWeek) {
-    console.log("calling modal")
     this.editModalSubject.next({
       type: 'create',
       data: { lessonNumber, groupId, weekDay }

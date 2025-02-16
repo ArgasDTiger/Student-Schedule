@@ -7,7 +7,7 @@
 
     @if (lessonInfo) {
       <mat-icon (click)="openEditModal()" class="icon">edit</mat-icon>
-      <mat-icon class="icon">delete</mat-icon>
+      <mat-icon (click)="deleteScheduleItem()" class="icon">delete</mat-icon>
     } @else {
       <mat-icon (click)="openCreateModal()" class="icon moderator">add</mat-icon>
     }
