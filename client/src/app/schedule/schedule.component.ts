@@ -75,8 +75,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         });
       });
     });
-
-
   }
 
   ngOnDestroy() {

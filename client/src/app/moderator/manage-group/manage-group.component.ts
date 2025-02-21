@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserSearchListComponent} from "../../shared/user-search-list/user-search-list.component";
 import {User} from "../../core/models/user";
 import {UserService} from "../../core/services/user.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-manage-group',
@@ -15,13 +16,25 @@ import {UserService} from "../../core/services/user.service";
 export class ManageGroupComponent implements OnInit {
   groupUsers: User[] = [];
   availableUsers: User[] = [];
-  readonly groupId = 2;
+  groupId?: number;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,
+              private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.loadGroupUsers();
     this.loadAvailableUsers();
+
+    this.route.params.subscribe(params => {
+      this.route.parent?.params.subscribe(parentParams => {
+        this.groupId = +parentParams['id'];
+        if (this.groupId) {
+          this.loadGroupUsers();
+          this.loadAvailableUsers();
+          return;
+        }
+      });
+    });
   }
 
   onGroupSearch(term: string) {
@@ -35,6 +48,7 @@ export class ManageGroupComponent implements OnInit {
   }
 
   async addToGroup(user: User) {
+    if (!this.groupId) return;
     const success = await this.userService.addUserToGroup(user.id, this.groupId);
     if (success) {
       this.groupUsers = [...this.groupUsers, user];
@@ -43,14 +57,13 @@ export class ManageGroupComponent implements OnInit {
   }
 
   async removeFromGroup(user: User) {
+    if (!this.groupId) return;
     const success = await this.userService.removeUserFromGroup(user.id, this.groupId);
     if (success) {
       this.availableUsers = [...this.availableUsers, user];
       this.groupUsers = this.groupUsers.filter(u => u.id !== user.id);
     }
   }
-
-
 
   private loadGroupUsers(search: string = '') {
     this.userService.getStudentsByGroup(search, this.groupId)

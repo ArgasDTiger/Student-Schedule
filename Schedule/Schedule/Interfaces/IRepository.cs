@@ -8,5 +8,5 @@ public interface IRepository
     void AddRange<T>(IEnumerable<T> entities);
     void Remove<T>(T entity) where T : class;
     T Update<T>(T entity) where T : class;
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
 }

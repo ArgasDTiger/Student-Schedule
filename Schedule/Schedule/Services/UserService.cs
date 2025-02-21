@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Google.Apis.Auth;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -72,5 +71,117 @@ public class UserService : IUserService
         var user = await _repository.GetAll<User>().SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user.Adapt<UserDTO>();
+    }
+
+    public Task<List<User>> GetStudents(string? search, CancellationToken cancellationToken)
+    {
+        return _repository.GetAll<User>()
+            .Where(u => 
+                u.Role == UserRole.Student
+                && (search == null 
+                    || EF.Functions.Like(u.FirstName, $"%{search}%")
+                    || EF.Functions.Like(u.LastName, $"%{search}%")
+                    || EF.Functions.Like(u.MiddleName, $"%{search}%")
+                    || EF.Functions.Like(u.Email, $"%{search}%")
+                    || EF.Functions.Like(u.LastName + " " + u.FirstName, $"%{search}%")
+                    || EF.Functions.Like(u.LastName + " " + u.FirstName + " " + u.MiddleName, $"%{search}%")))
+            .OrderBy(u => u.LastName)
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<List<User>> GetStudentsByGroup(string? search, int groupId, CancellationToken cancellationToken)
+    {
+        return _repository.GetAll<User>()
+            .Where(u => u.Role == UserRole.Student 
+                        && u.Groups.Any(g => g.Id == groupId)
+                        && (search == null 
+                            || EF.Functions.Like(u.FirstName, $"%{search}%")
+                            || EF.Functions.Like(u.LastName, $"%{search}%")
+                            || EF.Functions.Like(u.MiddleName, $"%{search}%")
+                            || EF.Functions.Like(u.Email, $"%{search}%")
+                            || EF.Functions.Like(u.LastName + " " + u.FirstName, $"%{search}%")
+                            || EF.Functions.Like(u.LastName + " " + u.FirstName + " " + u.MiddleName, $"%{search}%")))
+            .OrderBy(u => u.LastName)
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<List<User>> GetStudentsOutsideGroup(string? search, int groupId, CancellationToken cancellationToken)
+    {
+        return _repository.GetAll<User>()
+            .Where(u => u.Role == UserRole.Student 
+                        && (u.Groups.All(g => g.Id != groupId) || u.Groups.Count == 0)
+                        && (search == null 
+                            || EF.Functions.Like(u.FirstName, $"%{search}%")
+                            || EF.Functions.Like(u.LastName, $"%{search}%")
+                            || EF.Functions.Like(u.MiddleName, $"%{search}%")
+                            || EF.Functions.Like(u.Email, $"%{search}%")
+                            || EF.Functions.Like(u.LastName + " " + u.FirstName, $"%{search}%")
+                            || EF.Functions.Like(u.LastName + " " + u.FirstName + " " + u.MiddleName, $"%{search}%")))
+            .OrderBy(u => u.LastName)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> PromoteUserToModerator(int userId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId).SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+
+        if (user.Role == UserRole.Moderator || user.Role == UserRole.Admin)
+            throw new DetailedException("User cannot be promoted.");
+
+        user.Role = UserRole.Moderator;
+
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> DemoteUserFromModerator(int userId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId).SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+
+        if (user.Role != UserRole.Moderator)
+            throw new DetailedException("User cannot be demoted.");
+
+        user.Role = UserRole.Student;
+
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> AddUserToGroup(int userId, int groupId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId).SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+        
+        var group = await _repository.GetAll<Group>().Where(g => g.Id == groupId).SingleOrDefaultAsync(cancellationToken);
+        if (group is null)
+            throw new DetailedException("Group is not found.");
+        
+        if (user.Groups.Any(g => g.Id == groupId))
+            throw new DetailedException("User is already in this group.");
+        
+        user.Groups.Add(group);
+
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> RemoveUserFromGroup(int userId, int groupId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId).SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+        
+        var group = await _repository.GetAll<Group>().Where(g => g.Id == groupId).SingleOrDefaultAsync(cancellationToken);
+        if (group is null)
+            throw new DetailedException("Group is not found.");
+        
+        if (user.Groups.All(g => g.Id != groupId))
+            throw new DetailedException("User is not included in this group.");
+        
+        user.Groups.Remove(group);
+        
+        return await _repository.SaveChangesAsync(cancellationToken);
     }
 }

@@ -126,7 +126,8 @@ export class UserService {
           }
         `,
         variables: { userId, groupId }
-      }).toPromise();
+      })
+      .toPromise();
       return result?.data?.addUserToGroup ?? false;
     } catch {
       return false;

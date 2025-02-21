@@ -38,8 +38,8 @@ public class Repository(ScheduleDbContext context) : IRepository
         return context.Update<T>(entity).Entity;
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return context.SaveChangesAsync(cancellationToken);
+        return await context.SaveChangesAsync(cancellationToken) > 0;
     }
 }
