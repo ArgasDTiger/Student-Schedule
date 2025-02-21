@@ -1,0 +1,32 @@
+<div class="group-list">
+  <div class="group-list-header">
+    {{ title }}
+  </div>
+  <input
+    type="text"
+    class="search-box"
+    [placeholder]="placeholder"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange($event)">
+  <div class="group-list-content">
+    @for (user of users; track user.id) {
+      <div class="user-item">
+        <div class="user-info">
+          <div class="user-avatar">{{ getInitials(user) }}</div>
+          <div class="user-details">
+            <div class="user-name">{{ getFullName(user) }}</div>
+            <div class="user-email">{{ user.email }}</div>
+          </div>
+        </div>
+        <button
+          [class]="buttonClass"
+          (click)="onAction(user)">
+          {{ actionLabel }}
+        </button>
+      </div>
+    }
+    @empty {
+      <div class="no-results">Немає користувачів</div>
+    }
+  </div>
+</div>

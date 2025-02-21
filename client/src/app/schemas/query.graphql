@@ -3,4 +3,7 @@ type Query {
   currentUser: User!
   lessons: [Lesson!]
   teachers: [Teacher!]
+  students(search: String): [User!]
+  studentsByGroup(search: String, groupId: Int!): [User!]
+  studentsOutsideGroup(search: String, groupId: Int!): [User!]
 }

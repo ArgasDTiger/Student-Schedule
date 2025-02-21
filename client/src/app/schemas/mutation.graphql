@@ -5,4 +5,8 @@ type Mutation {
   createLessonInfo(lessonInfo: AddLessonInfoInput!): LessonInfo!
   updateLessonInfo(lessonInfo: UpdateLessonInfoInput!): Boolean!
   deleteLessonInfo(id: Int!): Boolean!
+  promoteUserToModerator(userId: Int!): Boolean!
+  demoteUserFromModerator(userId: Int!): Boolean!
+  addUserToGroup(userId: Int!, groupId: Int!): Boolean!
+  removeUserFromGroup(userId: Int!, groupId: Int!): Boolean!
 }

@@ -48,6 +48,7 @@ export class ModeratorOverviewComponent implements OnInit, OnDestroy {
 
   async switchTab(tab: string) {
     this.activeTab = tab;
+    console.log(`tab: ${tab} groupId: ${this.groupId}`);
     if (this.groupId) {
       if (tab === 'schedule') {
         await this.router.navigate(['/moderator', this.groupId, 'schedule']);

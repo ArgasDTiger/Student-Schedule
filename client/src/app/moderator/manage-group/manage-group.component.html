@@ -1,41 +1,21 @@
-<div class="panel">
-  <div class="group-management">
-    <div class="group-list">
-      <div class="group-list-header">
-        Група 201
-      </div>
-      <input type="text" class="search-box" placeholder="Пошук студентів...">
-      <div class="group-list-content">
-        <div class="student-item">
-          <div class="student-info">
-            <div class="student-avatar">ІП</div>
-            <div>
-              <div>Іванов Петро</div>
-              <div class="text-secondary">ivanovuniversity.edu</div>
-            </div>
-          </div>
-          <button class="btn btn-danger">Видалити</button>
-        </div>
-      </div>
-    </div>
+<div class="group-management">
+  <app-user-search-list
+    title="Група 201"
+    placeholder="Пошук студента..."
+    [users]="groupUsers"
+    actionLabel="Видалити"
+    buttonClass="btn-danger"
+    (search)="onGroupSearch($event)"
+    (action)="removeFromGroup($event)">
+  </app-user-search-list>
 
-    <div class="group-list">
-      <div class="group-list-header">
-        Доступні студенти
-      </div>
-      <input type="text" class="search-box" placeholder="Пошук студентів...">
-      <div class="group-list-content">
-        <div class="student-item">
-          <div class="student-info">
-            <div class="student-avatar">МС</div>
-            <div>
-              <div>Марченко Сергій</div>
-              <div class="text-secondary">marchenkouniversity.edu</div>
-            </div>
-          </div>
-          <button class="btn btn-success">Додати</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-user-search-list
+    title="Доступні студенти"
+    placeholder="Пошук студента..."
+    [users]="availableUsers"
+    actionLabel="Додати"
+    buttonClass="btn-primary"
+    (search)="onAvailableSearch($event)"
+    (action)="addToGroup($event)">
+  </app-user-search-list>
 </div>
