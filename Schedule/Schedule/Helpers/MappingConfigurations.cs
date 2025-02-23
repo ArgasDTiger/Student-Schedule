@@ -1,6 +1,7 @@
 using Mapster;
 using Schedule.DTOs;
 using Schedule.Entities;
+using Schedule.Requests;
 
 namespace Schedule.Helpers;
 
@@ -24,9 +25,11 @@ public class MappingConfigurations : IRegister
         config.NewConfig<User, UserDTO>()
             .Map(dest => dest.Groups, src => src.Groups.Adapt<List<GroupDTO>>())
             .Map(dest => dest.Faculties, src => src.Faculties.Adapt<List<FacultyDTO>>());
-        
+
+        config.NewConfig<UpdateLessonInput, Lesson>();
+
         /*config.NewConfig<User, object>()
-            .MapWith(src => 
+            .MapWith(src =>
                 src.Role == UserRole.Admin ? src.Adapt<AdminDTO>() :
                 src.Role == UserRole.Moderator ? src.Adapt<ModeratorDTO>() :
                 src.Role == UserRole.Student ? src.Adapt<StudentDTO>() :

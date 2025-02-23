@@ -1,0 +1,9 @@
+<div class="faculty-container">
+  <div
+    class="faculty-item"
+    [routerLink]="['/admin/faculty', faculty.id]"
+    routerLinkActive="active">
+    <mat-icon>apartment</mat-icon>
+    <span class="faculty-name">{{ faculty.name }}</span>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="item-list">
+  <div class="item-list-header">
+    <div class="header-content">
+      <span>{{ title }}</span>
+      @if (showAddButton) {
+        <button [class]="addButtonClass" (click)="onAdd()">
+          {{ addButtonLabel }}
+        </button>
+      }
+    </div>
+  </div>
+  <input
+    type="text"
+    class="search-box"
+    [placeholder]="placeholder"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange($event)"
+  >
+  <div class="item-list-content">
+    @for (item of items; track item.id) {
+      <div class="item-row">
+        @if (itemTemplate) {
+          <ng-container
+            [ngTemplateOutlet]="itemTemplate"
+            [ngTemplateOutletContext]="{ $implicit: item }">
+          </ng-container>
+        }
+        <div class="item-actions">
+          @for (action of actions; track action.label) {
+            <button [class]="action.class" (click)="onAction(action.type, item)">
+              {{ action.label }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+    @empty {
+      <div class="no-results">Результатів пошуку не знайдено</div>
+    }
+  </div>
+</div>

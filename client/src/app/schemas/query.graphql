@@ -1,9 +1,13 @@
 type Query {
   scheduleByStudentGroup(groupId: Int!): LessonInfo!
   currentUser: User!
-  lessons: [Lesson!]
-  teachers: [Teacher!]
   students(search: String): [User!]
   studentsByGroup(search: String, groupId: Int!): [User!]
   studentsOutsideGroup(search: String, groupId: Int!): [User!]
+
+  lessons(search: String): [Lesson!]
+  archivedLessons(search: String): [Lesson!]
+
+  teachers(search: String): [Teacher!]
+  archivedTeachers(search: String): [Teacher!]
 }

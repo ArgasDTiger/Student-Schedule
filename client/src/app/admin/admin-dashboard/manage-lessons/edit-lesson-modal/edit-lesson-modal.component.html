@@ -1,0 +1,27 @@
+<app-modal-form
+  [isVisible]="isModalVisible"
+  [title]="isUpdate ? 'Редагування предмету' : 'Створення предмету'"
+  [submitButtonText]="'Зберегти'"
+  [submitDisabled]="!lessonForm.valid"
+  (close)="closeModal()"
+  (submit)="onSubmit()">
+
+  <form [formGroup]="lessonForm" class="form">
+    <div class="form-group">
+      <label for="name" class="form-label">Назва</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        class="form-input"
+        [class.is-invalid]="lessonForm.get('name')?.invalid && lessonForm.get('name')?.touched"
+        placeholder="Введіть назву предмету">
+      @if (lessonForm.get('name')?.invalid && lessonForm.get('name')?.touched) {
+        <div class="error-message">
+          Назва предмету обов'язкова
+        </div>
+      }
+    </div>
+  </form>
+
+</app-modal-form>

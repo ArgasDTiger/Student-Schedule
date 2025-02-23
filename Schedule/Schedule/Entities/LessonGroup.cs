@@ -17,14 +17,14 @@ public class LessonGroup : EntityWithIntId
     public bool EvenWeek { get; set; }
 }
 
-public enum LessonType
+public enum LessonType : byte
 {
     Lecture,
     Practice,
     Laboratory
 }
 
-public enum LessonNumber
+public enum LessonNumber : byte
 {
     First = 1,
     Second,

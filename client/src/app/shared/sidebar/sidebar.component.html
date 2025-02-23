@@ -3,7 +3,7 @@
     <button (click)="toggleSidebar()">
       <mat-icon class="icon">menu</mat-icon>
     </button>
-    @if (!isSidebarCollapsed) {
+    @if (!isSidebarCollapsed && userRole !== Role.Admin) {
       <span>Мої групи</span>
     }
   </div>
@@ -13,6 +13,9 @@
     }
     @if (userRole === Role.Moderator) {
       <app-moderator-sidebar/>
+    }
+    @if (userRole === Role.Admin) {
+      <app-admin-sidebar/>
     }
   }
 </div>

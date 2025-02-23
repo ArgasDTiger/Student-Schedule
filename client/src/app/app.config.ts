@@ -14,7 +14,7 @@ import {GoogleLoginProvider, SocialAuthServiceConfig} from "@abacritt/angularx-s
 import {authInterceptor} from "./core/interceptors/auth.interceptor";
 import {GraphQLWsLink} from "@apollo/client/link/subscriptions";
 import {createClient} from "graphql-ws";
-import {getMainDefinition} from "@apollo/client/utilities";
+import {addTypenameToDocument, getMainDefinition} from "@apollo/client/utilities";
 import {Kind, OperationTypeNode} from "graphql/language";
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
@@ -77,7 +77,9 @@ export const appConfig: ApplicationConfig = {
 
         return {
           link,
-          cache: new InMemoryCache()
+          cache: new InMemoryCache({
+            addTypename: false
+          })
         };
       }
 

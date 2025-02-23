@@ -106,6 +106,9 @@ namespace Schedule.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -132,8 +135,8 @@ namespace Schedule.Data.Migrations
                     b.Property<int>("LessonId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LessonNumber")
-                        .HasColumnType("int");
+                    b.Property<byte>("LessonNumber")
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("OddWeek")
                         .HasColumnType("bit");
@@ -144,8 +147,8 @@ namespace Schedule.Data.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("WeekDay")
                         .HasColumnType("int");
@@ -202,12 +205,15 @@ namespace Schedule.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Degree")
-                        .HasColumnType("int");
+                    b.Property<byte>("Degree")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -253,8 +259,8 @@ namespace Schedule.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<byte>("Role")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 

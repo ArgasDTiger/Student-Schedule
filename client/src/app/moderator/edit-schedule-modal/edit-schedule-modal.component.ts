@@ -13,7 +13,7 @@ import {ModalService} from "../../core/services/modal.service";
 import {ScheduleService} from "../../core/services/schedule.service";
 import {AddLessonInfoInput} from "../../core/inputs/add-lesson-info-input";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
-import {convertLessonNumber, LessonNumber, LessonNumberString} from "../../core/enums/lessonNumber";
+import {convertLessonNumber, LessonNumberString} from "../../core/enums/lessonNumber";
 import {ToasterManagerService} from "../../core/services/toaster-manager.service";
 import {map} from "rxjs/operators";
 import {UpdateLessonInfoInput} from "../../core/inputs/update-lesson-info-input";
@@ -57,7 +57,7 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.modalSubscription = this.modalService.editModal$.subscribe(modalData => {
+    this.modalSubscription = this.modalService.editScheduleModal$.subscribe(modalData => {
       if (modalData.type === 'create') {
         this.openCreateModal(modalData.data.lessonNumber, modalData.data.groupId, modalData.data.weekDay);
       } else {

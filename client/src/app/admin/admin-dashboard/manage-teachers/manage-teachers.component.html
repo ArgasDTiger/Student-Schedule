@@ -1,0 +1,35 @@
+<div class="teachers-management">
+  <app-item-list
+    title="Активні викладачі"
+    placeholder="Пошук викладача..."
+    [items]="activeItems"
+    [actions]="activeActions"
+    [showAddButton]="true"
+    [itemTemplate]="teacherTemplate"
+    (search)="onActiveSearch($event)"
+    (action)="onAction($event)"
+    (add)="openCreateModal()">
+  </app-item-list>
+
+  <app-item-list
+    title="Архівовані викладачі"
+    placeholder="Пошук викладача..."
+    [items]="archivedItems"
+    [actions]="archivedActions"
+    [itemTemplate]="teacherTemplate"
+    (search)="onArchivedSearch($event)"
+    (action)="onAction($event)">
+  </app-item-list>
+
+  <ng-template #teacherTemplate let-teacher>
+    <div class="teacher-info">
+      <div class="teacher-name">
+        {{ teacher.lastName }} {{ teacher.firstName }} {{ teacher.middleName }}
+      </div>
+      <div class="teacher-degree">
+        {{ getDegree(teacher) }} </div>
+    </div>
+  </ng-template>
+</div>
+
+<app-edit-teacher-modal/>

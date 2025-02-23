@@ -1,3 +1,4 @@
+using GreenDonut.Predicates;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Entities;
 using Schedule.Exceptions;
@@ -15,9 +16,84 @@ public class LessonService : ILessonService
         _repository = repository;
     }
 
-    public async Task<List<Lesson>> GetAllLessons(CancellationToken cancellationToken)
+    public Task<List<Lesson>> GetAllLessons(string? search, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll<Lesson>().OrderBy(l => l.Name).ToListAsync(cancellationToken);
+        return _repository
+            .GetAll<Lesson>()
+            .Where(l => !l.IsArchived 
+                        && (search == null || EF.Functions.Like(l.Name, $"%{search}%")))
+            .OrderBy(l => l.Name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<List<Lesson>> GetAllArchivedLessons(string? search, CancellationToken cancellationToken)
+    {
+        return _repository
+            .GetAll<Lesson>()
+            .Where(l => l.IsArchived 
+                        && (search == null || EF.Functions.Like(l.Name, $"%{search}%")))
+            .OrderBy(l => l.Name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Lesson> CreateLesson(string name, CancellationToken cancellationToken)
+    {
+        var lesson = new Lesson
+        {
+            Name = name,
+            IsArchived = false
+        };
+
+        var addedLesson = _repository.Add(lesson);
+        await _repository.SaveChangesAsync(cancellationToken);
+        return addedLesson;
+    }
+
+    public async Task<bool> UpdateLesson(Lesson lesson, CancellationToken cancellationToken)
+    {
+        var existingLesson = await _repository.GetAllAsNoTracking<Lesson>().Where(l => l.Id == lesson.Id).SingleOrDefaultAsync(cancellationToken);
+        if (existingLesson is null)
+            throw new DetailedException("Lesson is not found.");
+
+        lesson.IsArchived = existingLesson.IsArchived;
+        _repository.Update(lesson);
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> ArchiveLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        var existingLesson = await _repository.GetAll<Lesson>().Where(l => l.Id == lessonId).SingleOrDefaultAsync(cancellationToken);
+        if (existingLesson is null)
+            throw new DetailedException("Lesson is not found.");
+        
+        if (existingLesson.IsArchived)
+            throw new DetailedException("Lesson is already archived.");
+
+        existingLesson.IsArchived = true;
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> PublishLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        var existingLesson = await _repository.GetAll<Lesson>().Where(l => l.Id == lessonId).SingleOrDefaultAsync(cancellationToken);
+        if (existingLesson is null)
+            throw new DetailedException("Lesson is not found.");
+        
+        if (!existingLesson.IsArchived)
+            throw new DetailedException("Lesson is already published.");
+
+        existingLesson.IsArchived = false;
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> DeleteLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        var existingLesson = await _repository.GetAll<Lesson>().Where(l => l.Id == lessonId).SingleOrDefaultAsync(cancellationToken);
+        if (existingLesson is null)
+            throw new DetailedException("Lesson is not found.");
+        
+        _repository.Remove(existingLesson);
+        return await _repository.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<LessonGroup> AddLessonGroup(AddLessonInfoInput input, CancellationToken cancellationToken)

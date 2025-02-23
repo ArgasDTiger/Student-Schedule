@@ -8,6 +8,7 @@ $bg-hover: #f1f5f9;
 $btn-bg-hover: #a7a8e6;
 $danger-color: #f43f5e;
 $success-color: #10b981;
+$warning-color: #f59e0b;
 $bg-color: #e9eced;
 $sidebar-width: 300px;
 $sidebar-collapsed-width: 80px;
@@ -63,49 +64,41 @@ mat-icon {
   overflow: hidden;
 }
 
-.btn-primary {
-  background-color: #6366f1;
-  color: white;
+@mixin button-style($bg-color, $hover-color, $text-color: white) {
+  background-color: $bg-color;
+  color: $text-color;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: $default-border-radius;
   cursor: pointer;
+  border: none;
 
   &:hover {
-    background-color: #a7a8e6;
+    background-color: $hover-color;
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
+}
+
+.btn-primary {
+  @include button-style($primary-color, $btn-bg-hover);
 }
 
 .btn-secondary {
-  background-color: white;
-  color: #4a5c73;
-  padding: 0.5rem 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f1f5f9;
-  }
+  @include button-style(white, $bg-hover, $text-secondary);
+  border: 1px solid $border-color;
 }
 
 .btn-danger {
-  background-color: $danger-color;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
+  @include button-style($danger-color, #c53030);
+}
 
-  &:hover {
-    background-color: #c1a5a9;
-  }
+.btn-success {
+  @include button-style($success-color, #059669);
+}
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+.btn-warning {
+  @include button-style($warning-color, #d97706);
 }

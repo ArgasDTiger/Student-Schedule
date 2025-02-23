@@ -1,0 +1,17 @@
+.teachers-management {
+  display: grid;
+  gap: 2rem;
+}
+
+.teacher-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.teacher-name {
+  font-weight: 500;
+}
+.teacher-degree {
+  font-size: 0.9em;
+  color: #666;
+}

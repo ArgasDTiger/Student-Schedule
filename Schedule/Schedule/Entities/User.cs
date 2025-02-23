@@ -14,7 +14,7 @@ public class User : EntityWithIntId
     public virtual List<Faculty> Faculties { get; set; }
 }
 
-public enum UserRole
+public enum UserRole : byte
 {
     Student,
     Moderator,

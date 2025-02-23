@@ -1,0 +1,20 @@
+<div class="main-content">
+  <h1 class="content-title">{{ faculty?.name }}</h1>
+
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'moderators'"
+      (click)="switchTab('moderators')">
+      Модератори
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'groups'"
+      (click)="switchTab('groups')">
+      Групи
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

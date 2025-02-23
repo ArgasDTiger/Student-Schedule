@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { LessonInfo } from '../models/lessonInfo';
 import { DayOfWeek } from "../enums/dayOfWeek";
 import {ActionButtonColor, ActionButtonType} from "../constants/modal-types";
+import {Lesson} from "../models/lesson";
+import {Teacher} from "../models/teacher";
 
 export interface ActionModalConfig {
   header: string;
@@ -15,24 +17,54 @@ export interface ActionModalConfig {
   providedIn: 'root'
 })
 export class ModalService {
-  private editModalSubject = new Subject<{type: 'create' | 'edit', data: any}>();
+  private editLessonInfoModalSubject = new Subject<{type: 'create' | 'edit', data: any}>();
+  private editLessonModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
+  private editTeacherModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
   private actionModalSubject = new Subject<ActionModalConfig>();
   private actionModalConfirmed?: (value: boolean) => void;
 
-  editModal$ = this.editModalSubject.asObservable();
+  editScheduleModal$ = this.editLessonInfoModalSubject.asObservable();
+  editLessonModal$ = this.editLessonModalSubject.asObservable();
+  editTeacherModal$ = this.editTeacherModalSubject.asObservable();
   actionModal$ = this.actionModalSubject.asObservable();
 
   openCreateLessonInfoModal(lessonNumber: number, groupId: number, weekDay: DayOfWeek) {
-    this.editModalSubject.next({
+    this.editLessonInfoModalSubject.next({
       type: 'create',
       data: { lessonNumber, groupId, weekDay }
     });
   }
 
   openEditLessonInfoModal(lessonInfo: LessonInfo) {
-    this.editModalSubject.next({
+    this.editLessonInfoModalSubject.next({
       type: 'edit',
       data: lessonInfo
+    });
+  }
+
+  openCreateLessonModal() {
+    this.editLessonModalSubject.next({
+      type: 'edit',
+    });
+  }
+
+  openEditLessonModal(lesson: Lesson) {
+    this.editLessonModalSubject.next({
+      type: 'edit',
+      data: lesson
+    });
+  }
+
+  openCreateTeacherModal() {
+    this.editTeacherModalSubject.next({
+      type: 'edit',
+    });
+  }
+
+  openEditTeacherModal(teacher: Teacher) {
+    this.editTeacherModalSubject.next({
+      type: 'edit',
+      data: teacher
     });
   }
 

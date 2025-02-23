@@ -9,11 +9,12 @@ import {Subscription} from "rxjs";
 import {UserService} from "../../core/services/user.service";
 import {Role} from "../../core/enums/role";
 import {ModeratorSidebarComponent} from "./moderator-sidebar/moderator-sidebar.component";
+import {AdminSidebarComponent} from "./admin-sidebar/admin-sidebar.component";
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [MatIconModule, MatSlideToggleModule, StudentSidebarComponent, NgClass, NgStyle, ModeratorSidebarComponent
+  imports: [MatIconModule, MatSlideToggleModule, StudentSidebarComponent, NgClass, NgStyle, ModeratorSidebarComponent, AdminSidebarComponent
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',

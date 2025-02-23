@@ -1,0 +1,18 @@
+<div class="sidebar-content">
+  <div
+    class="control-panel-item"
+    [routerLink]="['/admin/dashboard']"
+    routerLinkActive="active">
+    <mat-icon>dashboard</mat-icon>
+    <span>Панель керування</span>
+  </div>
+
+  <div class="faculties-section">
+    <div class="section-title">Факультети</div>
+    <div class="faculties-list">
+      @for (faculty of faculties; track faculty.id) {
+        <app-admin-sidebar-faculty [faculty]="faculty"/>
+      }
+    </div>
+  </div>
+</div>

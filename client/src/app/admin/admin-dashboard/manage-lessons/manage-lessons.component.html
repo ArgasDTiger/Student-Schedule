@@ -1,0 +1,29 @@
+<div class="lessons-management">
+  <app-item-list
+    title="Активні предмети"
+    placeholder="Пошук предмету..."
+    [items]="activeItems"
+    [actions]="activeActions"
+    [showAddButton]="true"
+    (search)="onActiveSearch($event)"
+    (action)="onAction($event)"
+    [itemTemplate]="lessonTemplate"
+    (add)="openCreateModal()">
+  </app-item-list>
+
+  <app-item-list
+    title="Архівовані предмети"
+    placeholder="Пошук предмету..."
+    [items]="archivedItems"
+    [actions]="archivedActions"
+    [itemTemplate]="lessonTemplate"
+    (search)="onArchivedSearch($event)"
+    (action)="onAction($event)">
+  </app-item-list>
+
+  <ng-template #lessonTemplate let-lesson>
+      {{ lesson.name }}
+  </ng-template>
+</div>
+
+<app-edit-lesson-modal/>

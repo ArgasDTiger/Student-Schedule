@@ -52,6 +52,7 @@ export class ManageGroupComponent implements OnInit {
     const success = await this.userService.addUserToGroup(user.id, this.groupId);
     if (success) {
       this.groupUsers = [...this.groupUsers, user];
+      this.groupUsers = this.groupUsers.sort((a, b) => a.lastName.localeCompare(b.lastName));
       this.availableUsers = this.availableUsers.filter(u => u.id !== user.id);
     }
   }
@@ -61,6 +62,7 @@ export class ManageGroupComponent implements OnInit {
     const success = await this.userService.removeUserFromGroup(user.id, this.groupId);
     if (success) {
       this.availableUsers = [...this.availableUsers, user];
+      this.availableUsers = this.availableUsers.sort((a, b) => a.lastName.localeCompare(b.lastName));
       this.groupUsers = this.groupUsers.filter(u => u.id !== user.id);
     }
   }

@@ -7,3 +7,8 @@ input LessonInput {
   id: Int!
   name: String!
 }
+
+input UpdateLessonInput {
+  id: Int!
+  name: String!
+}

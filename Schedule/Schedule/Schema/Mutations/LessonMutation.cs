@@ -1,5 +1,6 @@
 using Mapster;
 using Schedule.DTOs;
+using Schedule.Entities;
 using Schedule.Requests;
 using Schedule.Schema.Subscriptions;
 
@@ -27,4 +28,31 @@ public partial class Mutation
     {
         return await _lessonService.DeleteLessonGroup(id, cancellationToken);
     }
+
+    public async Task<LessonDTO> CreateLesson(string name, CancellationToken cancellationToken)
+    {
+        var createdLesson = await _lessonService.CreateLesson(name, cancellationToken);
+        return createdLesson.Adapt<LessonDTO>();
+    }
+
+    public async Task<bool> UpdateLesson(UpdateLessonInput lesson, CancellationToken cancellationToken)
+    {
+        var mappedLesson = lesson.Adapt<Lesson>();
+        return await _lessonService.UpdateLesson(mappedLesson, cancellationToken);
+    }
+
+    public async Task<bool> ArchiveLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        return await _lessonService.ArchiveLesson(lessonId, cancellationToken);
+    }
+
+    public async Task<bool> PublishLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        return await _lessonService.PublishLesson(lessonId, cancellationToken);
+    }
+
+    public async Task<bool> DeleteLesson(int lessonId, CancellationToken cancellationToken)
+    {
+        return await _lessonService.DeleteLesson(lessonId, cancellationToken);
+    }    
 }

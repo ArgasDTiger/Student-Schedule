@@ -13,3 +13,19 @@ input TeacherInput {
   lastName: String!
   degree: String!
 }
+
+input AddTeacherInput {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+  degree: String!
+}
+
+input UpdateTeacherInput {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+  degree: String!
+}

@@ -9,4 +9,16 @@ type Mutation {
   demoteUserFromModerator(userId: Int!): Boolean!
   addUserToGroup(userId: Int!, groupId: Int!): Boolean!
   removeUserFromGroup(userId: Int!, groupId: Int!): Boolean!
+
+  createLesson(name: String!): Lesson!
+  updateLesson(lesson: UpdateLessonInput!): Boolean!
+  archiveLesson(lessonId: Int!): Boolean!
+  publishLesson(lessonId: Int!): Boolean!
+  deleteLesson(lessonId: Int!): Boolean!
+
+  createTeacher(teacher: AddTeacherInput!): Teacher!
+  updateTeacher(teacher: UpdateTeacherInput!): Boolean!
+  archiveTeacher(teacherId: Int!): Boolean!
+  publishTeacher(teacherId: Int!): Boolean!
+  deleteTeacher(teacherId: Int!): Boolean!
 }

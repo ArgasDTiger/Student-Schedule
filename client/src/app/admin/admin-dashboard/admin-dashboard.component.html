@@ -1,0 +1,26 @@
+<div class="main-content">
+  <h1 class="content-title">Панель керування</h1>
+
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'lessons'"
+      (click)="switchTab('lessons')">
+      Предмети
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'teachers'"
+      (click)="switchTab('teachers')">
+      Викладачі
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'students'"
+      (click)="switchTab('students')">
+      Студенти
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>
