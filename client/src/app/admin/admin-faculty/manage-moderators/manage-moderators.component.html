@@ -1,0 +1,34 @@
+<div class="moderators-management">
+  <app-item-list
+    title="Модератори"
+    placeholder="Пошук модератора..."
+    [items]="moderators"
+    [actions]="moderatorActions"
+    [showAddButton]="false"
+    [itemTemplate]="userTemplate"
+    (search)="onModeratorSearch($event)"
+    (action)="onAction($event)">
+  </app-item-list>
+
+  <app-item-list
+    title="Доступні користувачі"
+    placeholder="Пошук користувача..."
+    [items]="availableUsers"
+    [actions]="availableUserActions"
+    [showAddButton]="false"
+    [itemTemplate]="userTemplate"
+    (search)="onAvailableUserSearch($event)"
+    (action)="onAction($event)">
+  </app-item-list>
+
+  <ng-template #userTemplate let-user>
+    <div class="moderator-info">
+      <div class="moderator-name">
+        {{ user.lastName }} {{ user.firstName }} {{ user.middleName }}
+      </div>
+      <div class="moderator-email">
+        {{ user.email }}
+      </div>
+    </div>
+  </ng-template>
+</div>

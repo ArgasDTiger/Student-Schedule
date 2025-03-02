@@ -5,6 +5,7 @@ import {isPlatformBrowser} from "@angular/common";
 import {RefreshTokenResponse} from "../responses/refresh-token-response";
 import {UserService} from "./user.service";
 import {of} from "rxjs";
+import {RevokeTokenResponse} from "../responses/revoke-token-response";
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,22 @@ export class AuthService {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  logout() {
+  async revokeToken() {
     if (!this.isBrowser) return;
-    localStorage.removeItem("token");
+    return this.apollo
+    .mutate<RevokeTokenResponse>({
+      mutation: gql`
+        mutation RefreshToken {
+          revokeToken
+        }`
+    })
+    .toPromise()
+    .then(response => {
+      return response?.data?.revokeToken === true;
+    })
+    .catch(e => {
+      return false;
+    });
   }
 
   isAuthorized() {

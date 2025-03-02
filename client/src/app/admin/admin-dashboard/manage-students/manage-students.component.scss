@@ -1,0 +1,17 @@
+.students-management {
+  display: grid;
+  gap: 2rem;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.student-name {
+  font-weight: 500;
+}
+.student-email {
+  font-size: 0.9em;
+  color: #666;
+}

@@ -10,6 +10,9 @@ import {UserService} from "../../core/services/user.service";
 import {Role} from "../../core/enums/role";
 import {ModeratorSidebarComponent} from "./moderator-sidebar/moderator-sidebar.component";
 import {AdminSidebarComponent} from "./admin-sidebar/admin-sidebar.component";
+import {AuthService} from "../../core/services/auth.service";
+import {Router} from "@angular/router";
+import {ToasterManagerService} from "../../core/services/toaster-manager.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -39,7 +42,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isBrowser = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private userService: UserService) {
+              private userService: UserService,
+              private authService: AuthService,
+              private router: Router,
+              private toasterManagerService: ToasterManagerService) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
@@ -64,6 +70,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     if (this.isBrowser)
       localStorage.setItem("sidebar_collapsed", this.isSidebarCollapsed.toString());
+  }
+
+  async onLogout() {
+    const success = await this.authService.revokeToken();
+    if (success) {
+      await this.router.navigate(['/login']);
+      this.userService.currentUser$.next(null);
+    } else {
+      this.toasterManagerService.error("Помилка при виході з аканту.");
+    }
   }
 
   protected readonly Role = Role;

@@ -1,0 +1,17 @@
+.moderators-management {
+  display: grid;
+  gap: 2rem;
+}
+
+.moderator-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.moderator-name {
+  font-weight: 500;
+}
+.moderator-email {
+  font-size: 0.9em;
+  color: #666;
+}

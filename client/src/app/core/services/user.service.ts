@@ -4,7 +4,6 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
-import {Lesson} from "../models/lesson";
 
 @Injectable({
   providedIn: 'root'

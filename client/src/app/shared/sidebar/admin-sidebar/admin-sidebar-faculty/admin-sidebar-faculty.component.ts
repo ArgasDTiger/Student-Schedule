@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
 import {Faculty} from "../../../../core/models/faculty";
 
@@ -8,7 +8,8 @@ import {Faculty} from "../../../../core/models/faculty";
   standalone: true,
   imports: [
     RouterLink,
-    MatIconModule
+    MatIconModule,
+    RouterLinkActive
   ],
   templateUrl: './admin-sidebar-faculty.component.html',
   styleUrl: './admin-sidebar-faculty.component.scss'

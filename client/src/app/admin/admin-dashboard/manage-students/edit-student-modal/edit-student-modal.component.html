@@ -1,0 +1,79 @@
+<app-modal-form
+  [isVisible]="isModalVisible"
+  [title]="isUpdate ? 'Редагування користувача' : 'Створення користувача'"
+  [submitButtonText]="'Зберегти'"
+  [submitDisabled]="!userForm.valid"
+  (close)="closeModal()"
+  (submit)="onSubmit()">
+
+  <form [formGroup]="userForm" class="form">
+    <div class="form-group">
+      <label for="lastName" class="form-label">Прізвище</label>
+      <input
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        class="form-input"
+        [class.is-invalid]="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+        placeholder="Введіть прізвище">
+      @if (userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched) {
+        <div class="error-message">
+          Прізвище обов'язкове
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="firstName" class="form-label">Ім'я</label>
+      <input
+        id="firstName"
+        type="text"
+        formControlName="firstName"
+        class="form-input"
+        [class.is-invalid]="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+        placeholder="Введіть ім'я">
+      @if (userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched) {
+        <div class="error-message">
+          Ім'я обов'язкове
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="middleName" class="form-label">По-батькові</label>
+      <input
+        id="middleName"
+        type="text"
+        formControlName="middleName"
+        class="form-input"
+        [class.is-invalid]="userForm.get('middleName')?.invalid && userForm.get('middleName')?.touched"
+        placeholder="Введіть по батькові">
+      @if (userForm.get('middleName')?.invalid && userForm.get('middleName')?.touched) {
+        <div class="error-message">
+          По-батькові обов'язкове
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="form-label">Електронна пошта</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        class="form-input"
+        [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+        placeholder="Введіть email">
+      @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+        <div class="error-message">
+          @if (userForm.get('email')?.errors?.['required']) {
+            Електронна пошта обов'язкова
+          } @else if (userForm.get('email')?.errors?.['email']) {
+            Введіть правильні данні
+          }
+        </div>
+      }
+    </div>
+  </form>
+
+</app-modal-form>

@@ -1,0 +1,27 @@
+<app-modal-form
+  [isVisible]="isModalVisible"
+  [title]="isUpdate ? 'Редагування групи' : 'Створення групи'"
+  [submitButtonText]="'Зберегти'"
+  [submitDisabled]="!groupForm.valid"
+  (close)="closeModal()"
+  (submit)="onSubmit()">
+
+  <form [formGroup]="groupForm" class="form">
+    <div class="form-group">
+      <label for="groupNumber" class="form-label">Номер</label>
+      <input
+        id="groupNumber"
+        type="text"
+        formControlName="groupNumber"
+        class="form-input"
+        [class.is-invalid]="groupForm.get('groupNumber')?.invalid && groupForm.get('groupNumber')?.touched"
+        placeholder="Введіть номер групи">
+      @if (groupForm.get('groupNumber')?.invalid && groupForm.get('groupNumber')?.touched) {
+        <div class="error-message">
+          Номер групи обов'язковий і не має перевищувати 6 цифр
+        </div>
+      }
+    </div>
+  </form>
+
+</app-modal-form>

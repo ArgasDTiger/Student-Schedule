@@ -1,0 +1,26 @@
+<div class="students-management">
+  <app-item-list
+    title="Студенти"
+    placeholder="Пошук студента..."
+    [items]="activeItems"
+    [actions]="activeActions"
+    [showAddButton]="true"
+    [itemTemplate]="userTemplate"
+    (search)="onActiveSearch($event)"
+    (action)="onAction($event)"
+    (add)="openCreateModal()">
+  </app-item-list>
+
+  <ng-template #userTemplate let-user>
+    <div class="student-info">
+      <div class="student-name">
+        {{ user.lastName }} {{ user.firstName }} {{ user.middleName }}
+      </div>
+      <div class="student-email">
+        {{ user.email }}
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<app-edit-student-modal/>

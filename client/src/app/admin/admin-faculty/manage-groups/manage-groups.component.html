@@ -1,0 +1,19 @@
+<div class="groups-management">
+  <app-item-list
+    title="Групи"
+    placeholder="Пошук групи..."
+    [items]="groups"
+    [actions]="actions"
+    [showAddButton]="true"
+    (search)="onSearch($event)"
+    (action)="onAction($event)"
+    [itemTemplate]="groupTemplate"
+    (add)="openCreateModal()">
+  </app-item-list>
+
+  <ng-template #groupTemplate let-group>
+    {{ group.groupNumber }}
+  </ng-template>
+</div>
+
+<app-edit-group-modal/>
