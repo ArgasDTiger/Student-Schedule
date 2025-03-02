@@ -9,3 +9,19 @@ type User {
   groups: [Group!]!
   faculties: [Faculty!]!
 }
+
+input AddStudentInput {
+  email: String!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+input UpdateStudentInput {
+  id: Int!
+  email: String!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+

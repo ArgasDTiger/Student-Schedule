@@ -29,4 +29,16 @@ public partial class Query
         var students = await _userService.GetStudentsOutsideGroup(search, groupId, cancellationToken);
         return students.Adapt<List<UserDTO>>();
     }
+    
+    public async Task<List<UserDTO>> GetUsers(string? search, CancellationToken cancellationToken)
+    {
+        var users = await _userService.GetUsers(search, cancellationToken);
+        return users.Adapt<List<UserDTO>>();
+    }
+
+    public async Task<List<UserDTO>> GetModerators(string? search, int facultyId, CancellationToken cancellationToken)
+    {
+        var users = await _userService.GetModerators(search, facultyId, cancellationToken);
+        return users.Adapt<List<UserDTO>>();
+    }
 }

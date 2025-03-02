@@ -248,7 +248,6 @@ namespace Schedule.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GoogleId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")

@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Schedule.Entities;
 using Schedule.Exceptions;
 using Schedule.Interfaces;
-using Schedule.Requests;
 
 namespace Schedule.Services;
 

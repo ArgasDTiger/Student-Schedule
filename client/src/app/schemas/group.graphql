@@ -9,3 +9,14 @@ input GroupInput {
   groupNumber: Int!
   faculty: FacultyInput!
 }
+
+input AddGroupInput {
+  groupNumber: Int
+  facultyId: Int
+}
+
+input UpdateGroupInput {
+  id: Int!
+  groupNumber: Int!
+  facultyId: Int!
+}

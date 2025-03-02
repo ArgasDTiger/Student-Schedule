@@ -5,6 +5,9 @@ import { DayOfWeek } from "../enums/dayOfWeek";
 import {ActionButtonColor, ActionButtonType} from "../constants/modal-types";
 import {Lesson} from "../models/lesson";
 import {Teacher} from "../models/teacher";
+import {User} from "../models/user";
+import {Group} from "../models/group";
+import {AddGroupInput} from "../inputs/add-group-input";
 
 export interface ActionModalConfig {
   header: string;
@@ -20,12 +23,16 @@ export class ModalService {
   private editLessonInfoModalSubject = new Subject<{type: 'create' | 'edit', data: any}>();
   private editLessonModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
   private editTeacherModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
+  private editStudentModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
+  private editGroupModalSubject = new Subject<{type: 'create' | 'edit', data?: any}>();
   private actionModalSubject = new Subject<ActionModalConfig>();
   private actionModalConfirmed?: (value: boolean) => void;
 
   editScheduleModal$ = this.editLessonInfoModalSubject.asObservable();
   editLessonModal$ = this.editLessonModalSubject.asObservable();
   editTeacherModal$ = this.editTeacherModalSubject.asObservable();
+  editStudentModal$ = this.editStudentModalSubject.asObservable();
+  editGroupModal$ = this.editGroupModalSubject.asObservable();
   actionModal$ = this.actionModalSubject.asObservable();
 
   openCreateLessonInfoModal(lessonNumber: number, groupId: number, weekDay: DayOfWeek) {
@@ -65,6 +72,34 @@ export class ModalService {
     this.editTeacherModalSubject.next({
       type: 'edit',
       data: teacher
+    });
+  }
+
+  openCreateStudentModal() {
+    this.editStudentModalSubject.next({
+      type: 'edit',
+    });
+  }
+
+  openEditStudentModal(student: User) {
+    this.editStudentModalSubject.next({
+      type: 'edit',
+      data: student
+    });
+  }
+
+  openCreateGroupModal(facultyId: number) {
+    console.log("fac id in modal is ", facultyId)
+    this.editGroupModalSubject.next({
+      type: 'create',
+      data: facultyId
+    });
+  }
+
+  openEditGroupModal(group: Group) {
+    this.editGroupModalSubject.next({
+      type: 'edit',
+      data: group
     });
   }
 

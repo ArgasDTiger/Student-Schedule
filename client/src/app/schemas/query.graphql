@@ -10,4 +10,9 @@ type Query {
 
   teachers(search: String): [Teacher!]
   archivedTeachers(search: String): [Teacher!]
+
+  users(search: String): [User!]
+  moderators(search: String, facultyId: Int!): [User!]
+
+  groups(facultyId: Int!, search: String): [Group!]
 }

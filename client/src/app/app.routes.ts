@@ -8,6 +8,9 @@ import {AdminDashboardComponent} from "./admin/admin-dashboard/admin-dashboard.c
 import {AdminFacultyComponent} from "./admin/admin-faculty/admin-faculty.component";
 import {ManageLessonsComponent} from "./admin/admin-dashboard/manage-lessons/manage-lessons.component";
 import {ManageTeachersComponent} from "./admin/admin-dashboard/manage-teachers/manage-teachers.component";
+import {ManageStudentsComponent} from "./admin/admin-dashboard/manage-students/manage-students.component";
+import {ManageModeratorsComponent} from "./admin/admin-faculty/manage-moderators/manage-moderators.component";
+import {ManageGroupsComponent} from "./admin/admin-faculty/manage-groups/manage-groups.component";
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -41,7 +44,7 @@ export const routes: Routes = [
         children: [
           { path: 'lessons', component: ManageLessonsComponent },
           { path: 'teachers', component: ManageTeachersComponent },
-          // { path: 'students', component: StudentsComponent },
+          { path: 'students', component: ManageStudentsComponent },
           { path: '', redirectTo: 'lessons', pathMatch: 'full' }
         ]
       },
@@ -49,8 +52,8 @@ export const routes: Routes = [
         path: 'faculty/:id',
         component: AdminFacultyComponent,
         children: [
-          // { path: 'moderators', component: ModeratorsComponent },
-          // { path: 'groups', component: GroupsComponent },
+          { path: 'moderators', component: ManageModeratorsComponent },
+          { path: 'groups', component: ManageGroupsComponent },
           { path: '', redirectTo: 'moderators', pathMatch: 'full' }
         ]
       },

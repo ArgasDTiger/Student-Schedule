@@ -8,12 +8,14 @@ public partial class Query
     private readonly IUserService _userService;
     private readonly ILessonService _lessonService;
     private readonly ITeacherService _teacherService;
+    private readonly IGroupService _groupService;
 
-    public Query(ITokenService tokenService, IUserService userService, ILessonService lessonService, ITeacherService teacherService)
+    public Query(ITokenService tokenService, IUserService userService, ILessonService lessonService, ITeacherService teacherService, IGroupService groupService)
     {
         _tokenService = tokenService;
         _userService = userService;
         _lessonService = lessonService;
         _teacherService = teacherService;
+        _groupService = groupService;
     }
 }

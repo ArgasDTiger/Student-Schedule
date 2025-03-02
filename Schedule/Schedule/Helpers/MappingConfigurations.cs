@@ -1,7 +1,7 @@
 using Mapster;
 using Schedule.DTOs;
 using Schedule.Entities;
-using Schedule.Requests;
+using Schedule.Inputs;
 
 namespace Schedule.Helpers;
 

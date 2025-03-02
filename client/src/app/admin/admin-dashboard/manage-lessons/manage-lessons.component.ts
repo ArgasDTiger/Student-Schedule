@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Lesson} from "../../../core/models/lesson";
 import {LessonService} from "../../../core/services/lesson.service";
-import {ItemListComponent} from "../item-list/item-list.component";
+import {ItemListComponent} from "../../item-list/item-list.component";
 import {ModalService} from "../../../core/services/modal.service";
 import {ToasterManagerService} from "../../../core/services/toaster-manager.service";
 import {EditLessonModalComponent} from "./edit-lesson-modal/edit-lesson-modal.component";

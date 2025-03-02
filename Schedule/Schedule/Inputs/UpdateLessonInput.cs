@@ -1,4 +1,4 @@
-namespace Schedule.Requests;
+namespace Schedule.Inputs;
 
 public class UpdateLessonInput
 {

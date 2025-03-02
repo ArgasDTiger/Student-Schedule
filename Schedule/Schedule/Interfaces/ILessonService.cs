@@ -1,5 +1,5 @@
 using Schedule.Entities;
-using Schedule.Requests;
+using Schedule.Inputs;
 
 namespace Schedule.Interfaces;
 

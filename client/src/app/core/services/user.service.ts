@@ -4,13 +4,19 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
+import {Lesson} from "../models/lesson";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private studentsRefreshSubject = new BehaviorSubject<void>(undefined);
+  private moderatorsRefreshSubject = new BehaviorSubject<void>(undefined);
+
   isBrowser = false;
   currentUser$ = new BehaviorSubject<User | null>(null);
+  studentsRefresh$ = this.studentsRefreshSubject.asObservable();
+  moderatorsRefresh$ = this.moderatorsRefreshSubject.asObservable();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -151,4 +157,149 @@ export class UserService {
       return false;
     }
   }
+
+  addStudent(user: User): Observable<User> {
+    if (!this.isBrowser) return new Observable<User>();
+    return this.apollo.mutate<{ addStudent: User }>({
+      mutation: gql`
+        mutation AddStudent($user: AddStudentInput!) {
+          addStudent(user: $user) {
+            id
+            firstName
+            lastName
+            middleName
+            email
+          }
+        }
+      `,
+      variables: { user },
+      refetchQueries: ['Students']
+    }).pipe(
+      map(result => {
+        this.studentsRefreshSubject.next();
+        return result.data?.addStudent as User;
+      })
+    );
+  }
+
+  async updateStudent(user: User): Promise<boolean> {
+    if (!this.isBrowser) return false;
+    try {
+      const result = await this.apollo.mutate<{ updateStudent: boolean }>({
+        mutation: gql`
+          mutation UpdateStudent($user: UpdateStudentInput!) {
+            updateStudent(user: $user)
+          }
+        `,
+        variables: { user },
+        refetchQueries: ['Students']
+      }).toPromise();
+      this.studentsRefreshSubject.next();
+      return result?.data?.updateStudent ?? false;
+    } catch {
+      return false;
+    }
+  }
+
+  async removeStudent(userId: number): Promise<boolean> {
+    if (!this.isBrowser) return false;
+    try {
+      const result = await this.apollo.mutate<{ removeStudent: boolean }>({
+        mutation: gql`
+          mutation RemoveStudent($userId: Int!) {
+            removeStudent(userId: $userId)
+          }
+        `,
+        variables: { userId }
+      }).toPromise();
+      return result?.data?.removeStudent ?? false;
+    } catch {
+      return false;
+    }
+  }
+
+  async addModeratorToFaculty(userId: number, facultyId: number): Promise<boolean> {
+    if (!this.isBrowser) return false;
+    try {
+      const result = await this.apollo.mutate<{ addModeratorToFaculty: boolean }>({
+        mutation: gql`
+          mutation AddModeratorToFaculty($userId: Int!, $facultyId: Int!) {
+            addModeratorToFaculty(userId: $userId, facultyId: $facultyId)
+          }
+        `,
+        variables: { userId, facultyId }
+      }).toPromise();
+      this.moderatorsRefreshSubject.next();
+      return result?.data?.addModeratorToFaculty ?? false;
+    } catch {
+      return false;
+    }
+  }
+
+  async removeModeratorFromFaculty(userId: number, facultyId: number): Promise<boolean> {
+    if (!this.isBrowser) return false;
+    try {
+      const result = await this.apollo.mutate<{ removeModeratorFromFaculty: boolean }>({
+        mutation: gql`
+          mutation RemoveModeratorFromFaculty($userId: Int!, $facultyId: Int!) {
+            removeModeratorFromFaculty(userId: $userId, facultyId: $facultyId)
+          }
+        `,
+        variables: { userId, facultyId },
+        refetchQueries: ['Students']
+      }).toPromise();
+      this.moderatorsRefreshSubject.next();
+      return result?.data?.removeModeratorFromFaculty ?? false;
+    } catch {
+      return false;
+    }
+  }
+
+  getModerators(search: string = '', facultyId: number): Observable<User[]> {
+    if (!this.isBrowser) return new Observable<User[]>();
+    return this.apollo
+    .watchQuery<{ moderators: User[] }>({
+      query: gql`
+        query Moderators($search: String, $facultyId: Int!) {
+          moderators(search: $search, facultyId: $facultyId) {
+            id,
+            firstName,
+            lastName,
+            middleName,
+            email
+          }
+        }
+      `,
+      variables: { search, facultyId },
+      fetchPolicy: 'cache-and-network'
+    })
+    .valueChanges.pipe(
+      map(result => result.data.moderators)
+    );
+  }
+
+  getUsers(search: string = ''): Observable<User[]> {
+    if (!this.isBrowser) return new Observable<User[]>();
+    return this.apollo
+    .watchQuery<{ users: User[] }>({
+      query: gql`
+        query Users($search: String) {
+          users(search: $search) {
+            id,
+            firstName,
+            lastName,
+            middleName,
+            email
+          }
+        }
+      `,
+      variables: { search },
+      fetchPolicy: 'cache-and-network'
+    })
+    .valueChanges.pipe(
+      map(result => result.data.users)
+    );
+  }
+
+
 }

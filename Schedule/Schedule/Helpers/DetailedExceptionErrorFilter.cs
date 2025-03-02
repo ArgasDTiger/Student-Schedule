@@ -11,6 +11,6 @@ public class DetailedExceptionErrorFilter : IErrorFilter
             return error.WithMessage(baseException.Message);
         }
 
-        return error.WithMessage("Unexpected Execution Error");
+        return error.WithMessage("Internal Server Error");
     }
 }

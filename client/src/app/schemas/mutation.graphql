@@ -10,6 +10,12 @@ type Mutation {
   addUserToGroup(userId: Int!, groupId: Int!): Boolean!
   removeUserFromGroup(userId: Int!, groupId: Int!): Boolean!
 
+  addStudent(user: AddStudentInput): User!
+  updateStudent(user: UpdateStudentInput): Boolean!
+  removeStudent(userId: Int!): Boolean!
+  addModeratorToFaculty(userId: Int!, facultyId: Int!): Boolean!
+  removeModeratorFromFaculty(userId: Int!, facultyId: Int!): Boolean!
+
   createLesson(name: String!): Lesson!
   updateLesson(lesson: UpdateLessonInput!): Boolean!
   archiveLesson(lessonId: Int!): Boolean!
@@ -21,4 +27,8 @@ type Mutation {
   archiveTeacher(teacherId: Int!): Boolean!
   publishTeacher(teacherId: Int!): Boolean!
   deleteTeacher(teacherId: Int!): Boolean!
+
+  createGroup(group: AddGroupInput!): Group!
+  updateGroup(group: UpdateGroupInput!): Boolean!
+  deleteGroup(groupId: Int!): Boolean!
 }

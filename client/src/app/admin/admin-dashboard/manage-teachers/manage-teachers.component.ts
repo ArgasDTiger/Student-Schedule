@@ -5,7 +5,7 @@ import {ModalService} from "../../../core/services/modal.service";
 import {ToasterManagerService} from "../../../core/services/toaster-manager.service";
 import {TeacherService} from "../../../core/services/teacher.service";
 import {EditLessonModalComponent} from "../manage-lessons/edit-lesson-modal/edit-lesson-modal.component";
-import {ItemListComponent} from "../item-list/item-list.component";
+import {ItemListComponent} from "../../item-list/item-list.component";
 import {degreeToString} from "../../../core/mappings/degreeToString";
 import {Degree} from "../../../core/enums/degree";
 import {EditTeacherModalComponent} from "./edit-teacher-modal/edit-teacher-modal.component";
@@ -151,6 +151,4 @@ export class ManageTeachersComponent implements OnInit, OnDestroy {
       error: () => this.toasterManagerService.error("Помилка при завантаженні архівованих викладачів.")
     });
   }
-
-  protected readonly Degree = Degree;
 }

@@ -1,6 +1,6 @@
 using Schedule.Entities;
 
-namespace Schedule.Requests;
+namespace Schedule.Inputs;
 
 public class AddLessonInfoInput
 {

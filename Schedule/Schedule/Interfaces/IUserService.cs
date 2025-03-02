@@ -14,4 +14,11 @@ public interface IUserService
     Task<bool> DemoteUserFromModerator(int userId, CancellationToken cancellationToken);
     Task<bool> AddUserToGroup(int userId, int groupId, CancellationToken cancellationToken);
     Task<bool> RemoveUserFromGroup(int userId, int groupId, CancellationToken cancellationToken);
+    Task<User> AddStudent(User user, CancellationToken cancellationToken);
+    Task<bool> UpdateStudent(User user, CancellationToken cancellationToken);
+    Task<bool> RemoveStudent(int userId, CancellationToken cancellationToken);
+    Task<bool> AddModeratorToFaculty(int userId, int facultyId, CancellationToken cancellationToken);
+    Task<bool> RemoveModeratorFromFaculty(int userId, int facultyId, CancellationToken cancellationToken);
+    Task<List<User>> GetUsers(string? search, CancellationToken cancellationToken);
+    Task<List<User>> GetModerators(string? search, int facultyId, CancellationToken cancellationToken);
 }

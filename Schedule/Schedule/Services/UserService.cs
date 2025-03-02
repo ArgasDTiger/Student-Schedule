@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth;
+using GreenDonut.Predicates;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.DTOs;
@@ -183,5 +184,127 @@ public class UserService : IUserService
         user.Groups.Remove(group);
         
         return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<User> AddStudent(User user, CancellationToken cancellationToken)
+    {
+        var existingStudent = await _repository.GetAllAsNoTracking<User>().Where(u => u.Email == user.Email)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (existingStudent is not null)
+            throw new DetailedException("User already exists.");
+
+        user.Role = UserRole.Student;
+        var addedUser = _repository.Add(user);
+        await _repository.SaveChangesAsync(cancellationToken);
+        return addedUser;
+    }
+
+    public async Task<bool> UpdateStudent(User user, CancellationToken cancellationToken)
+    {
+        var existingStudent = await _repository.GetAllAsNoTracking<User>().Where(u => u.Id == user.Id)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (existingStudent is null)
+            throw new UserIsNotFoundException();
+
+        var usersWithEmail = await _repository.GetAllAsNoTracking<User>().Where(u => u.Email == user.Email)
+            .ToListAsync(cancellationToken);
+
+        if (usersWithEmail.Count > 1)
+            throw new DetailedException("Can't update user to use this email.");
+
+        _repository.Update(user);
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> RemoveStudent(int userId, CancellationToken cancellationToken)
+    {
+        var existingStudent = await _repository.GetAll<User>().Where(u => u.Id == userId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (existingStudent is null)
+            throw new UserIsNotFoundException();
+        
+        _repository.Remove(existingStudent);
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> AddModeratorToFaculty(int userId, int facultyId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+
+        if (user.Faculties.Any(f => f.Id == facultyId))
+            throw new DetailedException("User already has access to this faculty.");
+
+        if (user.Groups.Count != 0)
+            user.Groups = [];
+
+        if (user.Role != UserRole.Moderator)
+            user.Role = UserRole.Moderator;
+
+        var faculty = await _repository.GetAll<Faculty>().Where(f => f.Id == facultyId)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (faculty is null)
+            throw new DetailedException("Faculty does not exist.");
+        
+        user.Faculties.Add(faculty);
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> RemoveModeratorFromFaculty(int userId, int facultyId, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetAll<User>().Where(u => u.Id == userId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
+            throw new UserIsNotFoundException();
+
+        if (user.Faculties.All(f => f.Id != facultyId))
+            throw new DetailedException("User does not belong to this faculty.");
+
+        var faculty = await _repository.GetAll<Faculty>().Where(f => f.Id == facultyId)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (faculty is null)
+            throw new DetailedException("Faculty does not exist.");
+
+        if (user.Faculties.Count == 1)
+            user.Role = UserRole.Moderator;
+        
+        user.Faculties.Remove(faculty);
+        return await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<List<User>> GetUsers(string? search, CancellationToken cancellationToken)
+    {
+        return _repository
+            .GetAll<User>()
+            .Where(
+                u => u.Role != UserRole.Admin
+                     && (search == null 
+                         || EF.Functions.Like(u.FirstName, $"%{search}%")
+                         || EF.Functions.Like(u.LastName, $"%{search}%")
+                         || EF.Functions.Like(u.MiddleName, $"%{search}%")
+                         || EF.Functions.Like(u.Email, $"%{search}%")
+                         || EF.Functions.Like(u.LastName + " " + u.FirstName, $"%{search}%")
+                         || EF.Functions.Like(u.LastName + " " + u.FirstName + " " + u.MiddleName, $"%{search}%")))
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<List<User>> GetModerators(string? search, int facultyId, CancellationToken cancellationToken)
+    {
+        return _repository
+            .GetAll<User>()
+            .Where(
+                u => u.Role == UserRole.Moderator && u.Faculties.Any(f => f.Id == facultyId)
+                                                  && (search == null 
+                                                      || EF.Functions.Like(u.FirstName, $"%{search}%")
+                                                      || EF.Functions.Like(u.LastName, $"%{search}%")
+                                                      || EF.Functions.Like(u.MiddleName, $"%{search}%")
+                                                      || EF.Functions.Like(u.Email, $"%{search}%")
+                                                      || EF.Functions.Like(u.LastName + " " + u.FirstName, $"%{search}%")
+                                                      || EF.Functions.Like(u.LastName + " " + u.FirstName + " " + u.MiddleName, $"%{search}%")))
+            .ToListAsync(cancellationToken);
     }
 }
