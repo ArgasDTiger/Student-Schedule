@@ -3,53 +3,80 @@ import { RouterOutlet } from '@angular/router';
 import {SidebarComponent} from "./shared/sidebar/sidebar.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {isPlatformBrowser, NgClass} from "@angular/common";
+import {isPlatformBrowser, NgClass, NgIf} from "@angular/common";
 import {ToasterManagerService} from "./core/services/toaster-manager.service";
 import {AuthService} from "./core/services/auth.service";
 import {UserService} from "./core/services/user.service";
 import {Subscription} from "rxjs";
 import {ActionModalComponent} from "./shared/modals/action-modal/action-modal.component";
+import {LoadingSpinnerComponent} from "./shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, SidebarComponent, MatIconModule, MatSlideToggleModule, NgClass, ActionModalComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  standalone: true,
+  imports: [
+    LoadingSpinnerComponent,
+    ActionModalComponent,
+    NgClass,
+    NgIf,
+    RouterOutlet,
+    SidebarComponent
+  ],
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
   private authSubscription?: Subscription;
+  private loadingSubscription?: Subscription;
   isSidebarCollapsed: boolean = false;
   isAuthorized: boolean = false;
+  isLoading: boolean = true;
   isBrowser = false;
 
-  constructor(private toasterManager: ToasterManagerService,
-              private authService: AuthService,
-              private userService: UserService,
-              @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    private toasterManager: ToasterManagerService,
+    private authService: AuthService,
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
-    if (this.isBrowser)
+    if (this.isBrowser) {
       this.isSidebarCollapsed = JSON.parse(localStorage.getItem("sidebar_collapsed") ?? "false");
 
-    this.userService.setCurrentUser();
+      // Initialize auth flow by setting current user
+      // This will also trigger loading states
+      this.userService.setCurrentUser();
+    }
+
+    // Subscribe to loading state
+    this.loadingSubscription = this.authService.isLoading$.subscribe(isLoading => {
+      this.isLoading = isLoading;
+    });
+
+    // Subscribe to auth state
     this.authSubscription = this.authService.isAuthorized().subscribe({
-      next: (user) => {
-        this.isAuthorized = user;
+      next: (isAuth) => {
+        this.isAuthorized = isAuth;
       },
       error: () => {
         this.isAuthorized = false;
+        this.authService.setLoading(false);
       },
     });
   }
 
   ngOnDestroy() {
     this.authSubscription?.unsubscribe();
+    this.loadingSubscription?.unsubscribe();
   }
 
   onSidebarToggle(isCollapsed: boolean) {
     this.isSidebarCollapsed = isCollapsed;
+    if (this.isBrowser) {
+      localStorage.setItem("sidebar_collapsed", JSON.stringify(isCollapsed));
+    }
   }
 }

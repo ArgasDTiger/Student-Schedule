@@ -4,7 +4,7 @@ import {map, take} from "rxjs/operators";
 import {isPlatformBrowser} from "@angular/common";
 import {RefreshTokenResponse} from "../responses/refresh-token-response";
 import {UserService} from "./user.service";
-import {of} from "rxjs";
+import {BehaviorSubject, of} from "rxjs";
 import {RevokeTokenResponse} from "../responses/revoke-token-response";
 
 @Injectable({
@@ -12,11 +12,15 @@ import {RevokeTokenResponse} from "../responses/revoke-token-response";
 })
 export class AuthService {
   isBrowser = false;
-
+  private isLoadingSubject = new BehaviorSubject<boolean>(true);
+  public isLoading$ = this.isLoadingSubject.asObservable();
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
               private readonly apollo: Apollo,
               private userService: UserService) {
     this.isBrowser = isPlatformBrowser(platformId);
+    this.userService.isLoading$.subscribe(isLoading => {
+      this.isLoadingSubject.next(isLoading);
+    });
   }
 
   async revokeToken() {
@@ -39,10 +43,15 @@ export class AuthService {
 
   isAuthorized() {
     if (!this.isBrowser) return of(false);
+
     return this.userService.currentUser$.pipe(
       map(user => {
         return !!user;
       }));
+  }
+
+  setLoading(isLoading: boolean): void {
+    this.isLoadingSubject.next(isLoading);
   }
 
   login(idToken: string) {

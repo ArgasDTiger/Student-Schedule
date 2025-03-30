@@ -2,7 +2,7 @@
   @for (group of userGroups; track group.id) {
     <div
       class="item"
-      [routerLink]="['/schedule', group.id]"
+      [routerLink]="['student/schedule', group.id]"
       routerLinkActive="active"
     >
       <mat-icon class="icon">groups</mat-icon>

@@ -1,4 +1,3 @@
-using HotChocolate.Authorization;
 using Schedule.DTOs;
 
 namespace Schedule.Schema.Mutations;

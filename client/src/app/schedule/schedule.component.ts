@@ -69,7 +69,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
           take(1)
         ).subscribe(async user => {
           if (user?.groups?.length) {
-            await this.router.navigate(['/schedule', user.groups[0].id]);
+            await this.router.navigate(['student/schedule', user.groups[0].id]);
           }
         });
       });
