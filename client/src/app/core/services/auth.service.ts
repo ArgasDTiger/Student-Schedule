@@ -1,11 +1,12 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Apollo, gql} from "apollo-angular";
-import {map, take} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {isPlatformBrowser} from "@angular/common";
 import {RefreshTokenResponse} from "../responses/refresh-token-response";
 import {UserService} from "./user.service";
-import {BehaviorSubject, of} from "rxjs";
+import {BehaviorSubject, catchError, combineLatest, of} from "rxjs";
 import {RevokeTokenResponse} from "../responses/revoke-token-response";
+import {LoadingService} from "./loading.service";
 
 @Injectable({
   providedIn: 'root'
@@ -56,41 +57,59 @@ export class AuthService {
 
   login(idToken: string) {
     return this.apollo
-      .mutate({
-        mutation: gql`
-          mutation Login($idToken: String!) {
-            login(idToken: $idToken) {
-              firstName,
-              lastName
+    .mutate({
+      mutation: gql`
+        mutation Login($idToken: String!) {
+          login(idToken: $idToken) {
+            firstName,
+            lastName,
+            middleName,
+            groups {
+              id,
+              groupNumber
+            },
+            faculties {
+              id,
+              name
+              groups {
+                id,
+                groupNumber,
+              }
             }
+            role
           }
-        `,
-        variables: { idToken },
+        }
+      `,
+      variables: { idToken },
+    })
+    .pipe(
+      map((result: any) => {
+        if (this.isBrowser) {
+          localStorage.setItem("sidebar_collapsed", "false");
+        }
+        const userData = result.data.login;
+        this.userService.currentUser$.next(userData);
+        this.userService.isInitialized = true;
+        return userData;
       })
-      .pipe(
-        map((result: any) => {
-          if (this.isBrowser) {
-            localStorage.setItem("sidebar_collapsed", "false");
-          }
-          return result.data.login;
-        }));
+    );
   }
 
   async refreshToken(): Promise<boolean> {
     return this.apollo
-      .mutate<RefreshTokenResponse>({
-        mutation: gql`
-          mutation RefreshToken {
-            refreshToken
-          }`
-      })
-      .toPromise()
-      .then(response => {
-        return response?.data?.refreshToken === true;
-      })
-      .catch(e => {
-        return false;
-      });
+    .mutate<RefreshTokenResponse>({
+      mutation: gql`
+        mutation RefreshToken {
+          refreshToken
+        }`
+    })
+    .toPromise()
+    .then(response => {
+      return response?.data?.refreshToken === true;
+    })
+    .catch(e => {
+      return false;
+    });
   }
 
 }

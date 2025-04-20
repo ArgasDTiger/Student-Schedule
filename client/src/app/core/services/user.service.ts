@@ -1,10 +1,9 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
-import {BehaviorSubject, interval, Observable, of, skipUntil, timeout} from 'rxjs';
+import {BehaviorSubject, catchError, finalize, Observable, of, Subject} from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import {filter, map, take} from 'rxjs/operators';
 import { User } from '../models/user';
-
 
 @Injectable({
   providedIn: 'root'
@@ -33,20 +32,15 @@ export class UserService {
   setCurrentUser(): Observable<User | null> {
     if (!this.isBrowser) return of(null);
 
-    // Set loading state
     this.isLoadingSubject.next(true);
 
-    // Check if we have a token in storage
-    const hasToken = localStorage.getItem('auth_token') !== null;
-
-    // If there's no token, no need to make the query
-    if (!hasToken && this.isInitialized) {
+    if (this.isInitialized) {
       this.currentUser$.next(null);
       this.isLoadingSubject.next(false);
       return of(null);
     }
 
-    const query = this.apollo.query<{ currentUser: User }>({
+    return this.apollo.query<{ currentUser: User }>({
       query: gql`
         query CurrentUser {
           currentUser {
@@ -69,63 +63,23 @@ export class UserService {
           }
         }
       `,
-      fetchPolicy: 'network-only' // Important: Don't use cache on reload
-    });
-
-    query.subscribe({
-      next: response => {
+      fetchPolicy: 'network-only'
+    }).pipe(
+      map(response => {
         const user = response.data.currentUser ?? null;
         this.currentUser$.next(user);
         this.isInitialized = true;
         this.isLoadingSubject.next(false);
-      },
-      error: () => {
+        return user;
+      }),
+      catchError(error => {
         this.currentUser$.next(null);
         this.isInitialized = true;
         this.isLoadingSubject.next(false);
 
-        // Clear any potentially invalid token
-        if (this.isBrowser) {
-          localStorage.removeItem('auth_token');
-        }
-      }
-    });
-
-    return this.currentUser$;
-  }
-
-  getCurrentUserWithGuarantee(): Observable<User | null> {
-    // If already initialized, return current user immediately
-    if (this.isInitialized) {
-      return of(this.currentUser$.getValue());
-    }
-
-    // If not initialized, trigger initialization and wait for it
-    this.setCurrentUser();
-
-    // Return an observable that will only emit when isInitialized becomes true
-    return this.currentUser$.pipe(
-      // Wait until initialization is complete
-      skipUntil(
-        interval(100).pipe(
-          map(() => this.isInitialized),
-          filter(initialized => initialized),
-          take(1)
-        )
-      ),
-      // Take only the first emission after initialization
-      take(1),
-      // Set a reasonable timeout
-      timeout(10000)
+        return of(null);
+      })
     );
-  }
-
-  refreshStudents() {
-    this.studentsRefreshSubject.next();
-  }
-
-  refreshModerators() {
-    this.moderatorsRefreshSubject.next();
   }
 
   getStudents(search?: string): Observable<User[]> {

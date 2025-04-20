@@ -75,8 +75,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   async onLogout() {
     const success = await this.authService.revokeToken();
     if (success) {
-      await this.router.navigate(['/login']);
       this.userService.currentUser$.next(null);
+      await this.router.navigate(['/login']);
     } else {
       this.toasterManagerService.error("Помилка при виході з аканту.");
     }
