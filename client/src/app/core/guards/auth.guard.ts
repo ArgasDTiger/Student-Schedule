@@ -1,9 +1,10 @@
-import { inject } from '@angular/core';
+import {inject, PLATFORM_ID} from '@angular/core';
 import { CanActivateFn, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { map, take, of, Observable, timeout, catchError } from 'rxjs';
+import {map, take, of, Observable, timeout, catchError, tap} from 'rxjs';
 import { UserService } from "../services/user.service";
 import { LoadingService } from "../services/loading.service";
 import { Role } from "../enums/role";
+import {isPlatformBrowser} from "@angular/common";
 
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -12,10 +13,15 @@ export const authGuard: CanActivateFn = (
   const router = inject(Router);
   const userService = inject(UserService);
   const loadingService = inject(LoadingService);
+  const platformId = inject(PLATFORM_ID);
 
   loadingService.setLoading(true);
 
-  // Check if user is already loaded and initialized
+  if (!isPlatformBrowser(platformId)) {
+    loadingService.setLoading(false);
+    return of(true);
+  }
+
   if (userService.isInitialized) {
     const user = userService.currentUser$.getValue();
     loadingService.setLoading(false);
@@ -26,7 +32,6 @@ export const authGuard: CanActivateFn = (
     take(1),
     timeout(10000),
     catchError(error => {
-      console.error('Error in auth guard:', error);
       loadingService.setLoading(false);
 
       const canActivate = state.url.includes('/login');
@@ -37,23 +42,11 @@ export const authGuard: CanActivateFn = (
     }),
     map(user => {
       loadingService.setLoading(false);
-      return handleAuthLogic(user, route, state, router);
+      const result = handleAuthLogic(user, route, state, router);
+      return result;
     })
   );
 };
-
-function getRoleBasedRoute(role: Role): string {
-  switch(role) {
-    case Role.Admin:
-      return '/admin';
-    case Role.Moderator:
-      return '/moderator';
-    case Role.Student:
-      return '/student';
-    default:
-      return '/login';
-  }
-}
 
 function handleAuthLogic(user: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot, router: Router): boolean {
   if (state.url.includes('/login') && user) {
@@ -67,21 +60,18 @@ function handleAuthLogic(user: any, route: ActivatedRouteSnapshot, state: Router
     }
     return state.url.includes('/login');
   }
-
-  if (state.url.includes('/admin') && user.role !== Role.Admin) {
-    router.navigate([getRoleBasedRoute(user.role)]);
-    return false;
-  }
-
-  if (state.url.includes('/moderator') && user.role !== Role.Moderator && user.role !== Role.Admin) {
-    router.navigate([getRoleBasedRoute(user.role)]);
-    return false;
-  }
-
-  if (state.url.includes('/student') && user.role !== Role.Student && user.role !== Role.Moderator && user.role !== Role.Admin) {
-    router.navigate(['/login']);
-    return false;
-  }
-
   return true;
+}
+
+function getRoleBasedRoute(role: Role): string {
+  switch(role) {
+    case Role.Admin:
+      return '/admin';
+    case Role.Moderator:
+      return '/moderator';
+    case Role.Student:
+      return '/student';
+    default:
+      return '/login';
+  }
 }

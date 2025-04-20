@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
     <div class="spinner-overlay">
       <div class="spinner-container">
         <div class="spinner"></div>
-        <p>Loading...</p>
+        <p>Завантаження...</p>
       </div>
     </div>
   `,

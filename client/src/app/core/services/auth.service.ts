@@ -29,7 +29,7 @@ export class AuthService {
     return this.apollo
     .mutate<RevokeTokenResponse>({
       mutation: gql`
-        mutation RefreshToken {
+        mutation RevokeToken {
           revokeToken
         }`
     })
