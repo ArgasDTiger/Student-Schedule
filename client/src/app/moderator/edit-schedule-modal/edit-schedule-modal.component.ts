@@ -13,10 +13,11 @@ import {ModalService} from "../../core/services/modal.service";
 import {ScheduleService} from "../../core/services/schedule.service";
 import {AddLessonInfoInput} from "../../core/inputs/add-lesson-info-input";
 import {DayOfWeek} from "../../core/enums/dayOfWeek";
-import {convertLessonNumber, LessonNumberString} from "../../core/enums/lessonNumber";
+import {convertLessonNumber, convertLessonNumberToNumber, LessonNumberString} from "../../core/enums/lessonNumber";
 import {ToasterManagerService} from "../../core/services/toaster-manager.service";
 import {map} from "rxjs/operators";
 import {UpdateLessonInfoInput} from "../../core/inputs/update-lesson-info-input";
+import {GetTeacherInput} from "../../core/inputs/get-teacher-input";
 
 @Component({
   selector: 'app-edit-schedule-modal',
@@ -52,8 +53,6 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
               private scheduleService: ScheduleService,
               private toasterManagerService: ToasterManagerService) {
     this.initForm();
-    this.lessons$ = this.lessonService.getLessons();
-    this.teachers$ = this.teacherService.getTeachers();
   }
 
   ngOnInit() {
@@ -74,6 +73,10 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
     this.isModalVisible = true;
     this.isUpdate = true;
     this.lessonInfo = lessonInfo;
+    this.weekDay = lessonInfo.weekDay;
+    this.lessonNumber = convertLessonNumberToNumber(lessonInfo.lessonNumber);
+
+    this.loadData();
 
     this.scheduleForm.patchValue({
       lesson: lessonInfo.lesson.id,
@@ -91,10 +94,18 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
     this.lessonNumber = lessonNumber;
     this.groupId = groupId;
     this.weekDay = weekDay;
+
+    this.loadData();
+
     this.scheduleForm.reset({
       evenWeek: false,
       oddWeek: false
     });
+  }
+
+  private loadData() {
+    this.lessons$ = this.lessonService.getLessons();
+    this.teachers$ = this.getTeachers();
   }
 
   closeModal() {
@@ -196,6 +207,17 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
     };
 
     return await this.scheduleService.updateScheduleItem(lessonInfo);
+  }
+
+  private getTeachers() {
+    const getTeacherInput: GetTeacherInput = {
+      search: null,
+      weekDay: this.weekDay ?? null,
+      lessonNumber: this.lessonNumber ? convertLessonNumber(this.lessonNumber) as LessonNumberString : null,
+      lessonInfoId: this.lessonInfo?.id ?? null,
+    }
+
+    return this.teacherService.getTeachers(getTeacherInput);
   }
 
   protected readonly lessonTypes = lessonTypes;

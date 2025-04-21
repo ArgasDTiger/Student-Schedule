@@ -15,35 +15,41 @@ export const authGuard: CanActivateFn = (
   const loadingService = inject(LoadingService);
   const platformId = inject(PLATFORM_ID);
 
-  loadingService.setLoading(true);
+  // Check if we're on the login page
+  const isLoginPage = state.url.includes('/login');
 
+  // For server-side rendering, just pass through
   if (!isPlatformBrowser(platformId)) {
-    loadingService.setLoading(false);
     return of(true);
   }
 
+  // If user is already initialized, handle quickly
   if (userService.isInitialized) {
     const user = userService.currentUser$.getValue();
-    loadingService.setLoading(false);
     return of(handleAuthLogic(user, route, state, router));
   }
 
+  // Only show loading if not on login page or if we need to fetch user data
+  loadingService.setLoading(true);
+
   return userService.setCurrentUser().pipe(
     take(1),
-    timeout(10000),
+    timeout(5000), // Reduced timeout from 10s to 5s
     catchError(error => {
       loadingService.setLoading(false);
 
-      const canActivate = state.url.includes('/login');
-      if (!canActivate) {
-        router.navigate(['/login']);
+      // If login page, allow access
+      if (isLoginPage) {
+        return of(true);
       }
-      return of(canActivate);
+
+      // Otherwise redirect to login
+      router.navigate(['/login']);
+      return of(false);
     }),
     map(user => {
       loadingService.setLoading(false);
-      const result = handleAuthLogic(user, route, state, router);
-      return result;
+      return handleAuthLogic(user, route, state, router);
     })
   );
 };

@@ -8,7 +8,7 @@ type Query {
   lessons(search: String): [Lesson!]
   archivedLessons(search: String): [Lesson!]
 
-  teachers(search: String): [Teacher!]
+  teachers(teacherInput: GetTeacherInput!): [Teacher!]
   archivedTeachers(search: String): [Teacher!]
 
   users(search: String): [User!]

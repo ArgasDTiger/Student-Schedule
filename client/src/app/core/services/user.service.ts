@@ -35,9 +35,9 @@ export class UserService {
     this.isLoadingSubject.next(true);
 
     if (this.isInitialized) {
-      this.currentUser$.next(null);
+      const currentUser = this.currentUser$.getValue();
       this.isLoadingSubject.next(false);
-      return of(null);
+      return of(currentUser);
     }
 
     return this.apollo.query<{ currentUser: User }>({
@@ -73,10 +73,10 @@ export class UserService {
         return user;
       }),
       catchError(error => {
+        console.error('Error fetching current user:', error);
         this.currentUser$.next(null);
         this.isInitialized = true;
         this.isLoadingSubject.next(false);
-
         return of(null);
       })
     );

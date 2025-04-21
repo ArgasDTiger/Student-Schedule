@@ -4,7 +4,7 @@ namespace Schedule.Interfaces;
 
 public interface ITeacherService
 {
-    Task<List<Teacher>> GetAllTeachers(string? search, CancellationToken cancellationToken);
+    Task<List<Teacher>> GetAllTeachers(string? search, DayOfWeek? weekDay, LessonNumber? lessonNumber, int? lessonGroupId, CancellationToken cancellationToken);
     Task<List<Teacher>> GetAllArchivedTeachers(string? search, CancellationToken cancellationToken);
     Task<Teacher> CreateTeacher(Teacher teacher, CancellationToken cancellationToken);
     Task<bool> UpdateTeacher(Teacher teacher, CancellationToken cancellationToken);

@@ -29,3 +29,10 @@ input UpdateTeacherInput {
   lastName: String!
   degree: String!
 }
+
+input GetTeacherInput {
+  search: String
+  weekDay: String
+  lessonNumber: String
+  lessonInfoId: Int
+}

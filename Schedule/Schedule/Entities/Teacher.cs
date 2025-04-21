@@ -7,6 +7,7 @@ public class Teacher : EntityWithIntId, IArchivedEntity
     public string LastName { get; set; }
     public Degree Degree { get; set; }
     public bool IsArchived { get; set; }
+    public virtual List<LessonGroup> LessonGroups { get; set; }
 }
 
 public enum Degree : byte

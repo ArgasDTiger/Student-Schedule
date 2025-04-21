@@ -9,6 +9,7 @@ import {ItemListComponent} from "../../item-list/item-list.component";
 import {degreeToString} from "../../../core/mappings/degreeToString";
 import {Degree} from "../../../core/enums/degree";
 import {EditTeacherModalComponent} from "./edit-teacher-modal/edit-teacher-modal.component";
+import {GetTeacherInput} from "../../../core/inputs/get-teacher-input";
 
 @Component({
   selector: 'app-manage-teachers',
@@ -61,7 +62,7 @@ export class ManageTeachersComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  onActiveSearch(term: string) {
+  async onActiveSearch(term: string) {
     this.loadActiveItems(term);
   }
 
@@ -139,7 +140,13 @@ export class ManageTeachersComponent implements OnInit, OnDestroy {
   }
 
   private loadActiveItems(search: string = '') {
-    this.teacherService.getTeachers(search).subscribe({
+    const getTeacherInput: GetTeacherInput = {
+      search: search,
+      weekDay: null,
+      lessonNumber: null,
+      lessonInfoId: null,
+    };
+    this.teacherService.getTeachers(getTeacherInput).subscribe({
       next: teachers => this.activeItems = teachers,
       error: () => this.toasterManagerService.error("Помилка при завантаженні викладачів.")
     });

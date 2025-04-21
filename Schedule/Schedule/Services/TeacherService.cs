@@ -14,7 +14,7 @@ public class TeacherService : ITeacherService
         _repository = repository;
     }
     
-    public Task<List<Teacher>> GetAllTeachers(string? search, CancellationToken cancellationToken)
+    public Task<List<Teacher>> GetAllTeachers(string? search, DayOfWeek? weekDay, LessonNumber? lessonNumber, int? lessonGroupId, CancellationToken cancellationToken)
     {
         return _repository
             .GetAll<Teacher>()
@@ -25,6 +25,11 @@ public class TeacherService : ITeacherService
                             || EF.Functions.Like(t.MiddleName, $"%{search}%")
                             || EF.Functions.Like(t.LastName + " " + t.FirstName, $"%{search}%")
                             || EF.Functions.Like(t.LastName + " " + t.FirstName + " " + t.MiddleName, $"%{search}%")))
+            .Where(t =>
+                weekDay == null || lessonNumber == null ||
+                !t.LessonGroups
+                    .Where(lg => lg.WeekDay == weekDay && lg.LessonNumber == lessonNumber)
+                    .Any(lg => lessonGroupId == null || lg.Id != lessonGroupId))
             .OrderBy(t => t.LastName)
             .ToListAsync(cancellationToken);
     }

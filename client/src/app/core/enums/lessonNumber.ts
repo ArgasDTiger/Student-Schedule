@@ -37,3 +37,15 @@ export function convertLessonNumber(input: LessonNumber | LessonNumberString): L
     return stringToNumberMap[input] ?? null;
   }
 }
+
+export function convertLessonNumberToNumber(input: LessonNumberString): LessonNumber {
+  const stringToNumberMap: Record<LessonNumberString, LessonNumber> = {
+    [LessonNumberString.First]: LessonNumber.First,
+    [LessonNumberString.Second]: LessonNumber.Second,
+    [LessonNumberString.Third]: LessonNumber.Third,
+    [LessonNumberString.Fourth]: LessonNumber.Fourth,
+    [LessonNumberString.Fifth]: LessonNumber.Fifth,
+  };
+
+  return stringToNumberMap[input] || 0;
+}

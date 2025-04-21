@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import {isPlatformBrowser} from "@angular/common";
 import {BehaviorSubject, Observable} from "rxjs";
 import {Teacher} from "../models/teacher";
+import {GetTeacherInput} from "../inputs/get-teacher-input";
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +19,14 @@ export class TeacherService {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  getTeachers(search: string = '') {
+    getTeachers(teacherInput: GetTeacherInput) {
     if (!this.isBrowser) return new Observable<Teacher[]>();
+
     return this.apollo
       .watchQuery<{ teachers: Teacher[] }>({
         query: gql`
-          query Teachers($search: String) {
-            teachers(search: $search) {
+          query Teachers($teacherInput: GetTeacherInput!) {
+            teachers(teacherInput: $teacherInput) {
               id,
               firstName,
               middleName,
@@ -33,7 +35,7 @@ export class TeacherService {
             }
           }
         `,
-       variables: { search },
+       variables: { teacherInput },
        fetchPolicy: 'cache-and-network'
     })
       .valueChanges.pipe(

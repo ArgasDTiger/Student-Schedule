@@ -45,7 +45,7 @@ public class ScheduleDbContext : DbContext
 
         modelBuilder.Entity<LessonGroup>()
             .HasOne(lt => lt.Teacher)
-            .WithMany()
+            .WithMany(t => t.LessonGroups)
             .HasForeignKey("TeacherId");
 
         modelBuilder.Entity<User>()

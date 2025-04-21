@@ -7,7 +7,6 @@ import {Lesson} from "../models/lesson";
 import {Teacher} from "../models/teacher";
 import {User} from "../models/user";
 import {Group} from "../models/group";
-import {AddGroupInput} from "../inputs/add-group-input";
 
 export interface ActionModalConfig {
   header: string;
