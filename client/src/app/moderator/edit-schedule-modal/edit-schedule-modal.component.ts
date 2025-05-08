@@ -98,8 +98,8 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
     this.loadData();
 
     this.scheduleForm.reset({
-      evenWeek: false,
-      oddWeek: false
+      evenWeek: true,
+      oddWeek: true
     });
   }
 
@@ -149,10 +149,11 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
 
 
   private weekValidator(group: FormGroup) {
-    const evenWeek = group.get('evenWeek')?.value;
-    const oddWeek = group.get('oddWeek')?.value;
-
-    return evenWeek || oddWeek ? null : { weekRequired: true };
+    // const evenWeek = group.get('evenWeek')?.value;
+    // const oddWeek = group.get('oddWeek')?.value;
+    //
+    // return evenWeek || oddWeek ? null : { weekRequired: true };
+    return true;
   }
 
   private initForm() {
@@ -164,8 +165,8 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.pattern(/^\d{1,3}$/)
       ]],
-      evenWeek: [false],
-      oddWeek: [false]
+      evenWeek: [true],
+      oddWeek: [true]
     }, {
       validators: this.weekValidator
     });
@@ -202,8 +203,10 @@ export class EditScheduleModalComponent implements OnInit, OnDestroy {
       lessonNumber: this.lessonInfo!.lessonNumber,
       type: this.scheduleForm.controls['type'].value.toString(),
       room: +this.scheduleForm.controls['room'].value,
-      oddWeek: this.scheduleForm.controls['oddWeek'].value,
-      evenWeek: this.scheduleForm.controls['evenWeek'].value,
+      // oddWeek: this.scheduleForm.controls['oddWeek'].value,
+      // evenWeek: this.scheduleForm.controls['evenWeek'].value,
+      oddWeek: true,
+      evenWeek: true,
     };
 
     return await this.scheduleService.updateScheduleItem(lessonInfo);

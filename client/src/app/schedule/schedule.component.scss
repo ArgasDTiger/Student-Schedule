@@ -31,6 +31,145 @@
   overflow-x: auto;
 }
 
+.day-tabs {
+  display: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+
+  .day-tab {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid $border-color;
+    border-bottom: none;
+    background-color: #f8fafc;
+    margin-right: 0.25rem;
+    cursor: pointer;
+
+    &.active {
+      background-color: white;
+      border-bottom: 2px solid $primary-color;
+      font-weight: 600;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Mobile specific view
+.mobile-schedule {
+  width: 100%;
+
+  .day-header {
+    padding: 0.75rem 1rem;
+    background-color: #f8fafc;
+    font-weight: 600;
+    border-bottom: 1px solid $border-color;
+    text-align: center;
+  }
+
+  .lessons-container {
+    width: 100%;
+  }
+
+  .lesson-row {
+    display: flex;
+    border-bottom: 1px solid $border-color;
+
+    &:nth-child(even) {
+      background-color: $table-even;
+    }
+
+    &:nth-child(odd) {
+      background-color: $table-odd;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .lesson-number {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+    min-width: 60px;
+    border-right: 1px solid $border-color;
+  }
+
+  .lesson-content {
+    padding: 0.75rem;
+    flex: 1;
+  }
+
+  .class {
+    background: $primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+
+    &.student {
+      width: 40px;
+      height: 40px;
+    }
+
+    &.moderator {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  mat-icon {
+    background: $primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+
+  .lesson-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .lesson-time {
+      color: $text-secondary;
+      font-size: 0.875rem;
+    }
+
+    .lesson-title {
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .lesson-professor {
+      color: $text-secondary;
+      font-size: 0.875rem;
+    }
+
+    .lesson-location {
+      color: $text-secondary;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Desktop table view
 table {
   width: max-content;
   min-width: 100%;
@@ -97,4 +236,50 @@ td:empty {
   width: inherit;
   min-width: inherit;
   padding: 1rem;
+}
+
+// Media queries for responsive design
+@media (max-width: 1200px) {
+  td:nth-child(even), th:nth-child(even) {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  th[colspan="2"] {
+    width: 270px;
+    min-width: 270px;
+  }
+}
+
+@media (max-width: 992px) {
+  .day-tabs {
+    display: flex;
+  }
+}
+
+@media (max-width: 576px) {
+  .mobile-schedule {
+    .lesson-number {
+      width: 50px;
+      min-width: 50px;
+      padding: 0.5rem;
+    }
+
+    .lesson-content {
+      padding: 0.5rem;
+    }
+
+    .class {
+      &.student, &.moderator {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    mat-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+    }
+  }
 }

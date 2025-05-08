@@ -29,6 +29,7 @@ builder.Services.AddDbContext<ScheduleDbContext>(options =>
 
 builder.Services.AddAuthenticationServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddDataLoaders();
 
 builder.Services.AddEndpointsApiExplorer();
 

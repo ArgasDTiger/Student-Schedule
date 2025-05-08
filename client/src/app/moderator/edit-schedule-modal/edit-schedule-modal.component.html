@@ -82,7 +82,7 @@
       </div>
     </div>
 
-    <div class="checkbox-group">
+    <!--<div class="checkbox-group">
       <div class="checkbox-wrapper">
         <input
           type="checkbox"
@@ -100,7 +100,7 @@
           class="custom-checkbox">
         <label for="oddWeek" class="checkbox-label">Непарний тиждень</label>
       </div>
-    </div>
+    </div>-->
     <div class="error-message" *ngIf="scheduleForm.errors?.['weekRequired'] && (scheduleForm.get('evenWeek')?.touched || scheduleForm.get('oddWeek')?.touched)">
       Оберіть хоча б один параметр
     </div>

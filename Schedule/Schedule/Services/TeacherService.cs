@@ -78,6 +78,7 @@ public class TeacherService : ITeacherService
             throw new DetailedException("Teacher is already archived.");
 
         existingTeacher.IsArchived = true;
+        existingTeacher.LessonGroups.Clear();
         return await _repository.SaveChangesAsync(cancellationToken);
     }
 

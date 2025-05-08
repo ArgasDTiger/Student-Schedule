@@ -62,3 +62,35 @@ mat-icon {
   color: $text-secondary;
   font-size: 0.875rem;
 }
+
+@media (max-width: 576px) {
+  .class {
+    &.student {
+      width: 30px;
+      height: 30px;
+    }
+
+    &.moderator {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  mat-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 1rem;
+  }
+
+  .lesson-info {
+    gap: 0.15rem;
+  }
+
+  .lesson-time, .lesson-professor, .lesson-location {
+    font-size: 0.75rem;
+  }
+
+  .lesson-title {
+    font-size: 0.875rem;
+  }
+}

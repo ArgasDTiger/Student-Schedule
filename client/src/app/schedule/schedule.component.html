@@ -1,23 +1,77 @@
 <div class="content-container">
-  <table>
-<!--    <caption>1 семестр (12.08.2024 / 13.12.2024)</caption>-->
+  <div class="day-tabs">
+    @for (day of daysOfWeek; track day; let i = $index) {
+      <div class="day-tab"
+           [class.active]="selectedDayIndex === i"
+           (click)="selectDay(i)">
+        {{ dayLabels[i] }}
+      </div>
+    }
+  </div>
+
+  <div class="mobile-schedule" *ngIf="isMobile">
+    <div class="day-header">{{ dayLabels[selectedDayIndex] }}</div>
+    <div class="lessons-container">
+      @if (userRole && userRole === Role.Student) {
+        <div class="lesson-row" *ngFor="let lessonNumber of lessonNumbers">
+          <div class="lesson-number">
+            <div class="class student">{{ lessonNumber }}</div>
+          </div>
+          <div class="lesson-content">
+            <ng-container *ngIf="getLesson(lessonNumber, daysOfWeek[selectedDayIndex]) as lesson">
+              <div class="lesson-info">
+                <span class="lesson-time">{{ lessonNumberToTimeSpanMap[lesson.lessonNumber] }}</span>
+                <span class="lesson-title">{{ lesson.lesson.name }}</span>
+                <span class="lesson-professor">{{ degreeToString[lesson.teacher.degree] }} {{ lesson.teacher.lastName }} {{ lesson.teacher.firstName }} {{ lesson.teacher.middleName }}</span>
+                <span class="lesson-location">{{ lessonTypeToString[lesson.type] }}, {{ lesson.room }} ауд.</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      }
+
+      <!-- Moderator view -->
+      @if (userRole && userRole === Role.Moderator) {
+        <div class="lesson-row" *ngFor="let lessonNumber of moderatorLessonNumbers">
+          <div class="lesson-number">
+            <div class="class moderator">{{ lessonNumber }}</div>
+            <ng-container *ngIf="getLesson(lessonNumber, daysOfWeek[selectedDayIndex]) as lesson">
+              <mat-icon (click)="openEditModal(lesson)" class="icon">edit</mat-icon>
+              <mat-icon (click)="deleteScheduleItem(lesson)" class="icon">delete</mat-icon>
+            </ng-container>
+            <ng-container *ngIf="!getLesson(lessonNumber, daysOfWeek[selectedDayIndex])">
+              <mat-icon (click)="openCreateModal(lessonNumber, daysOfWeek[selectedDayIndex])" class="icon moderator">add</mat-icon>
+            </ng-container>
+          </div>
+          <div class="lesson-content">
+            <ng-container *ngIf="getLesson(lessonNumber, daysOfWeek[selectedDayIndex]) as lesson">
+              <div class="lesson-info">
+                <span class="lesson-time">{{ lessonNumberToTimeSpanMap[lesson.lessonNumber] }}</span>
+                <span class="lesson-title">{{ lesson.lesson.name }}</span>
+                <span class="lesson-professor">{{ degreeToString[lesson.teacher.degree] }} {{ lesson.teacher.lastName }} {{ lesson.teacher.firstName }} {{ lesson.teacher.middleName }}</span>
+                <span class="lesson-location">{{ lessonTypeToString[lesson.type] }}, {{ lesson.room }} ауд.</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <table *ngIf="!isMobile">
     <thead>
     <tr>
-      <th colspan="2">Понеділок</th>
-      <th colspan="2">Вівторок</th>
-      <th colspan="2">Середа</th>
-      <th colspan="2">Четвер</th>
-      <th colspan="2">П'ятниця</th>
+      <th colspan="2" *ngFor="let day of daysOfWeek; let i = index">{{ dayLabels[i] }}</th>
     </tr>
     </thead>
     <tbody>
-    @if (userRole && userRole === Role.Student) {
-      <tr *ngFor="let lessonNumber of lessonNumbers">
-        @for (day of daysOfWeek; track day) {
-          <app-lesson [lessonInfo]="getLesson(lessonNumber, day)"/>
-        }
-      </tr>
-    }
+      @if (userRole && userRole === Role.Student) {
+        <tr *ngFor="let lessonNumber of lessonNumbers">
+          @for (day of daysOfWeek; track day) {
+            <app-lesson [lessonInfo]="getLesson(lessonNumber, day)"/>
+          }
+        </tr>
+      }
       @if (userRole && userRole === Role.Moderator) {
         <tr *ngFor="let lessonNumber of moderatorLessonNumbers">
           @for (day of daysOfWeek; track day) {
@@ -25,7 +79,6 @@
           }
         </tr>
       }
-
     </tbody>
   </table>
 </div>

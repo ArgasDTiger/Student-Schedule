@@ -1,4 +1,3 @@
-using GreenDonut.Predicates;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Entities;
 using Schedule.Exceptions;
@@ -70,6 +69,7 @@ public class LessonService : ILessonService
             throw new DetailedException("Lesson is already archived.");
 
         existingLesson.IsArchived = true;
+        existingLesson.LessonGroups.Clear();
         return await _repository.SaveChangesAsync(cancellationToken);
     }
 
