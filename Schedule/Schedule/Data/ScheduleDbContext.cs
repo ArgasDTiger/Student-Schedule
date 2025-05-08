@@ -35,8 +35,8 @@ public class ScheduleDbContext : DbContext
 
         modelBuilder.Entity<LessonGroup>()
             .HasOne(lg => lg.Lesson)
-            .WithMany()
-            .HasForeignKey("LessonId");
+            .WithMany(l => l.LessonGroups) 
+            .HasForeignKey(lg => lg.LessonId);
 
         modelBuilder.Entity<LessonGroup>()
             .HasOne(lg => lg.Group)
