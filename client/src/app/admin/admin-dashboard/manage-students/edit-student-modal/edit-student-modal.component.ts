@@ -35,7 +35,11 @@ export class EditStudentModalComponent implements OnInit, OnDestroy {
       lastName: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       middleName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern('.*@chnu\\.edu\\.ua$')
+      ]],
     });
   }
 
@@ -80,7 +84,11 @@ export class EditStudentModalComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     if (!this.userForm.valid) {
-      this.toasterManagerService.error("Перевірте правильність заповнення форми.");
+      if (this.userForm.get('email')?.hasError('pattern')) {
+        this.toasterManagerService.error("Пошта має належати домену @chnu.edu.ua");
+      } else {
+        this.toasterManagerService.error("Перевірте правильність заповнення форми.");
+      }
       return;
     }
 

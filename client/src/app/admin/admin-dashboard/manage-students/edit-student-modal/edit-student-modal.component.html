@@ -70,6 +70,8 @@
             Електронна пошта обов'язкова
           } @else if (userForm.get('email')?.errors?.['email']) {
             Введіть правильні данні
+          } @else if (userForm.get('email')?.errors?.['pattern']) {
+            Пошта має належати домену &#64;chnu.edu.ua
           }
         </div>
       }
