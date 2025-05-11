@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth;
-using GreenDonut.Predicates;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Schedule.DTOs;
@@ -36,15 +35,15 @@ public class UserService : IUserService
 
         var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
 
-        // var allowedDomain = configuration["GoogleAuth:AllowedDomain"]
-        //                ?? throw new Exception("Allowed Domain is not configured");
-        // if (!payload.Email.EndsWith(allowedDomain))
-        // {
-        //     throw new Exception("Invalid email domain");
-        // }
+        var allowedDomain = _configuration["GoogleAuth:AllowedDomain"]
+                       ?? throw new Exception("Allowed Domain is not configured");
+        if (!payload.Email.EndsWith(allowedDomain))
+        {
+            throw new Exception("Invalid email domain");
+        }
 
         var user = await _repository.GetAll<User>()
-            .SingleOrDefaultAsync(u => u.GoogleId == payload.Subject, cancellationToken);
+            .SingleOrDefaultAsync(u => u.Email == payload.Email, cancellationToken);
         if (user is null)
             throw new Exception("User is not found.");
 
